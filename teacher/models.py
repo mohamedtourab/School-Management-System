@@ -1,8 +1,5 @@
 from django.db import models
-import regex
-
 from AdministrativeOfficer.models import ClassInfo
-
 from parent.models import Student
 
 
@@ -37,7 +34,7 @@ class Teacher(models.Model):
     email = models.EmailField()
     password = models.CharField(max_length=100)
     coursesTaught = models.ForeignKey(Course, on_delete=models.CASCADE)  # FIX THAT
-    coordinatedClass = models.ForeignKey(ClassInfo, null=True, blank=True)
+    coordinatedClass = models.ForeignKey(ClassInfo, null=True, blank=True,on_delete=models.CASCADE)
 
 
 class FreeSlots(models.Model):
@@ -76,6 +73,6 @@ class Attendance(models.Model):
     student_id = models.ForeignKey(Student, on_delete=models.CASCADE)
     course_id = models.ForeignKey(Course, on_delete=models.CASCADE)
     presence = models.BooleanField(default=True)
-    date = models.DateField
+    date = models.DateField()
     came_late = models.BooleanField(default=False)
     left_early = models.BooleanField(default=False)
