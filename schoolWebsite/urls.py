@@ -21,5 +21,5 @@ urlpatterns = [
     # path('ao/',include('AdministrativeOfficer.urls')),
     # path('teacher/',include('teacher.urls')),
     # path('principle/',include('principle.urls')),
-    # path('parent/',include('parent.urls'))
+     path('parent/',include('parent.urls'))
 ]
