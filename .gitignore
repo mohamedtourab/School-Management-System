@@ -8,3 +8,5 @@ __pycache__/
 /newSchoolWebsite/__pycache__/
 *.py[cod]
 *$py.class
+application/migrations/__init__.py
+application/migrations/
