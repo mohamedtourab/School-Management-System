@@ -3,17 +3,23 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-
 # Create your models here.
-
 
 class Principle(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     ID = models.AutoField(primary_key=True)
 
+    def __str__(self):
+        return self.user.username
+
+
 class AdministrativeOfficer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     ID = models.AutoField(primary_key=True)
+
+    def __str__(self):
+        return self.user.username
+
 
 # There is a missing field which is the TimeTable field to be done later
 # TODO add TimeTable field for the class
@@ -45,6 +51,9 @@ class Teacher(models.Model):
     fiscalCode = models.CharField(max_length=16)
     coordinatedClass = models.ForeignKey(ClassInfo, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.user.username
+
 
 class TeacherCourse(models.Model):
     ID = models.AutoField(primary_key=True)
@@ -56,6 +65,9 @@ class Parent(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     ID = models.AutoField(primary_key=True)
     studentID = models.ForeignKey(Student, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user.username
 
 
 class PerformanceGrade(models.Model):
