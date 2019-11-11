@@ -3,10 +3,11 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+
 # Create your models here.
 
 class Principle(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='principle')
     ID = models.AutoField(primary_key=True)
 
     def __str__(self):
@@ -14,7 +15,7 @@ class Principle(models.Model):
 
 
 class AdministrativeOfficer(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='administrativeOfficer')
     ID = models.AutoField(primary_key=True)
 
     def __str__(self):
@@ -46,7 +47,7 @@ class Course(models.Model):
 
 
 class Teacher(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='teacher')
     ID = models.AutoField(primary_key=True)
     fiscalCode = models.CharField(max_length=16)
     coordinatedClass = models.ForeignKey(ClassInfo, on_delete=models.CASCADE)
@@ -62,7 +63,7 @@ class TeacherCourse(models.Model):
 
 
 class Parent(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='parent')
     ID = models.AutoField(primary_key=True)
     studentID = models.ForeignKey(Student, on_delete=models.CASCADE)
 
@@ -75,6 +76,21 @@ class PerformanceGrade(models.Model):
     studentCourseID = models.ForeignKey(Student, on_delete=models.CASCADE)
     date = models.DateField()
     grade = models.PositiveIntegerField()
+
+
+@receiver(post_save, sender=User)
+def update_profile_signal(sender, instance, created, **kwargs):
+    if created:
+        if sender == Parent:
+            Parent.objects.create(user=instance)
+        elif sender == Principle:
+            Principle.objects.create(user=instance)
+        elif sender == Teacher:
+            Teacher.objects.create(user=instance)
+        else:
+            AdministrativeOfficer.objects.create(user=instance)
+
+    instance.profile.save()
 
 
 class StudentCourse(models.Model):
