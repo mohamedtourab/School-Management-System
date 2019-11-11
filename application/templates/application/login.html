@@ -75,7 +75,7 @@
 <div class="container">
   <h2>Login</h2>
   <form action="" method="post" class="needs-validation" novalidate>
-      {{ csrf_token }}
+      {% csrf_token %}
     <div class="form-group">
       <label for="uname">Username:</label>
       <input type="text" class="form-control" id="uname" placeholder="Enter username" name="uname" required>
