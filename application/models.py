@@ -49,7 +49,7 @@ class Teacher(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     ID = models.AutoField(primary_key=True)
     fiscalCode = models.CharField(max_length=16)
-    coordinatedClass = models.ForeignKey(ClassInfo, on_delete=models.CASCADE)
+    coordinatedClass = models.ForeignKey(ClassInfo, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return self.user.username

@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.shortcuts import render
 
@@ -35,7 +36,24 @@ def loginUser(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return HttpResponse("<h1>you are logged in in</h1>")
+                try:
+                    teacher = user.teacher
+                    return HttpResponse("<h1>you are logged in as teacher</h1>"+user.email)
+                except:
+                    try:
+                        parent = user.parent
+                        return HttpResponse("<h1>you are logged in as parent</h1>"+user.parent.studentID.surname)
+                    except:
+                        try:
+                            administrativeOfficer = user.administrativeofficer
+                            return HttpResponse("<h1>you are logged in as Adminstrative officer</h1>")
+                        except:
+                            try:
+                                principle = user.principle
+                                return HttpResponse("<h1>you are logged in as principle</h1>")
+                            except:
+                                return HttpResponse("<h1>you are logged in with stuped account </h1>")
+                #return HttpResponse("<h1>you are logged in </h1>")
         else:
             return render(request, 'application/login.html', {'error_message': 'Invalid login'})
     return render(request, 'application/login.html')
