@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.shortcuts import render
 
@@ -37,12 +38,10 @@ def loginUser(request):
                 login(request, user)
                 try:
                     teacher = user.teacher
-                    return HttpResponse(teacher)
                 except:
                     try:
                         parent = user.parent
                         return render(request, 'parent/afterloginparent.html')
-                        #return HttpResponse("<h1>you are logged in as parent</h1>")
                     except:
                         try:
                             administrativeOfficer = user.administrativeofficer
@@ -53,7 +52,6 @@ def loginUser(request):
                                 return HttpResponse("<h1>you are logged in as principle</h1>")
                             except:
                                 return HttpResponse("<h1>you are logged in with stuped account </h1>")
-                #return HttpResponse("<h1>you are logged in </h1>")
         else:
             return render(request, 'application/login.html', {'error_message': 'Invalid login'})
     return render(request, 'application/login.html')
