@@ -1,7 +1,7 @@
-{% extends 'application/base.html' %}
+{% extends 'parent/base.html' %}
 {% block body %}
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-<link rel="stylesheet" href="../../static/application/css/style2.css">
+<link rel="stylesheet" href="../../static/application/css/style3.css">
 <html lang='en'>
 
 <head>
@@ -10,13 +10,8 @@
 </head>
 
 <body>
-	<div>
-		<a href="attendancep.html"> Attendance/Behaviour </a>
-		<a href="gradep.html"> Grade </button>
-			<a href="appointementp.html"> Appointement </a>
-			<a href="communicationp.html"> Communication </a>
-		</div>
-		<div id="TimeTable">
+<h2 style="color: #1eaaf1; padding-left: 5%"> Welcome {{ user }} </h2>
+		<div id="TimeTable" style="padding-left: 5%">
 			<p> Schedule for the current weeks </p>
 			<table>
 				<tr>
@@ -145,20 +140,19 @@
 					<td>bla bla</td>
 					<td>bla bla</td>
 				</tr>
-			</table>
+			</table> <br>
 		</div>
-		<div>
-			<h1> First Year Courses</h1>
-			<ul>
-				<li> <a href="#"> Maths </a></li>
-				<li> <a href="#"> Physics </a></li>
-				<li> <a href="#"> English </a></li>
-				<li> <a href="#"> Musics </a></li>
-			</ul>
+		<div style="padding-left: 5%">
+			<h1 style="color: #1eaaf1"> First Year Courses</h1><br>
+
+				 <button href="#" class="btn btn-primary btn-lg"> Maths </button><br><br>
+				 <button href="#" class="btn btn-primary btn-lg"> Physics </button><br><br>
+				 <button href="#" class="btn btn-primary btn-lg"> English </button><br><br>
+				 <button href="#" class="btn btn-primary btn-lg"> Musics </button><br><br>
 		</div>
-		<div>
-			<a href="#"> View More Courses </a>
-		</div>
+		<div style="padding-left: 85%">
+			<button href="#" class="btn btn-primary btn-lg"> View More Courses </button>
+		</div><br><br>
 	</body>
 
 	{% endblock %}

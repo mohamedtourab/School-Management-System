@@ -7,7 +7,7 @@ from django.views import generic
 
 
 class TestView(generic.ListView):
-    template_name = 'teacher/communication.html'
+    template_name = 'parent/afterloginparent.html'
 
     def get_queryset(self):
         return "salam"
@@ -35,7 +35,25 @@ def loginUser(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return HttpResponse("<h1>you are logged in in</h1>")
+                try:
+                    teacher = user.teacher
+                    return HttpResponse(teacher)
+                except:
+                    try:
+                        parent = user.parent
+                        return render(request, 'parent/afterloginparent.html')
+                        #return HttpResponse("<h1>you are logged in as parent</h1>")
+                    except:
+                        try:
+                            administrativeOfficer = user.administrativeofficer
+                            return HttpResponse("<h1>you are logged in as Adminstrative officer</h1>")
+                        except:
+                            try:
+                                principle = user.principle
+                                return HttpResponse("<h1>you are logged in as principle</h1>")
+                            except:
+                                return HttpResponse("<h1>you are logged in with stuped account </h1>")
+                #return HttpResponse("<h1>you are logged in </h1>")
         else:
             return render(request, 'application/login.html', {'error_message': 'Invalid login'})
     return render(request, 'application/login.html')

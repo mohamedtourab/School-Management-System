@@ -31,10 +31,10 @@ class ClassInfo(models.Model):
 
 class Student(models.Model):
     ID = models.AutoField(primary_key=True)
-    Name = models.CharField(max_length=50)
-    surname = models.CharField(max_length=50)
-    classID = models.ForeignKey(ClassInfo, on_delete=models.CASCADE)
-    studentYear = models.CharField(max_length=20)
+    Name = models.CharField(max_length=50, verbose_name='First Name')
+    surname = models.CharField(max_length=50, verbose_name='Last Name')
+    classID = models.ForeignKey(ClassInfo, on_delete=models.CASCADE, verbose_name='Studnet Class Name')
+    studentYear = models.CharField(max_length=20,verbose_name='Year Grade')
 
 
 class Course(models.Model):
@@ -42,14 +42,14 @@ class Course(models.Model):
     Name = models.CharField(max_length=50)
     numberOfHoursPerWeek = models.PositiveIntegerField()
     year = models.CharField(max_length=10)
-    assignment = models.FileField()
+    assignment = models.FileField(blank=True, null=True)
 
 
 class Teacher(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     ID = models.AutoField(primary_key=True)
     fiscalCode = models.CharField(max_length=16)
-    coordinatedClass = models.ForeignKey(ClassInfo, on_delete=models.CASCADE)
+    coordinatedClass = models.ForeignKey(ClassInfo, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return self.user.username
