@@ -10,3 +10,4 @@ __pycache__/
 *$py.class
 application/migrations/__init__.py
 application/migrations/
+db.sqlite3
