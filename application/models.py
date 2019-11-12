@@ -81,7 +81,7 @@ class StudentCourse(models.Model):
     ID = models.AutoField(primary_key=True)
     studentID = models.ForeignKey(Student, on_delete=models.CASCADE)
     courseID = models.ForeignKey(Course, on_delete=models.CASCADE)
-    finalGrade = models.PositiveIntegerField()
+    finalGrade = models.PositiveIntegerField(blank=True, null=True)
 
 
 class Note(models.Model):
