@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 # Create your views here.
 from django.views import generic
@@ -12,6 +12,14 @@ from application.forms import StudentForm
 
 class TestView(generic.ListView):
     template_name = 'parent/afterloginparent.html'
+
+    def get_queryset(self):
+        return "salam"
+
+
+
+class administrativeOfficer(generic.ListView):
+    template_name = 'administrativeOfficer/base.html'
 
     def get_queryset(self):
         return "salam"
@@ -44,11 +52,11 @@ def loginUser(request):
                 except:
                     try:
                         parent = user.parent
-                        return render(request, 'parent/afterloginparent.html')
+                        return redirect('application:test')
                     except:
                         try:
                             administrativeOfficer = user.administrativeofficer
-                            return render(request, 'administrativeOfficer/base.html')
+                            return redirect('application:administrativeOfficer')
                         except:
                             try:
                                 principle = user.principle
