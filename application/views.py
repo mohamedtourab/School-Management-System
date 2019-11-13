@@ -54,10 +54,11 @@ def loginUser(request):
                                 principle = user.principle
                                 return HttpResponse("<h1>you are logged in as principle</h1>")
                             except:
-                                return HttpResponse("<h1>you are logged in with stuped account </h1>")
+                                return HttpResponse("<h1>you are a hacker</h1>")
         else:
             return render(request, 'application/login.html', {'error_message': 'Invalid login'})
-    return render(request, 'application/login.html')
+    else:
+        return render(request, 'application/login.html')
 
 
 def get_name(request):
