@@ -1,10 +1,13 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
-from django.http import HttpResponse
+from django.contrib import messages
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 
 # Create your views here.
 from django.views import generic
+
+from application.forms import StudentForm
 
 
 class TestView(generic.ListView):
@@ -55,3 +58,23 @@ def loginUser(request):
         else:
             return render(request, 'application/login.html', {'error_message': 'Invalid login'})
     return render(request, 'application/login.html')
+
+
+def get_name(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = StudentForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            form.save();
+            # redirect to a new URL:
+            messages.success(request, 'Student has been successfully added')
+            return render(request, 'application/signup.html', {'form': StudentForm()})
+
+            # if a GET (or any other method) we'll create a blank form
+    else:
+        form = StudentForm()
+
+    return render(request, 'application/signup.html', {'form': form})
