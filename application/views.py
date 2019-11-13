@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect
@@ -38,6 +38,9 @@ class LoginView(generic.ListView):
     def get_queryset(self):
         return "salam"
 
+def logout_view(request):
+    logout(request)
+    return redirect('application:index')
 
 def loginUser(request):
     if request.method == "POST":
