@@ -26,11 +26,24 @@
     <link rel="stylesheet" href="../../static/application/css/style.css">
   </head>
   <body>
+
 	  <div class="py-2 bg-primary">
     	<div class="container">
-    		<div class="row no-gutters d-flex align-items-start align-items-center px-3 px-md-0 pull-right">
+    		<div class="row no-gutters d-flex align-items-start align-items-center px-3 px-md-0">
 	    		<div class="col-lg-12 d-block">
 		    		<div class="row d-flex">
+			    		<div class="col-md-5 pr-4 d-flex topper align-items-center">
+			    			<div class="icon bg-fifth mr-2 d-flex justify-content-center align-items-center"><span class="icon-map"></span></div>
+						    <span class="text">198 West 21th Street, Suite 721 New York NY 10016</span>
+					    </div>
+					    <div class="col-md pr-4 d-flex topper align-items-center">
+					    	<div class="icon bg-secondary mr-2 d-flex justify-content-center align-items-center"><span class="icon-paper-plane"></span></div>
+						    <span class="text">youremail@email.com</span>
+					    </div>
+					    <div class="col-md pr-4 d-flex topper align-items-center">
+					    	<div class="icon bg-tertiary mr-2 d-flex justify-content-center align-items-center"><span class="icon-phone2"></span></div>
+						    <span class="text">+ 1235 2355 98</span>
+					    </div>
 						<div class="col-md pr-4 d-flex topper align-items-right">
 					    	<div class="icon bg-tertiary mr-2 d-flex justify-content-center align-items-center"><span class="glyphicon glyphicon-user"></span></div>
 							<a class="btn btn-outline-primary" href="{% url 'application:login' %}" role="button"><span class="text">Login</span></a>
@@ -49,7 +62,7 @@
 	      </button>
 	      <div class="collapse navbar-collapse" id="ftco-nav">
 	        <ul class="navbar-nav ml-auto">
-	        	<li class="nav-item active"><a href="#" class="nav-link pl-0">Home</a></li>
+	        	<li class="nav-item active"><a href="{% url 'application:index' %}" class="nav-link pl-0">Home</a></li>
 	        	<li class="nav-item"><a href="#" class="nav-link">About</a></li>
 	        	<li class="nav-item"><a href="#" class="nav-link">Teachers</a></li>
 	        	<li class="nav-item"><a href="#" class="nav-link">Courses</a></li>
