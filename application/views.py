@@ -48,7 +48,7 @@ def loginUser(request):
                     except:
                         try:
                             administrativeOfficer = user.administrativeofficer
-                            return HttpResponse("<h1>you are logged in as Adminstrative officer</h1>")
+                            return render(request, 'administrativeOfficer/base.html')
                         except:
                             try:
                                 principle = user.principle
