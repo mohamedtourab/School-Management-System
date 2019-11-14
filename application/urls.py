@@ -11,5 +11,7 @@ urlpatterns = [
     path('login/loginUser/', views.loginUser, name='loginUser'),
     path('test/', views.TestView.as_view(), name='test'),
     path('signup/', views.enrollStudent, name='signup'),
-    path('ao/',views.administrativeOfficer.as_view(), name='administrativeOfficer')
+    path('ao/',views.administrativeOfficer.as_view(), name='administrativeOfficer'),
+    path('parent/', views.parentView.as_view(), name='parent'),
+    path('parent/grades/', views.parentGradeView.as_view(), name='parentGrade')
 ]

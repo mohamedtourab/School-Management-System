@@ -3,10 +3,9 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
-
+from .models import StudentCourse,PerformanceGrade
 # Create your views here.
 from django.views import generic
-
 from application.forms import StudentForm
 
 
@@ -16,14 +15,29 @@ class TestView(generic.ListView):
     def get_queryset(self):
         return "salam"
 
-
-
 class administrativeOfficer(generic.ListView):
     template_name = 'administrativeOfficer/base.html'
 
     def get_queryset(self):
         return "salam"
 
+class parentView(generic.ListView):
+    template_name = 'parent/afterloginparent.html'
+    context_object_name = 'allStudentCourses'
+
+    def get_queryset(self):
+        return StudentCourse.objects.filter(studentID=1)  #GET STUDENT ID HERE
+
+class parentGradeView(generic.ListView):
+    template_name = 'parent/gradep.html'
+    context_object_name = 'allGrades'
+
+    def get_queryset(self):
+        return PerformanceGrade.objects.filter(studentCourseID__studentcourse__courseID__exact=1) #GET STUDENTCOURSEID HERE
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(parentGradeView, self).get_context_data(**kwargs)
+        context['studentCourse'] = StudentCourse.objects.filter(studentID=1)  #GET STUDENT ID HERE
+        return context
 
 class IndexView(generic.ListView):
     template_name = 'application/index.html'
@@ -55,7 +69,7 @@ def loginUser(request):
                 except:
                     try:
                         parent = user.parent
-                        return redirect('application:test')
+                        return redirect('application:parent')
                     except:
                         try:
                             administrativeOfficer = user.administrativeofficer
@@ -70,6 +84,7 @@ def loginUser(request):
             return render(request, 'application/login.html', {'error_message': 'Invalid login'})
     else:
         return render(request, 'application/login.html')
+
 
 
 def enrollStudent(request):

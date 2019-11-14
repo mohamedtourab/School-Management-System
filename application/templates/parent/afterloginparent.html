@@ -10,8 +10,7 @@
 </head>
 
 <body>
-<h2 style="color: #1eaaf1; padding-left: 5%"> Welcome {{ user }} </h2>
-		<div id="TimeTable" style="padding-left: 5%">
+ <h2 style="color: #1eaaf1; padding-left: 5%"> Welcome {{ user }} ! Your child {{ user.parent.studentID.Name }}. Class: {{ user.parent.studentID.classID.Name }} </h2>		<div id="TimeTable" style="padding-left: 5%">
 			<p> Schedule for the current weeks </p>
 			<table>
 				<tr>
@@ -144,11 +143,9 @@
 		</div>
 		<div style="padding-left: 5%">
 			<h1 style="color: #1eaaf1"> First Year Courses</h1><br>
-
-				 <button href="#" class="btn btn-primary btn-lg">  </button><br><br>
-				 <button href="#" class="btn btn-primary btn-lg"> Physics </button><br><br>
-				 <button href="#" class="btn btn-primary btn-lg"> English </button><br><br>
-				 <button href="#" class="btn btn-primary btn-lg"> Musics </button><br><br>
+                {% for studentcourse in allStudentCourses %}
+                     <button href="#" class="btn btn-primary btn-lg"> {{  studentcourse.courseID.Name }} </button><br><br>
+                {% endfor %}
 		</div>
 		<div style="padding-left: 85%">
 			<button href="#" class="btn btn-primary btn-lg"> View More Courses </button>

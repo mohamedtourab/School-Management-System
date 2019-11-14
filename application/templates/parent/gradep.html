@@ -1,12 +1,12 @@
-{% extends 'application/base.html' %}
+{% extends 'parent/base.html' %}
 
 {% block body %}
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-<link rel="stylesheet" href="../../static/application/css/style2.css">
+<link rel="stylesheet" href="../../static/application/css/style3.css">
 <html lang='en'>
+    <table style="padding-left: 5%">
 
-    <table>
 			<tr>
 				<th></th>
 				<th> Note 1 </th>
@@ -16,59 +16,15 @@
 				<th> Note 5 </th>
 				<th> Final grade </th>
 			</tr>
-			<tr>
-				<th>Music</th>
-				<td>bla bla</td>
-				<td>bla bla</td>
-				<td>bla bla</td>
-				<td>bla bla</td>
-				<td>bla bla</td>
-				<td>bla bla</td>
-			</tr>
-			<tr>
-				<th>Geography</th>
-				<td>bla bla</td>
-				<td>bla bla</td>
-				<td>bla bla</td>
-				<td>bla bla</td>
-				<td>bla bla</td>
-				<td>bla bla</td>
-			</tr>
-			<tr>
-				<th>Sport</th>
-				<td>bla bla</td>
-				<td>bla bla</td>
-				<td>bla bla</td>
-				<td>bla bla</td>
-				<td>bla bla</td>
-				<td>bla bla</td>
-			</tr>
-			<tr>
-				<th>English</th>
-				<td>bla bla</td>
-				<td>bla bla</td>
-				<td>bla bla</td>
-				<td>bla bla</td>
-				<td>bla bla</td>
-				<td>bla bla</td>
-			</tr>
-			<tr>
-				<th>Physics</th>
-				<td>bla bla</td>
-				<td>bla bla</td>
-				<td>bla bla</td>
-				<td>bla bla</td>
-				<td>bla bla</td>
-				<td>bla bla</td>
-			</tr>
-			<tr>
-				<th>Maths</th>
-				<td>bla bla</td>
-				<td>bla bla</td>
-				<td>bla bla</td>
-				<td>bla bla</td>
-				<td>bla bla</td>
-				<td>bla bla</td>
-			</tr>
+            <tr>
+            {% for studentcourse in studentCourse %}
+                <tr> <th> {{ studentcourse.courseID.Name }}</th>
+            {% for grade in allGrades %}
+                <td> {{ grade.grade }}</td>
+            {% endfor %}
+                </tr>
+            {% endfor %}
+
+
     </table>
 {% endblock %}
