@@ -6,12 +6,11 @@ app_name = 'application'
 urlpatterns = [
     path('', views.IndexView.as_view(), name='index'),
     path('index/', views.IndexView.as_view(), name='index1'),
-    path('login/', views.LoginView.as_view(), name='login'),
-    path('logout/',views.logout_view,name= 'logout'),
-    path('login/loginUser/', views.loginUser, name='loginUser'),
+    path('login/', views.loginUser, name='login'),
+    path('logout/', views.logout_view, name='logout'),
     path('test/', views.TestView.as_view(), name='test'),
     path('signup/', views.enrollStudent, name='signup'),
-    path('ao/',views.administrativeOfficer.as_view(), name='administrativeOfficer'),
-    path('parent/', views.parentView.as_view(), name='parent'),
-    path('parent/grades/', views.parentGradeView.as_view(), name='parentGrade')
+    path('ao/', views.AdministrativeOfficer.as_view(), name='administrativeOfficer'),
+    path('parent/', views.ParentView.as_view(), name='parent'),
+    path('parent/grades/', views.ParentGradeView.as_view(), name='parentGrade')
 ]

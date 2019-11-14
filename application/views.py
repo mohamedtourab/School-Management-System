@@ -1,13 +1,13 @@
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
 from django.contrib import messages
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from .models import StudentCourse,PerformanceGrade
-# Create your views here.
+from .models import StudentCourse, PerformanceGrade
 from django.views import generic
 from application.forms import StudentForm
 
+
+# Create your views here.
 
 class TestView(generic.ListView):
     template_name = 'parent/afterloginparent.html'
@@ -15,29 +15,35 @@ class TestView(generic.ListView):
     def get_queryset(self):
         return "salam"
 
-class administrativeOfficer(generic.ListView):
+
+class AdministrativeOfficer(generic.ListView):
     template_name = 'administrativeOfficer/base.html'
 
     def get_queryset(self):
         return "salam"
 
-class parentView(generic.ListView):
+
+class ParentView(generic.ListView):
     template_name = 'parent/afterloginparent.html'
     context_object_name = 'allStudentCourses'
 
     def get_queryset(self):
-        return StudentCourse.objects.filter(studentID=1)  #GET STUDENT ID HERE
+        return StudentCourse.objects.filter(studentID=1)  # GET STUDENT ID HERE
 
-class parentGradeView(generic.ListView):
+
+class ParentGradeView(generic.ListView):
     template_name = 'parent/gradep.html'
     context_object_name = 'allGrades'
 
     def get_queryset(self):
-        return PerformanceGrade.objects.filter(studentCourseID__studentcourse__courseID__exact=1) #GET STUDENTCOURSEID HERE
+        return PerformanceGrade.objects.filter(
+            studentCourseID__studentcourse__courseID__exact=1)  # GET STUDENTCOURSEID HERE
+
     def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(parentGradeView, self).get_context_data(**kwargs)
-        context['studentCourse'] = StudentCourse.objects.filter(studentID=1)  #GET STUDENT ID HERE
+        context = super(ParentGradeView, self).get_context_data(**kwargs)
+        context['studentCourse'] = StudentCourse.objects.filter(studentID=1)  # GET STUDENT ID HERE
         return context
+
 
 class IndexView(generic.ListView):
     template_name = 'application/index.html'
@@ -52,9 +58,11 @@ class LoginView(generic.ListView):
     def get_queryset(self):
         return "salam"
 
+
 def logout_view(request):
     logout(request)
     return redirect('application:index')
+
 
 def loginUser(request):
     if request.method == "POST":
@@ -69,7 +77,8 @@ def loginUser(request):
                 except:
                     try:
                         parent = user.parent
-                        return redirect('application:parent')
+                        parentChildren = parent.studentID
+                        return render(request,'parent/afterloginparent.html',{'children':parentChildren})
                     except:
                         try:
                             administrativeOfficer = user.administrativeofficer
@@ -84,7 +93,6 @@ def loginUser(request):
             return render(request, 'application/login.html', {'error_message': 'Invalid login'})
     else:
         return render(request, 'application/login.html')
-
 
 
 def enrollStudent(request):
