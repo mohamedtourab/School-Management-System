@@ -1,10 +1,12 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from .models import StudentCourse, PerformanceGrade
+from .models import StudentCourse, PerformanceGrade, Parent
 from django.views import generic
-from application.forms import StudentForm
+from application.forms import StudentForm, ParentSignUpForm
 
 
 # Create your views here.
@@ -74,11 +76,12 @@ def loginUser(request):
                 login(request, user)
                 try:
                     teacher = user.teacher
+                    return render(request, 'teacher/teacherAfterLogin.html',)
                 except:
                     try:
                         parent = user.parent
                         parentChildren = parent.studentID
-                        return render(request,'parent/afterloginparent.html',{'children':parentChildren})
+                        return render(request, 'parent/afterloginparent.html', {'children': parentChildren})
                     except:
                         try:
                             administrativeOfficer = user.administrativeofficer
@@ -103,13 +106,35 @@ def enrollStudent(request):
         # check whether it's valid:
         if form.is_valid():
             # process the data in form.cleaned_data as required
-            form.save();
+            form.save()
             # redirect to a new URL:
             messages.success(request, 'Student has been successfully added')
-            return render(request, 'application/signup.html', {'form': StudentForm()})
+            return render(request, 'application/enrollStudent.html', {'form': StudentForm()})
 
             # if a GET (or any other method) we'll create a blank form
     else:
         form = StudentForm()
 
-    return render(request, 'application/signup.html', {'form': form})
+    return render(request, 'application/enrollStudent.html', {'form': form})
+
+
+def parentSignup(request):
+    if request.method == 'POST':
+        form = ParentSignUpForm(request.POST)
+        try:
+            user = User.objects.get(username=request.POST['username'], )
+            return render(request, 'application/parentSignup.html',
+                          {'error_message': 'Username Exist...Try Something Else !', 'form': ParentSignUpForm()})
+        except User.DoesNotExist:
+            if form.is_valid():
+                user = form.save()
+                user.refresh_from_db()  # load the profile instance created by the signal
+                Parent.objects.create(user=user, studentID=form.cleaned_data.get('studentID'))
+                messages.success(request, 'Parent has been successfully added')
+                return render(request, 'application/parentSignup.html', {'form': ParentSignUpForm()})
+            else:
+                return render(request, 'application/parentSignup.html',
+                              {'error_message': 'Invalid Information', 'form': ParentSignUpForm()})
+    else:
+        form = ParentSignUpForm()
+    return render(request, 'application/parentSignup.html', {'form': form})

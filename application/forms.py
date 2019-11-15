@@ -10,3 +10,11 @@ class StudentForm(ModelForm):
     class Meta:
         model = Student
         fields = ['Name', 'surname', 'classID', 'studentYear']
+
+
+class ParentSignUpForm(UserCreationForm):
+    studentID = forms.ModelChoiceField(queryset=Student.objects.all())
+
+    class Meta:
+        model = User
+        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', 'studentID',)
