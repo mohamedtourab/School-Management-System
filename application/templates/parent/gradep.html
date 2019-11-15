@@ -5,7 +5,6 @@
 <link rel="stylesheet" href="../../static/application/css/style3.css">
 <html lang='en'>
     <table style="padding-left: 5%">
-
 			<tr>
 				<th></th>
 				<th> Note 1 </th>
@@ -18,10 +17,12 @@
             <tr>
             {% for studentcourse in studentCourse %}
                 <tr> <th> {{ studentcourse.courseID.Name }}</th>
-            {% for grade in allGrades %}
-                <td> {{ grade.grade }}</td>
-            {% endfor %}
+                 {% for grade in allGrades %}
+                <th> {{ grade.grade }}</th>
+                {% endfor %}
                 </tr>
+
+
             {% endfor %}
 
 

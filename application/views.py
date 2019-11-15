@@ -9,7 +9,6 @@ from django.views import generic
 from application.forms import StudentForm, ParentSignUpForm
 
 
-
 # Create your views here.
 
 class TestView(generic.ListView):
@@ -33,20 +32,24 @@ class ParentView(generic.ListView):
     def get_queryset(self):
         return StudentCourse.objects.filter(studentID=self.request.user.parent.studentID)  # GET STUDENT ID HERE
 
+class ParentAttendanceView(generic.ListView):
+    template_name = 'parent/attendancep.html'
+
+    def get_queryset(self):
+        return "salam"
 
 class ParentGradeView(generic.ListView):
-
     template_name = 'parent/gradep.html'
     context_object_name = 'allGrades'
 
-
     def get_queryset(self):
         return PerformanceGrade.objects.filter(
-            studentCourseID__parent__ID=self.request.user.parent.ID)  # GET STUDENTCOURSEID HERE
+            studentCourseID__studentID=self.request.user.parent.studentID)  # GET STUDENTCOURSEID HERE
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ParentGradeView, self).get_context_data(**kwargs)
-        context['studentCourse'] = StudentCourse.objects.filter(studentID=self.request.user.parent.studentID)  # GET STUDENT ID HERE
+        context['studentCourse'] = StudentCourse.objects.filter(
+            studentID=self.request.user.parent.studentID)  # GET STUDENT ID HERE
         return context
 
 
@@ -79,14 +82,14 @@ def loginUser(request):
                 login(request, user)
                 try:
                     teacher = user.teacher
-                    return render(request, 'teacher/teacherAfterLogin.html',)
+                    return render(request, 'teacher/teacherAfterLogin.html', )
                 except:
                     try:
                         parent = user.parent
-                        #studentID = parent.studentID
-                        #studentCourses = StudentCourse.objects.filter(studentID=studentID)
+                        # studentID = parent.studentID
+                        # studentCourses = StudentCourse.objects.filter(studentID=studentID)
                         return redirect('application:parent')
-                        #return render(request,'parent/afterloginparent.html', {'studentID': studentID, 'studentCourses': studentCourses})
+                        # return render(request,'parent/afterloginparent.html', {'studentID': studentID, 'studentCourses': studentCourses})
                     except:
                         try:
                             administrativeOfficer = user.administrativeofficer

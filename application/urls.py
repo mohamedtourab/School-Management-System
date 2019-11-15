@@ -14,4 +14,5 @@ urlpatterns = [
     path('parent/', views.ParentView.as_view(), name='parent'),
     path('parent/grades/', views.ParentGradeView.as_view(), name='parentGrade'),
     path('parentsignup/', views.parentSignup, name='parentSignup'),
+    path('parent/attendance', views.ParentAttendanceView.as_view(), name='parentAttendance'),
 ]
