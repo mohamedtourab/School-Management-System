@@ -143,11 +143,15 @@
 		</div>
 		<div style="padding-left: 5%">
 			<h1 style="color: #1eaaf1"> First Year Courses</h1><br>
-                {% for studentcourse in allStudentCourses %}
+               <!-- {% for studentCourse in studentCourses %}
+            <button href="#" class="btn btn-primary btn-lg"> {{ studentCourse.courseID.Name }}</button><br><br>
+            {% endfor %}-->
+        {% for studentcourse in allStudentCourses %}
                      <button href="#" class="btn btn-primary btn-lg"> {{  studentcourse.courseID.Name }} </button><br><br>
                 {% endfor %}
 		</div>
 		<div style="padding-left: 85%">
+
 			<button href="#" class="btn btn-primary btn-lg"> View More Courses </button>
 		</div><br><br>
 	</body>

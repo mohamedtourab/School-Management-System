@@ -2,9 +2,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from .models import StudentCourse, PerformanceGrade
+from .models import StudentCourse, PerformanceGrade, Parent
 from django.views import generic
 from application.forms import StudentForm
+
 
 
 # Create your views here.
@@ -28,20 +29,22 @@ class ParentView(generic.ListView):
     context_object_name = 'allStudentCourses'
 
     def get_queryset(self):
-        return StudentCourse.objects.filter(studentID=1)  # GET STUDENT ID HERE
+        return StudentCourse.objects.filter(studentID=self.request.user.parent.studentID)  # GET STUDENT ID HERE
 
 
 class ParentGradeView(generic.ListView):
+
     template_name = 'parent/gradep.html'
     context_object_name = 'allGrades'
 
+
     def get_queryset(self):
         return PerformanceGrade.objects.filter(
-            studentCourseID__studentcourse__courseID__exact=1)  # GET STUDENTCOURSEID HERE
+            studentCourseID__parent__ID=self.request.user.parent.ID)  # GET STUDENTCOURSEID HERE
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ParentGradeView, self).get_context_data(**kwargs)
-        context['studentCourse'] = StudentCourse.objects.filter(studentID=1)  # GET STUDENT ID HERE
+        context['studentCourse'] = StudentCourse.objects.filter(studentID=self.request.user.parent.studentID)  # GET STUDENT ID HERE
         return context
 
 
@@ -77,8 +80,10 @@ def loginUser(request):
                 except:
                     try:
                         parent = user.parent
-                        parentChildren = parent.studentID
-                        return render(request,'parent/afterloginparent.html',{'children':parentChildren})
+                        #studentID = parent.studentID
+                        #studentCourses = StudentCourse.objects.filter(studentID=studentID)
+                        return redirect('application:parent')
+                        #return render(request,'parent/afterloginparent.html', {'studentID': studentID, 'studentCourses': studentCourses})
                     except:
                         try:
                             administrativeOfficer = user.administrativeofficer
