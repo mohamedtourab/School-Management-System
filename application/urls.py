@@ -15,4 +15,6 @@ urlpatterns = [
     path('parent/grades/', views.ParentGradeView.as_view(), name='parentGrade'),
     path('parentsignup/', views.parentSignup, name='parentSignup'),
     path('parent/attendance', views.ParentAttendanceView.as_view(), name='parentAttendance'),
+    path('parent/course/<courseid>', views.CourseView.as_view(), name='courseView'),
+
 ]

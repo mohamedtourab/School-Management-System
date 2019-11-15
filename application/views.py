@@ -32,11 +32,20 @@ class ParentView(generic.ListView):
     def get_queryset(self):
         return StudentCourse.objects.filter(studentID=self.request.user.parent.studentID)  # GET STUDENT ID HERE
 
+
+class CourseView(generic.ListView):
+    template_name = 'parent/course.html'
+
+    def get_queryset(self):
+        return "salam"
+
+
 class ParentAttendanceView(generic.ListView):
     template_name = 'parent/attendancep.html'
 
     def get_queryset(self):
         return "salam"
+
 
 class ParentGradeView(generic.ListView):
     template_name = 'parent/gradep.html'

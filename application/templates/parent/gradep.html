@@ -1,32 +1,31 @@
 {% extends 'parent/base.html' %}
 
 {% block body %}
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-<link rel="stylesheet" href="../../static/application/css/style3.css">
-<html lang='en'>
-    <table style="padding-left: 5%">
-			<tr>
-				<th></th>
-				<th> Note 1 </th>
-				<th> Note 2</th>
-				<th> Note 3</th>
-				<th> Note 4 </th>
-				<th> Note 5 </th>
-				<th> Final grade </th>
-			</tr>
-            <tr>
-            {% for studentcourse in studentCourse %}
-                <tr> <th> {{ studentcourse.courseID.Name }}</th>
-                 {% for grade in allGrades %}
-                     {% if grade.studentCourseID.courseID.Name == studentcourse.courseID.Name %}
-                        <th> {{ grade.grade }}</th>
-                     {% endif %}
-                {% endfor %}
-                </tr>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../static/application/css/style3.css">
+    <html lang='en'>
+    <div style="padding-left: 5%">
+        <table>
+            <th></th>
+            {% for grade in allGrades %}
 
-
+                <th> Grade</th>
             {% endfor %}
+            <tr>
+                {% for studentcourse in studentCourse %}
+                    <tr>
+                        <th> {{ studentcourse.courseID.Name }}</th>
+                        {% for grade in allGrades %}
+                            {% if grade.studentCourseID.courseID.Name == studentcourse.courseID.Name %}
+                                <td> {{ grade.grade }}</td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
 
 
-    </table>
+                {% endfor %}
+
+        </table>
+    </div><br><br>
 {% endblock %}

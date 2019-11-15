@@ -1,32 +1,30 @@
 {% extends 'parent/base.html' %}
 {% block body %}
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-<link rel="stylesheet" href="../../static/application/css/style3.css">
-<html lang='en'>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../static/application/css/style3.css">
+    <html lang='en'>
 
-<head>
-	<meta charset='UTF-8'/>
-	<title>AfterLoginParent Page </title>
-</head>
+    <head>
+        <meta charset='UTF-8'/>
+        <title>AfterLoginParent Page </title>
+    </head>
 
-<body>
- <h2 style="color: #1eaaf1; padding-left: 5%"> Welcome {{ user }} ! Your child {{ user.parent.studentID.Name }}. Class: {{ user.parent.studentID.classID.Name }} </h2>		<div id="TimeTable" style="padding-left: 5%">
+    <body>
+    <h2 style="color: #1eaaf1; padding-left: 5%"> Welcome {{ user }} ! Your child {{ user.parent.studentID.Name }}.
+        Class: {{ user.parent.studentID.classID.Name }} </h2>
+    <div id="TimeTable" style="padding-left: 5%">
 
-			 <br>
-		</div>
-		<div style="padding-left: 5%">
-			<h1 style="color: #1eaaf1"> First Year Courses</h1><br>
-               <!-- {% for studentCourse in studentCourses %}
-            <button href="#" class="btn btn-primary btn-lg"> {{ studentCourse.courseID.Name }}</button><br><br>
-            {% endfor %}-->
+        <br>
+    </div>
+    <div style="padding-left: 5%">
+        <h1 style="color: #1eaaf1"> First Year Courses</h1><br>
         {% for studentcourse in allStudentCourses %}
-                     <button href="#" class="btn btn-primary btn-lg"> {{  studentcourse.courseID.Name }} </button><br><br>
-                {% endfor %}
-		</div>
-		<div style="padding-left: 85%">
+            <button href="{% url 'cou' %}" class="btn btn-primary btn-lg"> {{ studentcourse.courseID.Name }} </button><br><br>
+        {% endfor %}
+    </div>
 
-			<button href="#" class="btn btn-primary btn-lg"> View More Courses </button>
-		</div><br><br>
-	</body>
+    <br><br>
+    </body>
 
-	{% endblock %}
+{% endblock %}
