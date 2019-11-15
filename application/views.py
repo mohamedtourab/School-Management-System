@@ -25,19 +25,27 @@ class AdministrativeOfficer(generic.ListView):
         return "salam"
 
 
+class CourseView(generic.ListView):
+    template_name = 'parent/course.html'
+
+    def get_queryset(self):
+        return "salam"
+
+
+class CourseDetailView(generic.ListView):
+    template_name = 'parent/course.html'
+    context_object_name = 'courseID'
+
+    def get_queryset(self):
+        return self.kwargs['courseID']
+
+
 class ParentView(generic.ListView):
     template_name = 'parent/afterloginparent.html'
     context_object_name = 'allStudentCourses'
 
     def get_queryset(self):
         return StudentCourse.objects.filter(studentID=self.request.user.parent.studentID)  # GET STUDENT ID HERE
-
-
-class CourseView(generic.ListView):
-    template_name = 'parent/course.html'
-
-    def get_queryset(self):
-        return "salam"
 
 
 class ParentAttendanceView(generic.ListView):

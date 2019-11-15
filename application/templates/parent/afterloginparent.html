@@ -1,30 +1,17 @@
 {% extends 'parent/base.html' %}
 {% block body %}
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
-          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-    <link rel="stylesheet" href="../../static/application/css/style3.css">
-    <html lang='en'>
-
-    <head>
-        <meta charset='UTF-8'/>
-        <title>AfterLoginParent Page </title>
-    </head>
-
-    <body>
-    <h2 style="color: #1eaaf1; padding-left: 5%"> Welcome {{ user }} ! Your child {{ user.parent.studentID.Name }}.
-        Class: {{ user.parent.studentID.classID.Name }} </h2>
+    <h2 style="padding-left: 5%"> Welcome {{ user }}<br>Your child {{ user.parent.studentID.Name }}<br>Class: {{ user.parent.studentID.classID.Name }} </h2>
     <div id="TimeTable" style="padding-left: 5%">
 
         <br>
     </div>
     <div style="padding-left: 5%">
-        <h1 style="color: #1eaaf1"> First Year Courses</h1><br>
+        <h1> Student Courses</h1><br>
         {% for studentcourse in allStudentCourses %}
-            <button href="{% url 'cou' %}" class="btn btn-primary btn-lg"> {{ studentcourse.courseID.Name }} </button><br><br>
+            <a href="{% url 'application:courseView' %}{{ studentcourse.courseID.ID }}"
+               class="btn btn-primary btn-lg"> {{ studentcourse.courseID.Name }} </a><br><br>
         {% endfor %}
     </div>
 
     <br><br>
-    </body>
-
 {% endblock %}

@@ -1,4 +1,5 @@
 from django.urls import path, re_path
+from django.conf.urls import url
 from . import views
 
 app_name = 'application'
@@ -15,6 +16,8 @@ urlpatterns = [
     path('parent/grades/', views.ParentGradeView.as_view(), name='parentGrade'),
     path('parentsignup/', views.parentSignup, name='parentSignup'),
     path('parent/attendance', views.ParentAttendanceView.as_view(), name='parentAttendance'),
-    path('parent/course/<courseid>', views.CourseView.as_view(), name='courseView'),
+    path('parent/course/', views.CourseView.as_view(), name='courseView'),
+    url(r'^parent/course/(?P<courseID>[0-9]+)/$', views.CourseDetailView.as_view(), name='courseViewWithCourseId'),
+
 
 ]
