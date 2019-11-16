@@ -1,4 +1,11 @@
 {% extends 'parent/courseBase.html' %}
 {% block body %}
-    <h2>This is course number {{ courseID }}</h2>
+    {% if topics %}
+       <h2 style="padding-left: 1%">List of topics discussed in {{ courseDetails.name }}</h2>
+        <ul>
+            {% for topic in topics %}
+                <li >{{ topic.contentString }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 {% endblock %}

@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from .models import StudentCourse, PerformanceGrade, Parent
+from .models import StudentCourse, PerformanceGrade, Parent, Content, Course
 from django.views import generic
 from application.forms import StudentForm, ParentSignUpForm
 
@@ -34,10 +34,15 @@ class CourseView(generic.ListView):
 
 class CourseDetailView(generic.ListView):
     template_name = 'parent/course.html'
-    context_object_name = 'courseID'
+    context_object_name = 'topics'
 
     def get_queryset(self):
-        return self.kwargs['courseID']
+        return Content.objects.filter(courseID=self.kwargs['courseID'])
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(CourseDetailView, self).get_context_data(**kwargs)
+        context['courseDetails'] = Course.objects.get(ID=self.kwargs['courseID'])
+        return context
 
 
 class ParentView(generic.ListView):

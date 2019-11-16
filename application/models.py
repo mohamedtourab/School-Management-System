@@ -72,14 +72,12 @@ class Parent(models.Model):
         return self.user.username
 
 
-
-
-
 class StudentCourse(models.Model):
     ID = models.AutoField(primary_key=True)
     studentID = models.ForeignKey(Student, on_delete=models.CASCADE)
     courseID = models.ForeignKey(Course, on_delete=models.CASCADE)
     finalGrade = models.PositiveIntegerField(blank=True, null=True)
+
 
 class PerformanceGrade(models.Model):
     ID = models.AutoField(primary_key=True)
