@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.core.mail import send_mail
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from .models import StudentCourse, PerformanceGrade, Parent, Content, Course
@@ -160,6 +161,12 @@ def parentSignup(request):
                 user.refresh_from_db()  # load the profile instance created by the signal
                 Parent.objects.create(user=user, studentID=form.cleaned_data.get('studentID'))
                 messages.success(request, 'Parent has been successfully added')
+
+                username = request.POST['username']
+                email = request.POST['email']
+                password = request.POST['password2']
+                sendmailtoparent(username, email, password)  # send credentials to a parent
+
                 return render(request, 'application/parentSignup.html', {'form': ParentSignUpForm()})
             else:
                 return render(request, 'application/parentSignup.html',
@@ -167,3 +174,11 @@ def parentSignup(request):
     else:
         form = ParentSignUpForm()
     return render(request, 'application/parentSignup.html', {'form': form})
+
+
+def sendmailtoparent(username, email, password):
+    send_mail('Credentials',
+              'Username: ' + username + '\nPassword: ' + password,
+              'admofficer658@gmail.com',
+              [email],
+              fail_silently=False)
