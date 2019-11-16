@@ -26,13 +26,13 @@ class AdministrativeOfficer(models.Model):
 # TODO add TimeTable field for the class
 class ClassInfo(models.Model):
     ID = models.AutoField(primary_key=True)
-    Name = models.CharField(max_length=30)
+    name = models.CharField(max_length=30)
     totalStudentsNumber = models.PositiveIntegerField()
 
 
 class Student(models.Model):
     ID = models.AutoField(primary_key=True)
-    Name = models.CharField(max_length=50, verbose_name='First Name')
+    name = models.CharField(max_length=50, verbose_name='First Name')
     surname = models.CharField(max_length=50, verbose_name='Last Name')
     classID = models.ForeignKey(ClassInfo, on_delete=models.CASCADE, verbose_name='Student Class Name', blank=True,
                                 null=True)
@@ -41,7 +41,7 @@ class Student(models.Model):
 
 class Course(models.Model):
     ID = models.AutoField(primary_key=True)
-    Name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50)
     numberOfHoursPerWeek = models.PositiveIntegerField()
     year = models.CharField(max_length=10)
     assignment = models.FileField(blank=True, null=True)
@@ -98,6 +98,7 @@ class Content(models.Model):
     ID = models.AutoField(primary_key=True)
     courseID = models.ForeignKey(Course, on_delete=models.CASCADE)
     contentString = models.CharField(max_length=100)
+    material = models.FileField(blank=True, null=True)
 
 
 class Announcements(models.Model):

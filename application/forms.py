@@ -9,7 +9,7 @@ from .models import Student
 class StudentForm(ModelForm):
     class Meta:
         model = Student
-        fields = ['Name', 'surname', 'classID', 'studentYear']
+        fields = ['name', 'surname', 'classID', 'studentYear']
 
 
 class ParentSignUpForm(UserCreationForm):
