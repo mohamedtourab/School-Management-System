@@ -59,7 +59,6 @@ class ParentAttendanceView(generic.ListView):
     def get_queryset(self):
         return "salam"
 
-
 class ParentGradeView(generic.ListView):
     template_name = 'parent/gradep.html'
     context_object_name = 'allGrades'
