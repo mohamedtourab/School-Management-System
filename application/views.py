@@ -72,6 +72,16 @@ class ParentGradeView(generic.ListView):
         context = super(ParentGradeView, self).get_context_data(**kwargs)
         context['studentCourse'] = StudentCourse.objects.filter(
             studentID=self.request.user.parent.studentID)  # GET STUDENT ID HERE
+
+        columns = 0
+        for studentcourse in context['studentCourse']:
+            gradeCounter = 0
+            for grade in context['allGrades']:
+                if grade.studentCourseID.courseID.name == studentcourse.courseID.name:
+                    gradeCounter += 1
+            if gradeCounter > columns:
+                columns = gradeCounter
+        context['columns'] = range(columns)
         return context
 
 
