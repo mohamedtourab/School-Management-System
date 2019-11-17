@@ -164,11 +164,14 @@ def classCompose(request):
         form = ClassComposeForm(request.POST)
         # check whether it's valid:
         if form.is_valid():
+
             # process the data in form.cleaned_data as required
             # here : create the class (1st year class with 1st year students)
-            # 2 cases : more students than the capacity of the class, or less/= students than the capacity of the class
-            form.save()
+            classInfo = form.save()
+            classInfo.refresh_from_db()
+
             messages.success(request, 'Class has been successfully added')
+
             assignClassesAlphabetically()
             return render(request, 'application/classCompose.html',
                           {'form': form, 'numberOfSeats': numberOfSeats(), 'numberOfStudents': numberOfStudents()})
