@@ -1,11 +1,13 @@
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib import messages
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth.models import User
 from django.db.models import Sum
 from django.core.mail import send_mail
 from django.http import HttpResponse
-from django.shortcuts import render, redirect, render_to_response
+from django.shortcuts import render, redirect#, render_to_response
+from django.urls import reverse
+
 from .models import StudentCourse, PerformanceGrade, Parent, Content, Course, Student, ClassInfo
 from django.views import generic
 from application.forms import StudentForm, ParentSignUpForm, ClassComposeForm
@@ -253,3 +255,20 @@ def sendmailtoparent(username, email, password):
               'admofficer658@gmail.com',
               [email],
               fail_silently=False)
+
+
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(data=request.POST, user=request.user)
+
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            return redirect(reverse('application:parent'))
+        else:
+            return redirect(reverse('application:change_password'))
+    else:
+        form = PasswordChangeForm(user=request.user)
+
+        args = {'form': form}
+        return render(request, 'parent/change_password.html', args)

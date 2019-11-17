@@ -20,6 +20,6 @@ urlpatterns = [
     path('composeClass/', views.classCompose, name='classCompose'),
     path('assignStudent/', views.assignClassesAlphabetically, name='assignClassesAlphabetically'),
     url(r'^parent/course/(?P<courseID>[0-9]+)/$', views.CourseDetailView.as_view(), name='courseViewWithCourseId'),
-
+    path('change-password/', views.change_password, name='change_password'),
 
 ]
