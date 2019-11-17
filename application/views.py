@@ -168,9 +168,8 @@ def classCompose(request):
             # here : create the class (1st year class with 1st year students)
             # 2 cases : more students than the capacity of the class, or less/= students than the capacity of the class
             form.save()
-
-            assignClassesAlphabetically()
             messages.success(request, 'Class has been successfully added')
+            assignClassesAlphabetically()
             return render(request, 'application/classCompose.html',
                           {'form': form, 'numberOfSeats': numberOfSeats(), 'numberOfStudents': numberOfStudents()})
     else:
@@ -184,6 +183,8 @@ def classCompose(request):
 def assignClassesAlphabetically():
     studentsAssigned = 0
     studentList = Student.objects.filter(studentYear=1)
+    print(studentList)
+
     numberOfStudentsToAssign = studentList.count()
 
     i = 0  # class number
@@ -200,7 +201,7 @@ def assignClassesAlphabetically():
 
             student = studentList[j]
             student.classID = classInfo
-            print("student name : "+ str(student.name) + " in class : "+ str(classInfo.ID))
+            print("student name : "+ str(student.first_name) + " in class : "+ str(classInfo.ID))
 
         print("number to assign left : " + str(numberOfStudentsToAssign))
         studentsAssigned += classCapacity
@@ -218,23 +219,7 @@ def assignClassesAlphabetically():
         student = studentList[k]
         student.classID = classInfo
         print("k value : " + str(k))
-        print("student name : " + str(student.name) + " in class : " + str(classInfo.ID))
-
-
-def assignStudent(request):
-    students = Student.objects.all().count()
-    classes = ClassInfo.objects.all()[0]
-    """if request.method == 'POST':
-        students = Student.objects.all().count()
-        classes = ClassInfo.objects.all()[0]
-
-        print(students)
-        print(classes)
-        return render(request)"""
-    # if studentsRemaining > classCapacity: #we get the next class full
-
-    # else: #all the students go to the next class
-
+        print("student name : " + str(student.first_name) + " in class : " + str(classInfo.ID))
 
 def numberOfSeats():
     number = ClassInfo.objects.aggregate((Sum('totalStudentsNumber')))['totalStudentsNumber__sum']
