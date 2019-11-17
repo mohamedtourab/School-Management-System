@@ -24,10 +24,6 @@
         </li>
     </ul>
 
-    <h1 class="messages">
-        <button type="submit" class="btn btn-info btn-lg" onclick="{% url 'application:assignStudent' %}">Assign Students</button>
-    </h1>
-
     <form method="post">
         {% csrf_token %}
         {{ form|crispy }}

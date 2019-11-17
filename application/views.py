@@ -175,7 +175,6 @@ def classCompose(request):
     else:
         form = ClassComposeForm()
 
-    assignClassesAlphabetically()
     return render(request, 'application/classCompose.html',
                   {'form': form, 'numberOfSeats': numberOfSeats(), 'numberOfStudents': numberOfStudents()})
 
@@ -183,7 +182,6 @@ def classCompose(request):
 def assignClassesAlphabetically():
     studentsAssigned = 0
     studentList = Student.objects.filter(studentYear=1)
-    print(studentList)
 
     numberOfStudentsToAssign = studentList.count()
 
@@ -192,34 +190,24 @@ def assignClassesAlphabetically():
     classCapacity = classInfo.totalStudentsNumber
 
     while numberOfStudentsToAssign > int(classCapacity):
-        print("i value : "+ str(i))
-        print("number to assign : " + str(numberOfStudentsToAssign) + "\n \n")
         numberOfStudentsToAssign -= classCapacity
 
         for j in range(studentsAssigned, studentsAssigned + classCapacity):
-            print("j value : "+ str(j))
 
             student = studentList[j]
             student.classID = classInfo
-            print("student name : "+ str(student.first_name) + " in class : "+ str(classInfo.ID))
 
-        print("number to assign left : " + str(numberOfStudentsToAssign))
         studentsAssigned += classCapacity
 
         i += 1
-        print(i)
 
         #new class incoming
         classInfo = ClassInfo.objects.all()[i]
         classCapacity = classInfo.totalStudentsNumber
 
-    print("less students than last class capacity !")
-
     for k in range(studentsAssigned, studentList.count()):
         student = studentList[k]
         student.classID = classInfo
-        print("k value : " + str(k))
-        print("student name : " + str(student.first_name) + " in class : " + str(classInfo.ID))
 
 def numberOfSeats():
     number = ClassInfo.objects.aggregate((Sum('totalStudentsNumber')))['totalStudentsNumber__sum']
