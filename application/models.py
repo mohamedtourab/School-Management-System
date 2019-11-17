@@ -35,8 +35,8 @@ class ClassInfo(models.Model):
 
 class Student(models.Model):
     ID = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=50, verbose_name='First Name')
-    surname = models.CharField(max_length=50, verbose_name='Last Name')
+    first_name = models.CharField(max_length=50, verbose_name='First Name')
+    last_name = models.CharField(max_length=50, verbose_name='Last Name')
     classID = models.ForeignKey(ClassInfo, on_delete=models.CASCADE, verbose_name='Student Class Name', blank=True,
                                 null=True)
     studentYear = models.CharField(max_length=20, verbose_name='Year Grade')
