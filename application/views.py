@@ -2,11 +2,12 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.db.models import Sum
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
-from .models import StudentCourse, PerformanceGrade, Parent, Content, Course
+from django.shortcuts import render, redirect, render_to_response
+from .models import StudentCourse, PerformanceGrade, Parent, Content, Course, Student, ClassInfo
 from django.views import generic
-from application.forms import StudentForm, ParentSignUpForm
+from application.forms import StudentForm, ParentSignUpForm, ClassComposeForm
 
 
 # Create your views here.
@@ -146,6 +147,93 @@ def enrollStudent(request):
         form = StudentForm()
 
     return render(request, 'application/enrollStudent.html', {'form': form})
+
+
+def classCompose(request):
+    if request.method == 'POST':
+        form = ClassComposeForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            # here : create the class (1st year class with 1st year students)
+            # 2 cases : more students than the capacity of the class, or less/= students than the capacity of the class
+            form.save()
+
+            assignClassesAlphabetically()
+            messages.success(request, 'Class has been successfully added')
+            return render(request, 'application/classCompose.html',
+                          {'form': form, 'numberOfSeats': numberOfSeats(), 'numberOfStudents': numberOfStudents()})
+    else:
+        form = ClassComposeForm()
+
+    assignClassesAlphabetically()
+    return render(request, 'application/classCompose.html',
+                  {'form': form, 'numberOfSeats': numberOfSeats(), 'numberOfStudents': numberOfStudents()})
+
+
+def assignClassesAlphabetically():
+    studentsAssigned = 0
+    studentList = Student.objects.filter(studentYear=1)
+    numberOfStudentsToAssign = studentList.count()
+
+    i = 0  # class number
+    classInfo = ClassInfo.objects.all()[i]
+    classCapacity = classInfo.totalStudentsNumber
+
+    while numberOfStudentsToAssign > int(classCapacity):
+        print("i value : "+ str(i))
+        print("number to assign : " + str(numberOfStudentsToAssign) + "\n \n")
+        numberOfStudentsToAssign -= classCapacity
+
+        for j in range(studentsAssigned, studentsAssigned + classCapacity):
+            print("j value : "+ str(j))
+
+            student = studentList[j]
+            student.classID = classInfo
+            print("student name : "+ str(student.name) + " in class : "+ str(classInfo.ID))
+
+        print("number to assign left : " + str(numberOfStudentsToAssign))
+        studentsAssigned += classCapacity
+
+        i += 1
+        print(i)
+
+        #new class incoming
+        classInfo = ClassInfo.objects.all()[i]
+        classCapacity = classInfo.totalStudentsNumber
+
+    print("less students than last class capacity !")
+
+    for k in range(studentsAssigned, studentList.count()):
+        student = studentList[k]
+        student.classID = classInfo
+        print("k value : " + str(k))
+        print("student name : " + str(student.name) + " in class : " + str(classInfo.ID))
+
+
+def assignStudent(request):
+    students = Student.objects.all().count()
+    classes = ClassInfo.objects.all()[0]
+    """if request.method == 'POST':
+        students = Student.objects.all().count()
+        classes = ClassInfo.objects.all()[0]
+
+        print(students)
+        print(classes)
+        return render(request)"""
+    # if studentsRemaining > classCapacity: #we get the next class full
+
+    # else: #all the students go to the next class
+
+
+def numberOfSeats():
+    number = ClassInfo.objects.aggregate((Sum('totalStudentsNumber')))['totalStudentsNumber__sum']
+    return number
+
+
+def numberOfStudents():
+    number = Student.objects.all().count()
+    return number
 
 
 def parentSignup(request):
