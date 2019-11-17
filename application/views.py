@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.db.models import Sum
+from django.core.mail import send_mail
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, render_to_response
 from .models import StudentCourse, PerformanceGrade, Parent, Content, Course, Student, ClassInfo
@@ -60,7 +61,6 @@ class ParentAttendanceView(generic.ListView):
     def get_queryset(self):
         return "salam"
 
-
 class ParentGradeView(generic.ListView):
     template_name = 'parent/gradep.html'
     context_object_name = 'allGrades'
@@ -73,6 +73,16 @@ class ParentGradeView(generic.ListView):
         context = super(ParentGradeView, self).get_context_data(**kwargs)
         context['studentCourse'] = StudentCourse.objects.filter(
             studentID=self.request.user.parent.studentID)  # GET STUDENT ID HERE
+
+        columns = 0
+        for studentcourse in context['studentCourse']:
+            gradeCounter = 0
+            for grade in context['allGrades']:
+                if grade.studentCourseID.courseID.name == studentcourse.courseID.name:
+                    gradeCounter += 1
+            if gradeCounter > columns:
+                columns = gradeCounter
+        context['columns'] = range(columns)
         return context
 
 
@@ -249,6 +259,12 @@ def parentSignup(request):
                 user.refresh_from_db()  # load the profile instance created by the signal
                 Parent.objects.create(user=user, studentID=form.cleaned_data.get('studentID'))
                 messages.success(request, 'Parent has been successfully added')
+
+                username = request.POST['username']
+                email = request.POST['email']
+                password = request.POST['password2']
+                sendmailtoparent(username, email, password)  # send credentials to a parent
+
                 return render(request, 'application/parentSignup.html', {'form': ParentSignUpForm()})
             else:
                 return render(request, 'application/parentSignup.html',
@@ -256,3 +272,11 @@ def parentSignup(request):
     else:
         form = ParentSignUpForm()
     return render(request, 'application/parentSignup.html', {'form': form})
+
+
+def sendmailtoparent(username, email, password):
+    send_mail('Credentials',
+              'Username: ' + username + '\nPassword: ' + password,
+              'admofficer658@gmail.com',
+              [email],
+              fail_silently=False)

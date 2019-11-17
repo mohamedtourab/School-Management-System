@@ -1,23 +1,18 @@
 {% extends 'parent/base.html' %}
 
 {% block body %}
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
-          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-    <link rel="stylesheet" href="../../static/application/css/style3.css">
-    <html lang='en'>
     <div style="padding-left: 5%">
         <table>
             <th></th>
-            {% for grade in allGrades %}
-
-                <th> Grade</th>
+            {% for i in columns %}
+                <th> Grade </th>
             {% endfor %}
             <tr>
                 {% for studentcourse in studentCourse %}
                     <tr>
-                        <th> {{ studentcourse.courseID.Name }}</th>
+                        <th> {{ studentcourse.courseID.name }}</th>
                         {% for grade in allGrades %}
-                            {% if grade.studentCourseID.courseID.Name == studentcourse.courseID.Name %}
+                            {% if grade.studentCourseID.courseID.name == studentcourse.courseID.name %}
                                 <td> {{ grade.grade }}</td>
                             {% endif %}
                         {% endfor %}

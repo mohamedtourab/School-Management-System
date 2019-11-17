@@ -1,13 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-
 
 # Create your models here.
 
 class Principle(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    email = models.EmailField(blank=True, null=True)
     ID = models.AutoField(primary_key=True)
 
     def __str__(self):
@@ -16,6 +16,9 @@ class Principle(models.Model):
 
 class AdministrativeOfficer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    email = models.EmailField(blank=True, null=True)
     ID = models.AutoField(primary_key=True)
 
     def __str__(self):
@@ -32,8 +35,8 @@ class ClassInfo(models.Model):
 
 class Student(models.Model):
     ID = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=50, verbose_name='First Name')
-    surname = models.CharField(max_length=50, verbose_name='Last Name')
+    first_name = models.CharField(max_length=50, verbose_name='First Name')
+    last_name = models.CharField(max_length=50, verbose_name='Last Name')
     classID = models.ForeignKey(ClassInfo, on_delete=models.CASCADE, verbose_name='Student Class Name', blank=True,
                                 null=True)
     studentYear = models.CharField(max_length=20, verbose_name='Year Grade')
@@ -50,6 +53,9 @@ class Course(models.Model):
 class Teacher(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     ID = models.AutoField(primary_key=True)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    email = models.EmailField(blank=True, null=True)
     fiscalCode = models.CharField(max_length=16)
     coordinatedClass = models.ForeignKey(ClassInfo, on_delete=models.CASCADE, blank=True, null=True)
 
