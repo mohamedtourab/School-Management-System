@@ -30,7 +30,7 @@ class AdministrativeOfficer(models.Model):
 # TODO add TimeTable field for the class
 class ClassInfo(models.Model):
     ID = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=30, unique=True)
     totalStudentsNumber = models.PositiveIntegerField()
 
 
