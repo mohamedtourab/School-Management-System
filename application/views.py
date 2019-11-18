@@ -198,9 +198,9 @@ def assignClassesAlphabetically():
         numberOfStudentsToAssign -= classCapacity
 
         for j in range(studentsAssigned, studentsAssigned + classCapacity):
-
             student = studentList[j]
             student.classID = classInfo
+            print(student.classID)
 
         studentsAssigned += classCapacity
 
