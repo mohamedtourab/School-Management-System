@@ -4,4 +4,4 @@ school by providing different functionalities to different types of users, it ca
 data that can be accessed by their parents in order interact with teachers and the employees.
 
 ###The Model UML Diagram
-![](ModelDesign.png)
+![Screenshot](Screenshots/ModelDesign.PNG)
