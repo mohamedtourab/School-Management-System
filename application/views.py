@@ -167,14 +167,24 @@ def classCompose(request):
         form = ClassComposeForm(request.POST)
         # check whether it's valid:
         if form.is_valid():
-            # process the data in form.cleaned_data as required
-            # here : create the class (1st year class with 1st year students)
             classInfo = form.save()
             classInfo.refresh_from_db()
 
+            print(Student.objects.filter(classID=None))
+            if Student.objects.filter(classID=None).count() < classInfo.totalStudentsNumber:
+                for student in Student.objects.filter(classID=None):
+                    student.classID = classInfo
+                    student.save()
+            else:
+                i = 0
+                for student in Student.objects.filter(classID=None):
+                    if i < classInfo.totalStudentsNumber:
+                        i += 1
+                        student.classID = classInfo
+                        student.save()
+
             messages.success(request, 'Class has been successfully added')
 
-            assignClassesAlphabetically()
             return render(request, 'administrativeOfficer/classCompose.html',
                           {'form': form, 'numberOfSeats': numberOfSeats(), 'numberOfStudents': numberOfStudents()})
     else:
@@ -182,37 +192,6 @@ def classCompose(request):
 
     return render(request, 'administrativeOfficer/classCompose.html',
                   {'form': form, 'numberOfSeats': numberOfSeats(), 'numberOfStudents': numberOfStudents()})
-
-
-def assignClassesAlphabetically():
-    studentsAssigned = 0
-    studentList = Student.objects.filter(studentYear='FIRST')
-
-    numberOfStudentsToAssign = studentList.count()
-
-    i = 0  # class number
-    classInfo = ClassInfo.objects.all()[i]
-    classCapacity = classInfo.totalStudentsNumber
-
-    while numberOfStudentsToAssign > int(classCapacity):
-        numberOfStudentsToAssign -= classCapacity
-
-        for j in range(studentsAssigned, studentsAssigned + classCapacity):
-            student = studentList[j]
-            student.classID = classInfo
-            print(student.classID)
-
-        studentsAssigned += classCapacity
-
-        i += 1
-
-        # new class incoming
-        classInfo = ClassInfo.objects.all()[i]
-        classCapacity = classInfo.totalStudentsNumber
-
-    for k in range(studentsAssigned, studentList.count()):
-        student = studentList[k]
-        student.classID = classInfo
 
 
 def numberOfSeats():
