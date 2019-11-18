@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 # Create your models here.
 
 class Principle(models.Model):
@@ -34,12 +35,32 @@ class ClassInfo(models.Model):
 
 
 class Student(models.Model):
+    FIRST = 'FIRST'
+    SECOND = 'SECOND'
+    THIRD = 'THIRD'
+    FOURTH = 'FOURTH'
+    FIFTH = 'FIFTH'
+    SIXTH = 'SIXTH'
+    SEVENTH = 'SEVENTH'
+    EIGHTH = 'EIGHTH'
+    NINTH = 'NINTH'
+    TENTH = 'TENTH'
+    grade_choice = ((FIRST, 'FIRST'),
+                    (SECOND, 'SECOND'),
+                    (THIRD, 'THIRD'),
+                    (FOURTH, 'FOURTH'),
+                    (FIFTH, 'FIFTH'),
+                    (SIXTH, 'SIXTH'),
+                    (SEVENTH, 'SEVENTH'),
+                    (EIGHTH, 'EIGHTH'),
+                    (NINTH, 'NINTH'),
+                    (TENTH, 'TENTH'),)
     ID = models.AutoField(primary_key=True)
     first_name = models.CharField(max_length=50, verbose_name='First Name')
     last_name = models.CharField(max_length=50, verbose_name='Last Name')
     classID = models.ForeignKey(ClassInfo, on_delete=models.CASCADE, verbose_name='Student Class Name', blank=True,
                                 null=True)
-    studentYear = models.CharField(max_length=20, verbose_name='Year Grade')
+    studentYear = models.CharField(max_length=20, choices=grade_choice, default=FIRST, verbose_name='Year Grade')
 
 
 class Course(models.Model):

@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.db.models import Sum
 from django.core.mail import send_mail
 from django.http import HttpResponse
-from django.shortcuts import render, redirect#, render_to_response
+from django.shortcuts import render, redirect  # , render_to_response
 from django.urls import reverse
 
 from .models import StudentCourse, PerformanceGrade, Parent, Content, Course, Student, ClassInfo
@@ -62,6 +62,7 @@ class ParentAttendanceView(generic.ListView):
 
     def get_queryset(self):
         return "salam"
+
 
 class ParentGradeView(generic.ListView):
     template_name = 'parent/gradep.html'
@@ -152,13 +153,13 @@ def enrollStudent(request):
             form.save()
             # redirect to a new URL:
             messages.success(request, 'Student has been successfully added')
-            return render(request, 'application/enrollStudent.html', {'form': StudentForm()})
+            return render(request, 'administrativeOfficer/enrollStudent.html', {'form': StudentForm()})
 
             # if a GET (or any other method) we'll create a blank form
     else:
         form = StudentForm()
 
-    return render(request, 'application/enrollStudent.html', {'form': form})
+    return render(request, 'administrativeOfficer/enrollStudent.html', {'form': form})
 
 
 def classCompose(request):
@@ -166,7 +167,6 @@ def classCompose(request):
         form = ClassComposeForm(request.POST)
         # check whether it's valid:
         if form.is_valid():
-
             # process the data in form.cleaned_data as required
             # here : create the class (1st year class with 1st year students)
             classInfo = form.save()
@@ -175,18 +175,18 @@ def classCompose(request):
             messages.success(request, 'Class has been successfully added')
 
             assignClassesAlphabetically()
-            return render(request, 'application/classCompose.html',
+            return render(request, 'administrativeOfficer/classCompose.html',
                           {'form': form, 'numberOfSeats': numberOfSeats(), 'numberOfStudents': numberOfStudents()})
     else:
         form = ClassComposeForm()
 
-    return render(request, 'application/classCompose.html',
+    return render(request, 'administrativeOfficer/classCompose.html',
                   {'form': form, 'numberOfSeats': numberOfSeats(), 'numberOfStudents': numberOfStudents()})
 
 
 def assignClassesAlphabetically():
     studentsAssigned = 0
-    studentList = Student.objects.filter(studentYear=1)
+    studentList = Student.objects.filter(studentYear='FIRST')
 
     numberOfStudentsToAssign = studentList.count()
 
@@ -198,7 +198,6 @@ def assignClassesAlphabetically():
         numberOfStudentsToAssign -= classCapacity
 
         for j in range(studentsAssigned, studentsAssigned + classCapacity):
-
             student = studentList[j]
             student.classID = classInfo
 
@@ -206,13 +205,14 @@ def assignClassesAlphabetically():
 
         i += 1
 
-        #new class incoming
+        # new class incoming
         classInfo = ClassInfo.objects.all()[i]
         classCapacity = classInfo.totalStudentsNumber
 
     for k in range(studentsAssigned, studentList.count()):
         student = studentList[k]
         student.classID = classInfo
+
 
 def numberOfSeats():
     number = ClassInfo.objects.aggregate((Sum('totalStudentsNumber')))['totalStudentsNumber__sum']
@@ -229,7 +229,7 @@ def parentSignup(request):
         form = ParentSignUpForm(request.POST)
         try:
             user = User.objects.get(username=request.POST['username'], )
-            return render(request, 'application/parentSignup.html',
+            return render(request, 'administrativeOfficer/parentSignup.html',
                           {'error_message': 'Username Exist...Try Something Else !', 'form': ParentSignUpForm()})
         except User.DoesNotExist:
             if form.is_valid():
@@ -243,13 +243,13 @@ def parentSignup(request):
                 password = request.POST['password2']
                 sendmailtoparent(username, email, password)  # send credentials to a parent
 
-                return render(request, 'application/parentSignup.html', {'form': ParentSignUpForm()})
+                return render(request, 'administrativeOfficer/parentSignup.html', {'form': ParentSignUpForm()})
             else:
-                return render(request, 'application/parentSignup.html',
+                return render(request, 'administrativeOfficer/parentSignup.html',
                               {'error_message': 'Invalid Information', 'form': ParentSignUpForm()})
     else:
         form = ParentSignUpForm()
-    return render(request, 'application/parentSignup.html', {'form': form})
+    return render(request, 'administrativeOfficer/parentSignup.html', {'form': form})
 
 
 def sendmailtoparent(username, email, password):
