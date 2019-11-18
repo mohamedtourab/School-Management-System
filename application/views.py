@@ -267,11 +267,10 @@ def change_password(request):
         if form.is_valid():
             form.save()
             update_session_auth_hash(request, form.user)
-            return redirect(reverse('application:parent'))
-        else:
+            messages.success(request, 'Password changed successfully.')
             return redirect(reverse('application:change_password'))
+        else:
+            return render(request, 'parent/change_password.html',
+                          {'error_message': 'Invalid Information', 'form': PasswordChangeForm(user=request.user)})
     else:
-        form = PasswordChangeForm(user=request.user)
-
-        args = {'form': form}
-        return render(request, 'parent/change_password.html', args)
+        return render(request, 'parent/change_password.html', {'form': PasswordChangeForm(user=request.user)})
