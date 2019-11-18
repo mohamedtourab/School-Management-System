@@ -199,7 +199,8 @@ def numberOfSeats():
 
 
 def numberOfStudents():
-    number = Student.objects.all().count()
+    number = Student.objects.filter(classID=None).count()
+    print(number)
     return number
 
 
