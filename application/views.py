@@ -170,7 +170,6 @@ def classCompose(request):
             classInfo = form.save()
             classInfo.refresh_from_db()
 
-            print(Student.objects.filter(classID=None))
             if Student.objects.filter(classID=None).count() < classInfo.totalStudentsNumber:
                 for student in Student.objects.filter(classID=None):
                     student.classID = classInfo
