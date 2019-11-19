@@ -30,9 +30,9 @@ class ContentForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
-        listOfCourses = (TeacherCourse.objects.filter(teacherID=self.user.teacher.ID)).values('courseID')
-        resultOfQuery = Course.objects.filter(ID__in=listOfCourses)
-        self.courseID = forms.ModelChoiceField(queryset=resultOfQuery)
+        listOfCoursesID = (TeacherCourse.objects.filter(teacherID=self.user.teacher.ID)).values('courseID')
+        listOfCourses = Course.objects.filter(ID__in=listOfCoursesID)
+        self.courseID = forms.ModelChoiceField(queryset=listOfCourses)
         super(ContentForm, self).__init__(*args, **kwargs)
         self.fields['courseID'] = self.courseID
 

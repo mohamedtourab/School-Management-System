@@ -274,11 +274,9 @@ class TeacherCourseDetailView(generic.ListView):
 
 def contentForm(request):
     if request.method == 'POST':
-        form = ContentForm(request.POST)
+        form = ContentForm(request.POST,user=request.user)
         if form.is_valid():
-            content = form.save()
-            contentString = form.cleaned_data['contentString']
-            material = form.cleaned_data['material']
+            form.save()
             return redirect('application:teacher')
     else:
         form = ContentForm(user=request.user)
