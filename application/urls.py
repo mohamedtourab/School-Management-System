@@ -26,4 +26,5 @@ urlpatterns = [
         name='teacherCourseViewWithCourseId'),
     path('teacher/', views.TeacherView.as_view(), name='teacher'),
     path('teacher/addtopic/', views.contentForm, name='contentForm'),
+    path('teacher/addPerformanceGrade/', views.gradeForm, name='gradeForm'),
 ]

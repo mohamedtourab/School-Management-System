@@ -10,7 +10,7 @@ from django.urls import reverse
 
 from .models import StudentCourse, PerformanceGrade, Parent, Content, Course, Student, ClassInfo, TeacherCourse
 from django.views import generic
-from application.forms import StudentForm, ParentSignUpForm, ClassComposeForm, ContentForm
+from application.forms import StudentForm, ParentSignUpForm, ClassComposeForm, ContentForm, PerformanceGradeForm
 
 
 # Create your views here.
@@ -256,7 +256,12 @@ def change_password(request):
         return render(request, 'parent/change_password.html', {'form': PasswordChangeForm(user=request.user)})
 
 
+class TeacherView(generic.ListView):
+    template_name = 'teacher/teacherAfterLogin.html'
+    context_object_name = 'allTeacherCourses'
 
+    def get_queryset(self):
+        return TeacherCourse.objects.filter(teacherID=self.request.user.teacher.ID)
 
 
 class TeacherCourseDetailView(generic.ListView):
@@ -274,7 +279,7 @@ class TeacherCourseDetailView(generic.ListView):
 
 def contentForm(request):
     if request.method == 'POST':
-        form = ContentForm(request.POST,user=request.user)
+        form = ContentForm(request.POST, user=request.user)
         if form.is_valid():
             form.save()
             return redirect('application:teacher')
@@ -282,10 +287,12 @@ def contentForm(request):
         form = ContentForm(user=request.user)
     return render(request, 'teacher/addTopicORMaterial.html', {'form': form})
 
-
-class TeacherView(generic.ListView):
-    template_name = 'teacher/teacherAfterLogin.html'
-    context_object_name = 'allTeacherCourses'
-
-    def get_queryset(self):
-        return TeacherCourse.objects.filter(teacherID=self.request.user.teacher.ID)
+def gradeForm(request):
+    if request.method == 'POST':
+        form = PerformanceGradeForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('application:teacher')
+    else:
+        form = PerformanceGradeForm()
+    return render(request, 'teacher/grade.html', {'form': form})
