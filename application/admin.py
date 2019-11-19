@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import Teacher, Principle, Parent, AdministrativeOfficer, Student, ClassInfo, StudentCourse, Course, \
-    Attendance, PerformanceGrade, Content
+    Attendance, PerformanceGrade, Content, TeacherCourse
 
 # Register your models here.
 admin.site.register(Teacher)
@@ -14,3 +14,4 @@ admin.site.register(Course)
 admin.site.register(Attendance)
 admin.site.register(PerformanceGrade)
 admin.site.register(Content)
+admin.site.register(TeacherCourse)
