@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import ModelForm
 
-from .models import Student, ClassInfo, Content, TeacherCourse
+from .models import Student, ClassInfo, Content, TeacherCourse, Course
 
 
 class StudentForm(ModelForm):
@@ -27,19 +27,15 @@ class ClassComposeForm(ModelForm):
 
 
 class ContentForm(ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        listOfCourses = (TeacherCourse.objects.filter(teacherID=self.user.teacher.ID)).values('courseID')
+        resultOfQuery = Course.objects.filter(ID__in=listOfCourses)
+        self.courseID = forms.ModelChoiceField(queryset=resultOfQuery)
+        super(ContentForm, self).__init__(*args, **kwargs)
+        self.fields['courseID'] = self.courseID
+
     class Meta:
         model = Content
-        fields = ['courseID', 'contentString', 'material']
-
-# class ContentForm(ModelForm):
-#     courseID = None
-#
-#     def __init__(self, *args, **kwargs):
-#         self.user = kwargs.pop('user', None)
-#         self.courseID = forms.ModelChoiceField(queryset=TeacherCourse.objects.filter(teacherID=self.user.teacher.ID),
-#                                                initial=self.courseID)
-#         super(ContentForm, self).__init__(*args, **kwargs)
-#
-#     class Meta:
-#         model = Content
-#         fields = ['courseID', 'contentString', 'material']
+        fields = ['courseID', 'contentString', 'material', ]

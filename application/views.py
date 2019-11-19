@@ -281,7 +281,7 @@ def contentForm(request):
             material = form.cleaned_data['material']
             return redirect('application:teacher')
     else:
-        form = ContentForm()
+        form = ContentForm(user=request.user)
     return render(request, 'teacher/addTopicORMaterial.html', {'form': form})
 
 
