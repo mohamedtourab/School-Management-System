@@ -22,4 +22,8 @@ urlpatterns = [
     url(r'^parent/course/(?P<courseID>[0-9]+)/$', views.CourseDetailView.as_view(), name='courseViewWithCourseId'),
     path('change-password/', views.change_password, name='change_password'),
 
+    url(r'^teacher/course/(?P<courseID>[0-9]+)/$', views.TeacherCourseDetailView.as_view(),
+        name='teacherCourseViewWithCourseId'),
+    path('teacher/', views.TeacherView.as_view(), name='teacher'),
+    path('teacher/addtopic/', views.contentForm, name='contentForm'),
 ]

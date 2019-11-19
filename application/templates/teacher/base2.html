@@ -33,25 +33,24 @@
 		    		<div class="row d-flex">
 						<div class="col-md pr-4 d-flex topper align-items-right">
 					    	<div class="icon bg-tertiary mr-2 d-flex justify-content-center align-items-center"><span class="glyphicon glyphicon-user"></span></div>
-							<a class="btn btn-outline-primary" href="#" role="button"><span class="text">LogOut</span></a>
+							<a class="btn btn-outline-primary" href="{% url 'application:logout' %}" role="button"><span class="text">LogOut</span></a>
 					    </div>
-				    </div>
+                    </div>
 			    </div>
 		    </div>
 		  </div>
     </div>
       <nav class="navbar navbar-expand-lg navbar-light bg-light ftco_navbar ftco-navbar-light" id="ftco-navbar">
 	    <div class="container d-flex align-items-center">
-	    	<a class="navbar-brand" href="#" style="font-size: 24px">Kiddos</a>
+	    	<a class="navbar-brand" href="{% url 'application:teacher' %}" style="font-size: 24px">Kiddos</a>
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
 	        <span class="oi oi-menu"></span> Menu
 	      </button>
 	      <div class="collapse navbar-collapse" id="ftco-nav">
 	        <ul class="navbar-nav ml-auto">
-	        	<li class="nav-item active"><a href="teacherAfterLogin.html" class="nav-link pl-0">Home</a></li>
-	        	<li class="nav-item"><a href="communication.html" class="nav-link">Communication</a></li>
-	        	<li class="nav-item"><a href="courseoption.html" class="nav-link">Course Option</a></li>
-	        	<li class="nav-item"><a href="teacherAfterLogin.html" class="nav-link">Attendance</a></li>
+	        	<li class="nav-item active"><a href="{% url 'application:teacher' %}" class="nav-link pl-0">Home</a></li>
+	        	<li class="nav-item"><a href="{% url 'application:contentForm' %}" class="nav-link">Add Topic/Material</a></li>
+                <li class="nav-item"><a href="appointment.html" class="nav-link">Appointment</a></li>
 	        </ul>
 	      </div>
 	    </div>
@@ -87,7 +86,7 @@
               <h2 class="ftco-heading-2">Links</h2>
               <ul class="list-unstyled">
                 <li><a href="#"><span class="ion-ios-arrow-round-forward mr-2"></span>Home</a></li>
-                <li><a href="#"><span class="ion-ios-arrow-round-forward mr-2"></span>About</a></li>
+                <li><a href="#"><span class="ion-ios-arrow-round-forward mr-2"></span>Appointment</a></li>
                 <li><a href="#"><span class="ion-ios-arrow-round-forward mr-2"></span>Teachers</a></li>
                 <li><a href="#"><span class="ion-ios-arrow-round-forward mr-2"></span>Courses</a></li>
                 <li><a href="#"><span class="ion-ios-arrow-round-forward mr-2"></span>Contact</a></li>

@@ -8,9 +8,9 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect  # , render_to_response
 from django.urls import reverse
 
-from .models import StudentCourse, PerformanceGrade, Parent, Content, Course, Student, ClassInfo
+from .models import StudentCourse, PerformanceGrade, Parent, Content, Course, Student, ClassInfo, TeacherCourse
 from django.views import generic
-from application.forms import StudentForm, ParentSignUpForm, ClassComposeForm
+from application.forms import StudentForm, ParentSignUpForm, ClassComposeForm, ContentForm
 
 
 # Create your views here.
@@ -118,7 +118,7 @@ def loginUser(request):
                 login(request, user)
                 try:
                     teacher = user.teacher
-                    return render(request, 'teacher/teacherAfterLogin.html', )
+                    return redirect('application:teacher')
                 except:
                     try:
                         parent = user.parent
@@ -254,3 +254,40 @@ def change_password(request):
                           {'error_message': 'Invalid Information', 'form': PasswordChangeForm(user=request.user)})
     else:
         return render(request, 'parent/change_password.html', {'form': PasswordChangeForm(user=request.user)})
+
+
+
+
+
+class TeacherCourseDetailView(generic.ListView):
+    template_name = 'teacher/course.html'
+    context_object_name = 'contents'
+
+    def get_queryset(self):
+        return Content.objects.filter(courseID=self.kwargs['courseID'])
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(TeacherCourseDetailView, self).get_context_data(**kwargs)
+        context['courseDetails'] = Course.objects.get(ID=self.kwargs['courseID'])
+        return context
+
+
+def contentForm(request):
+    if request.method == 'POST':
+        form = ContentForm(request.POST)
+        if form.is_valid():
+            content = form.save()
+            contentString = form.cleaned_data['contentString']
+            material = form.cleaned_data['material']
+            return redirect('application:teacher')
+    else:
+        form = ContentForm()
+    return render(request, 'teacher/addTopicORMaterial.html', {'form': form})
+
+
+class TeacherView(generic.ListView):
+    template_name = 'teacher/teacherAfterLogin.html'
+    context_object_name = 'allTeacherCourses'
+
+    def get_queryset(self):
+        return TeacherCourse.objects.filter(teacherID=self.request.user.teacher.ID)
