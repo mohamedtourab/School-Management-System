@@ -124,7 +124,12 @@ def loginUser(request):
                         parent = user.parent
                         # studentID = parent.studentID
                         # studentCourses = StudentCourse.objects.filter(studentID=studentID)
-                        return redirect('application:parent')
+                        if parent.lastLogin is False:
+                            parent.lastLogin = True
+                            parent.save()
+                            return redirect('application:change_password')
+                        else:
+                            return redirect('application:parent')
                         # return render(request,'parent/afterloginparent.html', {'studentID': studentID, 'studentCourses': studentCourses})
                     except:
                         try:

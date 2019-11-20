@@ -106,6 +106,7 @@ class Parent(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     ID = models.AutoField(primary_key=True)
     studentID = models.ForeignKey(Student, on_delete=models.CASCADE)
+    lastLogin = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.first_name + ' ' + self.user.last_name
