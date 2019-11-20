@@ -273,6 +273,7 @@ class TeacherCourseDetailView(generic.ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(TeacherCourseDetailView, self).get_context_data(**kwargs)
+        context['courseID'] = self.kwargs['courseID']
         context['courseDetails'] = Course.objects.get(ID=self.kwargs['courseID'])
         return context
 
@@ -287,12 +288,13 @@ def contentForm(request):
         form = ContentForm(user=request.user)
     return render(request, 'teacher/addTopicORMaterial.html', {'form': form})
 
-def gradeForm(request):
+
+def gradeForm(request, courseID):
     if request.method == 'POST':
-        form = PerformanceGradeForm(request.POST)
+        form = PerformanceGradeForm(request.POST, courseID=courseID)
         if form.is_valid():
             form.save()
             return redirect('application:teacher')
     else:
-        form = PerformanceGradeForm()
-    return render(request, 'teacher/grade.html', {'form': form})
+        form = PerformanceGradeForm(courseID=courseID)
+    return render(request, 'teacher/grade.html', {'form':form,'courseID':courseID,})

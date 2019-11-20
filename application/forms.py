@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import ModelForm
 
-from .models import Student, ClassInfo, Content, TeacherCourse, Course, PerformanceGrade
+from .models import Student, ClassInfo, Content, TeacherCourse, Course, PerformanceGrade, StudentCourse
 
 
 class StudentForm(ModelForm):
@@ -30,10 +30,10 @@ class ContentForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
+        super(ContentForm, self).__init__(*args, **kwargs)
         listOfCoursesID = (TeacherCourse.objects.filter(teacherID=self.user.teacher.ID)).values('courseID')
         listOfCourses = Course.objects.filter(ID__in=listOfCoursesID)
         self.courseID = forms.ModelChoiceField(queryset=listOfCourses)
-        super(ContentForm, self).__init__(*args, **kwargs)
         self.fields['courseID'] = self.courseID
 
     class Meta:
@@ -42,6 +42,12 @@ class ContentForm(ModelForm):
 
 
 class PerformanceGradeForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        self.courseID = kwargs.pop('courseID', None)
+        super(PerformanceGradeForm, self).__init__(*args, **kwargs)
+        self.studentCourseID = forms.ModelChoiceField(queryset=StudentCourse.objects.filter(courseID=self.courseID))
+        self.fields['studentCourseID'] = self.studentCourseID
+
     class Meta:
         model = PerformanceGrade
         fields = ['studentCourseID', 'date', 'grade', ]
