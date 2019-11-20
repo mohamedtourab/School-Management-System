@@ -32,7 +32,7 @@ class ClassInfo(models.Model):
     ID = models.AutoField(primary_key=True)
     name = models.CharField(max_length=30, unique=True)
     totalStudentsNumber = models.PositiveIntegerField()
-
+    timetable = models.FileField(blank=True,null=True)
     def __str__(self):
         return self.name
 
