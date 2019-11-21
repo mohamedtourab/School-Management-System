@@ -62,9 +62,9 @@
 	      </button>
 	      <div class="collapse navbar-collapse" id="ftco-nav">
 	        <ul class="navbar-nav ml-auto">
-	        	<li class="nav-item active"><a href="{% url 'application:index' %}" class="nav-link pl-0">Home</a></li>
-	        	<li class="nav-item"><a href="#" class="nav-link">About</a></li>
-	          <li class="nav-item"><a href="#" class="nav-link">Contact</a></li>
+	        	<li class="nav-item {% block home_active %}{% endblock %}"><a href="{% url 'application:index' %}" class="nav-link pl-0">Home</a></li>
+	        	<li class="nav-item {% block about_active %}{% endblock %}"><a href="#" class="nav-link">About</a></li>
+	            <li class="nav-item {% block contact_active %}{% endblock %}"><a href="#" class="nav-link">Contact</a></li>
 	        </ul>
 	      </div>
 	    </div>

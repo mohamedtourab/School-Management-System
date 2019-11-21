@@ -1,4 +1,5 @@
 {% extends 'parent/base.html' %}
+{% block home_active %} active {% endblock %}
 {% block body %}
     <h2 style="padding-left: 5%"> Welcome: {{ user }}<br>Your child: {{ user.parent.studentID.first_name }}<br>Class: {{ user.parent.studentID.classID.name }} </h2>
     <div id="TimeTable" style="padding-left: 5%">

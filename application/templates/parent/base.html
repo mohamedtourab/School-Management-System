@@ -62,11 +62,11 @@
 	      </button>
 	      <div class="collapse navbar-collapse" id="ftco-nav" style="font-size: 14px">
 	        <ul class="navbar-nav ml-auto">
-	        	<li class="nav-item active"><a href="{% url 'application:parent' %}" class="nav-link pl-0">Home</a></li>
-	        	<li class="nav-item"><a href="{% url 'application:parentGrade' %}" class="nav-link pl-0">Grades</a></li>
-                <li class="nav-item"><a href="#" class="nav-link pl-0">Appointment</a></li>
-                <li class="nav-item"><a href="#" class="nav-link pl-0">Notes</a></li>
-	          <li class="nav-item"><a href="#" class="nav-link pl-0">Announcements</a></li>
+	        	<li class="nav-item {% block home_active %}{% endblock %}"><a href="{% url 'application:parent' %}" class="nav-link pl-0">Home</a></li>
+	        	<li class="nav-item {% block grades_active %}{% endblock %}"><a href="{% url 'application:parentGrade' %}" class="nav-link pl-0">Grades</a></li>
+                <li class="nav-item {% block appointment_active %}{% endblock %}"><a href="#" class="nav-link pl-0">Appointment</a></li>
+                <li class="nav-item {% block notes_active %}{% endblock %}"><a href="#" class="nav-link pl-0">Notes</a></li>
+	            <li class="nav-item {% block announcement_active %}{% endblock %}"><a href="#" class="nav-link pl-0">Announcements</a></li>
 	        </ul>
 	      </div>
 	    </div>
