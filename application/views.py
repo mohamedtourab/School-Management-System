@@ -8,7 +8,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect  # , render_to_response
 from django.urls import reverse
 
-from .models import StudentCourse, PerformanceGrade, Parent, Content, Course, Student, ClassInfo, TeacherCourse
+from .models import StudentCourse, PerformanceGrade, Parent, Content, Course, Student, ClassInfo, TeacherCourse, ParentStudent
 from django.views import generic
 from application.forms import StudentForm, ParentSignUpForm, ClassComposeForm, ContentForm, PerformanceGradeForm
 
@@ -48,14 +48,26 @@ class CourseDetailView(generic.ListView):
         context['courseDetails'] = Course.objects.get(ID=self.kwargs['courseID'])
         return context
 
-
 class ParentView(generic.ListView):
     template_name = 'parent/afterloginparent.html'
     context_object_name = 'allStudentCourses'
 
     def get_queryset(self):
-        return StudentCourse.objects.filter(studentID=self.request.user.parent.studentID)  # GET STUDENT ID HERE
+        return Course.objects.filter(studentcourse__studentID=self.kwargs['studentID'])  # GET STUDENT ID HERE
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ParentView, self).get_context_data(**kwargs)
+        context['studentID'] = self.kwargs['studentID']
+        context['parentStudent'] = ParentStudent.objects.filter(studentID=self.kwargs['studentID'])
+        context['studentClass'] = ClassInfo.objects.get(student__ID=self.kwargs['studentID'])
+        return context
+
+class ChooseChild(generic.ListView):
+    template_name = 'parent/chooseChild.html'
+    context_object_name = 'allChildren'
+
+    def get_queryset(self):
+        return ParentStudent.objects.filter(parentID=self.request.user.parent.ID)  # GET STUDENT ID HERE
 
 class ParentAttendanceView(generic.ListView):
     template_name = 'parent/attendancep.html'
@@ -63,19 +75,19 @@ class ParentAttendanceView(generic.ListView):
     def get_queryset(self):
         return "salam"
 
-
 class ParentGradeView(generic.ListView):
     template_name = 'parent/gradep.html'
     context_object_name = 'allGrades'
 
     def get_queryset(self):
-        return PerformanceGrade.objects.filter(
-            studentCourseID__studentID=self.request.user.parent.studentID)  # GET STUDENTCOURSEID HERE
+        return PerformanceGrade.objects.filter(studentCourseID__studentID=self.kwargs[
+            'studentID'])  # GET STUDENTCOURSEID HERE ; should I send studentID to the url here?
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ParentGradeView, self).get_context_data(**kwargs)
+        context['studentID'] = self.kwargs['studentID']
         context['studentCourse'] = StudentCourse.objects.filter(
-            studentID=self.request.user.parent.studentID)  # GET STUDENT ID HERE
+            studentID=self.kwargs['studentID'])  # GET STUDENT ID HERE
 
         columns = 0
         for studentcourse in context['studentCourse']:
@@ -122,14 +134,17 @@ def loginUser(request):
                 except:
                     try:
                         parent = user.parent
-                        # studentID = parent.studentID
-                        # studentCourses = StudentCourse.objects.filter(studentID=studentID)
+                        numberOfStudent = ParentStudent.objects.filter(parentID=parent.ID).count()
+
                         if parent.lastLogin is False:
                             parent.lastLogin = True
                             parent.save()
                             return redirect('application:change_password')
                         else:
-                            return redirect('application:parent')
+                            if (numberOfStudent == 1):
+                                return redirect('application:parent')
+                            else:
+                                return redirect('application:chooseChild')
                         # return render(request,'parent/afterloginparent.html', {'studentID': studentID, 'studentCourses': studentCourses})
                     except:
                         try:

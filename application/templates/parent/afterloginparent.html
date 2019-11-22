@@ -1,7 +1,9 @@
 {% extends 'parent/base.html' %}
-{% block home_active %} active {% endblock %}
 {% block body %}
-    <h2 style="padding-left: 5%"> Welcome: {{ user.parent }}<br>Your child: {{ user.parent.studentID.first_name }}<br>Class: {{ user.parent.studentID.classID.name }} </h2>
+    <h2 style="padding-left: 5%">
+        Welcome: {{ user.first_name }}<br>Your child:
+       {% for p in parentStudent %} {{ p.studentID }} {% endfor %}<br>
+        Class: {{ studentClass }} </h2>
     <div id="TimeTable" style="padding-left: 5%">
 
         <br>
@@ -9,10 +11,9 @@
     <div style="padding-left: 5%">
         <h1> Student Courses</h1><br>
         {% for studentcourse in allStudentCourses %}
-            <a href="{% url 'application:courseView' %}{{ studentcourse.courseID.ID }}"
-               class="btn btn-primary btn-lg"> {{ studentcourse.courseID.name }} </a><br><br>
+            <a href="{% url 'application:courseView' %}{{ studentcourse.ID }}"
+               class="btn btn-primary btn-lg"> {{ studentcourse.name }} </a><br><br>
         {% endfor %}
     </div>
-
     <br><br>
 {% endblock %}

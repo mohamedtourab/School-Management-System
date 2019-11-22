@@ -13,15 +13,16 @@ urlpatterns = [
     path('signup/', views.enrollStudent, name='signup'),  #student signup
     path('ao/', views.AdministrativeOfficer.as_view(), name='administrativeOfficer'),
     path('parent/', views.ParentView.as_view(), name='parent'),
+    url(r'^parent/(?P<studentID>[0-9]+)/$', views.ParentView.as_view(), name='parentWithID'),
+    url(r'^parent/grades/(?P<studentID>[0-9]+)/$', views.ParentGradeView.as_view(), name='parentGradeWithID'),
     path('parent/grades/', views.ParentGradeView.as_view(), name='parentGrade'),
     path('parentsignup/', views.parentSignup, name='parentSignup'),
+    path('chooseChild/', views.ChooseChild.as_view(), name='chooseChild'),
     path('parent/attendance', views.ParentAttendanceView.as_view(), name='parentAttendance'),
     path('parent/course/', views.CourseView.as_view(), name='courseView'),
     path('composeClass/', views.classCompose, name='classCompose'),
-    # path('assignStudent/', views.assignClassesAlphabetically, name='assignClassesAlphabetically'),
     url(r'^parent/course/(?P<courseID>[0-9]+)/$', views.CourseDetailView.as_view(), name='courseViewWithCourseId'),
     path('change-password/', views.change_password, name='change_password'),
-
     url(r'^teacher/course/(?P<courseID>[0-9]+)/$', views.TeacherCourseDetailView.as_view(),
         name='teacherCourseViewWithCourseId'),
     path('teacher/', views.TeacherView.as_view(), name='teacher'),
