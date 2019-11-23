@@ -235,7 +235,8 @@ def parentSignup(request):
             if form.is_valid():
                 user = form.save()
                 user.refresh_from_db()  # load the profile instance created by the signal
-                Parent.objects.create(user=user, studentID=form.cleaned_data.get('studentID'))
+                parent = Parent.objects.create(user=user, )
+                ParentStudent.objects.create(studentID=form.cleaned_data.get('studentID'),parentID=parent)
                 messages.success(request, 'Parent has been successfully added')
 
                 username = request.POST['username']
