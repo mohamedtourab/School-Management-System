@@ -13,7 +13,7 @@ class StudentForm(ModelForm):
 
 
 class ParentSignUpForm(UserCreationForm):
-    studentID = forms.ModelChoiceField(queryset=Student.objects.all())
+    studentID = forms.ModelMultipleChoiceField(queryset=Student.objects.all())
 
     class Meta:
         model = User
