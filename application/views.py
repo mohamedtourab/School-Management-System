@@ -48,6 +48,8 @@ class CourseDetailView(generic.ListView):
         context['courseDetails'] = Course.objects.get(ID=self.kwargs['courseID'])
         return context
 
+
+
 class ParentView(generic.ListView):
     template_name = 'parent/afterloginparent.html'
     context_object_name = 'allStudentCourses'
