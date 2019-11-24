@@ -169,7 +169,8 @@ class ParentView(generic.ListView):
         context = super(ParentView, self).get_context_data(**kwargs)
         context['studentID'] = self.kwargs['studentID']
         context['parentStudent'] = ParentStudent.objects.filter(studentID=self.kwargs['studentID'])
-        context['studentClass'] = ClassInfo.objects.get(student__ID=self.kwargs['studentID'])
+        if ClassInfo.objects.filter(student__ID=self.kwargs['studentID']).exists():
+            context['studentClass'] = ClassInfo.objects.get(student__ID=self.kwargs['studentID'])
         return context
 
 

@@ -23,7 +23,7 @@
         <form method="post">
             {% csrf_token %}
             {{ form|crispy }}
-            <button type="submit" class="btn btn-info btn-lg" onclick="{% url 'application:classCompose' %}">Add Class
+            <button type="submit" class="btn btn-primary btn-lg" onclick="{% url 'application:classCompose' %}">Add Class
             </button>
         </form>
         <br><br>
