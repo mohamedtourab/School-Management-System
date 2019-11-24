@@ -32,7 +32,8 @@ class ClassInfo(models.Model):
     ID = models.AutoField(primary_key=True)
     name = models.CharField(max_length=30, unique=True)
     totalStudentsNumber = models.PositiveIntegerField()
-    timetable = models.FileField(blank=True,null=True)
+    timetable = models.FileField(blank=True, null=True)
+
     def __str__(self):
         return self.name
 
@@ -110,13 +111,15 @@ class Parent(models.Model):
     def __str__(self):
         return self.user.first_name + ' ' + self.user.last_name
 
+
 class ParentStudent(models.Model):
     ID = models.AutoField(primary_key=True)
     parentID = models.ForeignKey(Parent, on_delete=models.CASCADE)
     studentID = models.ForeignKey(Student, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.studentID.first_name+' '+self.studentID.last_name+':'+self.parentID.user.first_name+' '+self.parentID.user.last_name
+        return self.studentID.first_name + ' ' + self.studentID.last_name + ':' + self.parentID.user.first_name + ' ' + self.parentID.user.last_name
+
 
 class StudentCourse(models.Model):
     ID = models.AutoField(primary_key=True)
