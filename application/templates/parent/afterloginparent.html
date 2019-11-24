@@ -1,14 +1,14 @@
 {% extends 'parent/base.html' %}
 {% block body %}
-    <h2 style="padding-left: 5%">
+    <h2 style="padding-left: 2%">
         Welcome: {{ user.first_name }}<br>Your child:
        {% for p in parentStudent %} {{ p.studentID }} {% endfor %}<br>
         Class: {{ studentClass }} </h2>
-    <div id="TimeTable" style="padding-left: 5%">
+    <div id="TimeTable" style="padding-left: 2%">
 
         <br>
     </div>
-    <div style="padding-left: 5%">
+    <div style="padding-left: 2%">
         <h1> Student Courses</h1><br>
         {% for studentcourse in allStudentCourses %}
             <a href="{% url 'application:courseView' %}{{ studentcourse.ID }}"

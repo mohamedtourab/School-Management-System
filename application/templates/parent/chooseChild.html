@@ -1,7 +1,7 @@
 {% extends 'parent/baseChooseChild.html' %}
 {% block body %}
     {% for child in allChildren %}
-        <div style="padding-left: 5%">
+        <div style="padding-left: 2%">
             <a href="{% url 'application:parent' %}{{ child.studentID.ID }}"> <img src="../../static/application/images/student.png" width="200" height="200"></a><br>
         <a class="btn btn-primary btn-lg" href="{% url 'application:parent' %}{{ child.studentID.ID }}"> {{ child }} </a><br><br>
         </div>
