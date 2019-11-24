@@ -1,0 +1,14 @@
+{% extends 'teacher/courseBase.html' %}
+{% block body %}
+    {% if contents %}
+        <h2 style="padding-left: 1%">List of topics discussed in {{ courseDetails.name }}</h2>
+        <ul>
+            {% for content in contents %}
+                <li>{{ content.contentString }}</li>
+            {% endfor %}
+        </ul>
+        <br><br>
+    {% else %}
+        <li>No content added yet.</li><br><br>
+    {% endif %}
+{% endblock %}

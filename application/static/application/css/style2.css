@@ -1,0 +1,28 @@
+body {
+    font-size: 18px;
+    background-image:url(https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwjM69mct-DlAhUEsaQKHYWBDAgQjRx6BAgBEAQ&url=https%3A%2F%2Fwww.polito.it%2F&psig=AOvVaw1aQjEC383x-bZTIQ3kqY9X&ust=1573502360572567);
+}
+head {
+  line-break: 3
+}
+h1 {
+  font-size: 2em;
+}
+
+h2 {
+  font-size: 1.6em;
+}
+
+table, td, th {
+  border: 2px solid #ddd;
+  text-align: left;
+}
+
+table {
+  border-collapse: collapse;
+  width: 60%;
+}
+
+th, td {
+  padding: 8px;
+}

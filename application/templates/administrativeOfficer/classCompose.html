@@ -1,0 +1,31 @@
+{% extends 'administrativeOfficer/base.html' %}
+{% block composeClass_active %} active {% endblock %}
+{% block home_active %} passive {% endblock %}
+
+{% load crispy_forms_tags %}
+
+{% block body %}
+    <div style="padding-left: 5%">
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li  {% if message.tags %} class="text-success" {% endif %}> {{ message }} </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <ul class="messages">
+        <li class="messages">
+            Total number of Students Remaining : {{ numberOfStudents }}
+        </li>
+    </ul>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-info btn-lg" onclick="{% url 'application:classCompose' %}">Add Class</button>
+    </form><br><br>
+    </div>
+
+
+{% endblock %}
