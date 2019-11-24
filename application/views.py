@@ -137,7 +137,7 @@ def loginUser(request):
                     try:
                         parent = user.parent
                         numberOfStudent = ParentStudent.objects.filter(parentID=parent.ID).count()
-                        studentID = ParentStudent.objects.get(parentID=parent.ID).studentID.ID
+
 
                         if parent.lastLogin is False:
                             parent.lastLogin = True
@@ -145,7 +145,7 @@ def loginUser(request):
                             return redirect('application:change_password')
                         else:
                             if (numberOfStudent == 1):
-                                print(studentID)
+                                studentID = ParentStudent.objects.get(parentID=parent.ID).studentID.ID
                                 return redirect('application:parentWithID', studentID)
                             else:
                                 return redirect('application:chooseChild')
