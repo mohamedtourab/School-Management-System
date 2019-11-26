@@ -11,7 +11,7 @@
     <div style="padding-left: 2%">
         <h1> Student Courses</h1><br>
         {% for studentcourse in allStudentCourses %}
-            <a href="{% url 'application:courseView' %}{{ studentcourse.ID }}"
+            <a href="{% url 'application:courseView' studentID%}{{ studentcourse.ID }}"
                class="btn btn-primary btn-lg"> {{ studentcourse.name }} </a><br><br>
         {% endfor %}
     </div>

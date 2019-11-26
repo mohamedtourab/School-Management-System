@@ -156,6 +156,7 @@ class CourseDetailView(generic.ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(CourseDetailView, self).get_context_data(**kwargs)
+        context['studentID'] = self.kwargs['studentID']
         context['courseDetails'] = Course.objects.get(ID=self.kwargs['courseID'])
         context['courseID'] = self.kwargs['courseID']
         return context
@@ -169,6 +170,7 @@ class MaterialView(generic.ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(MaterialView, self).get_context_data(**kwargs)
+        context['studentID'] = self.kwargs['studentID']
         if Course.objects.get(ID=self.kwargs['courseID']).assignment:
             context['assignments'] = Course.objects.get(ID=self.kwargs['courseID']).assignment.url
             context['assignmentName'] = Course.objects.get(ID=self.kwargs['courseID']).assignment.name
