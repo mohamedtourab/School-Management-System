@@ -50,7 +50,7 @@
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item active"><a href="{% url 'application:parentWithID' studentID %}" class="nav-link pl-0">Home</a></li>
                 <li class="nav-item"><a href="#" class="nav-link pl-0">Topics</a></li>
-                <li class="nav-item"><a href="{% url 'application:materials' courseID studentID%}" class="nav-link pl-0">Material</a></li>
+                <li class="nav-item"><a href="{% url 'application:materials' studentID courseID %}" class="nav-link pl-0">Material</a></li>
             </ul>
         </div>
     </div>
