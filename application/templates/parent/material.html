@@ -1,0 +1,9 @@
+{% extends 'parent/materialBase.html' %}
+{% block body %}
+    <div style="padding-left: 1%;padding-top: 2%;padding-bottom: 5%">
+        <h3>Assignment: {{ assignmentName }} </h3> <br><br>
+            {% if assignments %}
+                <a href="{% url 'application:index' %}{{ assignments }} " download class="btn btn-primary btn-lg">Download Assignment</a>
+            {% endif %}
+    </div>
+{% endblock %}

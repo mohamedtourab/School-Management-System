@@ -16,3 +16,5 @@ admin.site.register(PerformanceGrade)
 admin.site.register(Content)
 admin.site.register(TeacherCourse)
 admin.site.register(ParentStudent)
+
+

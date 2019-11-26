@@ -7,6 +7,7 @@ from django.core.mail import send_mail
 from django.http import HttpResponse
 from django.shortcuts import render, redirect  # , render_to_response
 from django.urls import reverse
+import csv,io
 
 from .models import StudentCourse, PerformanceGrade, Parent, Content, Course, Student, ClassInfo, TeacherCourse, \
     ParentStudent
@@ -140,9 +141,10 @@ class TestView(generic.ListView):
 
 class CourseView(generic.ListView):
     template_name = 'parent/course.html'
+    context_object_name = 'studentID'
 
     def get_queryset(self):
-        return "salam"
+        return self.kwargs['studentID']
 
 
 class CourseDetailView(generic.ListView):
@@ -155,8 +157,24 @@ class CourseDetailView(generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(CourseDetailView, self).get_context_data(**kwargs)
         context['courseDetails'] = Course.objects.get(ID=self.kwargs['courseID'])
+        context['courseID'] = self.kwargs['courseID']
         return context
 
+class MaterialView(generic.ListView):
+    template_name = 'parent/material.html'
+    context_object_name = 'courseID'
+
+    def get_queryset(self):
+        return  self.kwargs['courseID']
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(MaterialView, self).get_context_data(**kwargs)
+        if Course.objects.get(ID=self.kwargs['courseID']).assignment:
+            context['assignments'] = Course.objects.get(ID=self.kwargs['courseID']).assignment.url
+            context['assignmentName'] = Course.objects.get(ID=self.kwargs['courseID']).assignment.name
+        else:
+            context['assignmentName'] = "No assignments yet!"
+        return context
 
 class ParentView(generic.ListView):
     template_name = 'parent/afterloginparent.html'

@@ -1,6 +1,8 @@
 from django.urls import path, re_path
 from django.conf.urls import url
 from . import views
+from  django.conf.urls.static import static
+from django.conf import settings
 
 app_name = 'application'
 
@@ -28,4 +30,10 @@ urlpatterns = [
     path('teacher/', views.TeacherView.as_view(), name='teacher'),
     path('teacher/addtopic/', views.contentForm, name='contentForm'),
     url(r'^teacher/course/(?P<courseID>[0-9]+)/addPerformanceGrade/$', views.gradeForm, name='gradeForm'),
+    url(r'^parent/course/(?P<courseID>[0-9]+)/materials/$', views.MaterialView.as_view(), name='materials'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
