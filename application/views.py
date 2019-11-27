@@ -9,9 +9,10 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect  # , render_to_response
 from django.urls import reverse
 import csv, io
+from django.db.models import Q
 
 from .models import StudentCourse, PerformanceGrade, Parent, Content, Course, Student, ClassInfo, TeacherCourse, \
-    ParentStudent
+    ParentStudent, Attendance
 from django.views import generic
 from application.forms import StudentForm, ParentSignUpForm, ClassComposeForm, ContentForm, PerformanceGradeForm, \
     AbsenceForm
@@ -210,9 +211,16 @@ class ChooseChild(generic.ListView):
 
 class ParentAttendanceView(generic.ListView):
     template_name = 'parent/attendancep.html'
+    context_object_name = 'studentID'
 
     def get_queryset(self):
-        return "salam"
+        return self.kwargs['studentID']
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ParentAttendanceView, self).get_context_data(**kwargs)
+        context['courseID'] = self.kwargs['courseID']
+        context['attendances'] = Attendance.objects.filter(Q(studentCourseID__studentID=self.kwargs['studentID']), Q(studentCourseID__courseID=self.kwargs['courseID']))
+        return context
 
 
 class ParentGradeView(generic.ListView):
