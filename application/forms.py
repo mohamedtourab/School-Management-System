@@ -31,14 +31,15 @@ class ContentForm(ModelForm):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
         super(ContentForm, self).__init__(*args, **kwargs)
-        listOfCoursesID = (TeacherCourse.objects.filter(teacherID=self.user.teacher.ID)).values('courseID')
-        listOfCourses = Course.objects.filter(ID__in=listOfCoursesID)
-        self.courseID = forms.ModelChoiceField(queryset=listOfCourses)
-        self.fields['courseID'] = self.courseID
+        # listOfCoursesID = (TeacherCourse.objects.filter(teacherID=self.user.teacher.ID)).values('courseID')
+        # listOfCourses = Course.objects.filter(ID__in=listOfCoursesID)
+        # self.courseID = forms.ModelChoiceField(queryset=listOfCourses)
+        #self.fields['courseID'] = self.courseID
 
     class Meta:
         model = Content
-        fields = ['courseID', 'contentString', 'material', ]
+        exclude = ('courseID',)
+        fields = ['contentString', 'material', ]
 
 
 class PerformanceGradeForm(ModelForm):

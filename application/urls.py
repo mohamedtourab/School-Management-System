@@ -39,7 +39,7 @@ urlpatterns = [
         login_required(views.TeacherCourseDetailView.as_view(), login_url='application:login'),
         name='teacherCourseViewWithCourseId'),
     path('teacher/', login_required(views.TeacherView.as_view(), login_url='application:login'), name='teacher'),
-    path('teacher/addtopic/', views.contentForm, name='contentForm'),
+    path('teacher/course/<int:courseID>/addtopic', views.contentForm, name='contentForm'),
     url(r'^teacher/course/(?P<courseID>[0-9]+)/addPerformanceGrade/$', views.gradeForm, name='gradeForm'),
 
     url(r'^teacher/course/(?P<courseID>[0-9]+)/behaviour/$', views.absenceForm, name='absenceForm'),

@@ -126,8 +126,12 @@ def parentSignup(request):
 
 
 def sendmailtoparent(username, email, password):
-    send_mail('Credentials',
-              'Username: ' + username + '\nPassword: ' + password,
+    send_mail('School Account Credentials',
+              'Dear Sir/Madam,\n We hope that this email finds you in a good health.\n'+
+              'This is your credentials for accessing the school website\n'+
+              'Username: ' + username + '\nPassword: ' + password+'\n'+
+              'you can access our website by pressing this link: http://127.0.0.1:8000/application/login/'+'\n'+
+              'Have a nice day.',
               'admofficer658@gmail.com',
               [email],
               fail_silently=False)
@@ -311,15 +315,17 @@ def absenceForm(request, courseID):
 
 
 @login_required(login_url='application:login')
-def contentForm(request):
+def contentForm(request,courseID):
     if request.method == 'POST':
         form = ContentForm(request.POST, user=request.user)
         if form.is_valid():
-            form.save()
+            unsavedForm = form.save(commit=False)
+            unsavedForm.courseID = Course.objects.get(ID=courseID)
+            unsavedForm.save()
             return redirect('application:teacher')
     else:
         form = ContentForm(user=request.user)
-    return render(request, 'teacher/addTopicORMaterial.html', {'form': form})
+    return render(request, 'teacher/addTopicORMaterial.html', {'form': form,'courseID':courseID,})
 
 
 @login_required(login_url='application:login')
