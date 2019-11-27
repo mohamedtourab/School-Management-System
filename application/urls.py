@@ -45,6 +45,8 @@ urlpatterns = [
     url(r'^teacher/course/(?P<courseID>[0-9]+)/behaviour/$', views.absenceForm, name='absenceForm'),
     url(r'^parent/(?P<studentID>[0-9]+)/course/(?P<courseID>[0-9]+)/materials/$',
         login_required(views.MaterialView.as_view(), login_url='application:login'), name='materials'),
+    url(r'^parent/(?P<studentID>[0-9]+)/course/(?P<courseID>[0-9]+)/attendance/$',
+        login_required(views.ParentAttendanceView.as_view(), login_url='application:login'), name='parentAttendance'),
 ]
 
 if settings.DEBUG:
