@@ -39,7 +39,7 @@ urlpatterns = [
         login_required(views.TeacherCourseDetailView.as_view(), login_url='application:login'),
         name='teacherCourseViewWithCourseId'),
     path('teacher/', login_required(views.TeacherView.as_view(), login_url='application:login'), name='teacher'),
-    path('teacher/addtopic/', views.contentForm, name='contentForm'),
+    path('teacher/course/<int:courseID>/addtopic', views.contentForm, name='contentForm'),
     url(r'^teacher/course/(?P<courseID>[0-9]+)/addPerformanceGrade/$', views.gradeForm, name='gradeForm'),
 
     url(r'^teacher/course/(?P<courseID>[0-9]+)/behaviour/$', views.absenceForm, name='absenceForm'),
@@ -47,6 +47,8 @@ urlpatterns = [
         login_required(views.MaterialView.as_view(), login_url='application:login'), name='materials'),
     url(r'^parent/(?P<studentID>[0-9]+)/course/(?P<courseID>[0-9]+)/attendance/$',
         login_required(views.ParentAttendanceView.as_view(), login_url='application:login'), name='parentAttendance'),
+    path('communication/', views.communicationWithParent, name='communication'),
+    path('announcement/', views.Announcement, name='announcement'),
 ]
 
 if settings.DEBUG:

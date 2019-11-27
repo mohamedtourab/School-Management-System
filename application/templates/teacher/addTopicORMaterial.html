@@ -1,9 +1,9 @@
-{% extends 'teacher/addTopicBase.html' %}
+{% extends 'teacher/course.html' %}
 
 {% load crispy_forms_tags %}
 
 {% block body %}
-    <form method="post" action="{% url 'application:teacher' %}addtopic/" style="padding-left: 2%">
+    <form method="post" action="{% url 'application:contentForm' courseID%}" style="padding-left: 2%">
         {% csrf_token %}
         {{ form|crispy }}
         <input type="submit" value="Submit" class="btn btn-primary btn-lg"/>

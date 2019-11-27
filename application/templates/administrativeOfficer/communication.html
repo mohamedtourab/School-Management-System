@@ -1,0 +1,21 @@
+{% extends 'administrativeOfficer/base.html' %}
+{% block communication_active %} active {% endblock %}
+{% block home_active %} passive {% endblock %}
+
+
+{% block body %}
+
+<script type="text/javascript">
+    function store() {
+        var text = document.getElementById("my_text").value;
+        document.cookie = "text=" + text + "; path=/";
+    }
+</script>
+
+<form action="#"  onsubmit="store()" style="padding-left: 0.4%">
+    <textarea id="my_text" rows="6" cols="50"></textarea>
+    <br><br>
+    <input type="submit"/>
+</form>
+<br>
+{% endblock %}
