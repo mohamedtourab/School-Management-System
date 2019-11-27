@@ -3,17 +3,29 @@
     <div style="padding-bottom: 5%; padding-top: 1%;padding-left: 1%">
     <table>
     <tr>
-        <td>Date</td>
-        <td>Presence</td>
-        <td>Came Late</td>
-        <td>Left Early</td>
+        <td style="text-align: center">Date</td>
+        <td style="text-align: center">Presence</td>
+        <td style="text-align: center">Came Late</td>
+        <td style="text-align: center">Left Early</td>
     </tr>
     {% for a in attendances %}
         <tr>
             <th>{{ a.date }}</th>
-            <td>{{ a.presence }}</td>
-            <td>{{ a.cameLate }}</td>
-            <td>{{ a.leftEarly }}</td>
+            {% if a.presence == True %}
+                <td style="text-align: center"> &#10004; </td>
+                {% else %}
+                <td style="text-align: center"> &times; </td>
+            {% endif %}
+            {% if a.cameLate == True %}
+                <td style="text-align: center"> &#10004; </td>
+                {% else %}
+                <td style="text-align: center"> &times; </td>
+            {% endif %}
+            {% if a.leftEarly == True %}
+                <td style="text-align: center"> &#10004;</td>
+                {% else %}
+                <td style="text-align: center"> &times; </td>
+            {% endif %}
         </tr>
 
     {% endfor %}
