@@ -63,4 +63,3 @@ class AbsenceForm(ModelForm):
     class Meta:
         model = Attendance
         fields = ['ID', 'studentCourseID', 'date', 'presence', 'cameLate', 'leftEarly', ]
-

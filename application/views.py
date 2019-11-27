@@ -8,13 +8,13 @@ from django.core.mail import send_mail
 from django.http import HttpResponse
 from django.shortcuts import render, redirect  # , render_to_response
 from django.urls import reverse
-import csv,io
+import csv, io
 
 from .models import StudentCourse, PerformanceGrade, Parent, Content, Course, Student, ClassInfo, TeacherCourse, \
     ParentStudent
 from django.views import generic
 from application.forms import StudentForm, ParentSignUpForm, ClassComposeForm, ContentForm, PerformanceGradeForm, \
- AbsenceForm
+    AbsenceForm
 
 
 # Create your views here.
@@ -27,6 +27,7 @@ class AdministrativeOfficer(generic.ListView):
 
     def get_queryset(self):
         return "salam"
+
 
 @login_required(login_url='application:login')
 def enrollStudent(request):
@@ -47,6 +48,7 @@ def enrollStudent(request):
         form = StudentForm()
 
     return render(request, 'administrativeOfficer/enrollStudent.html', {'form': form})
+
 
 @login_required(login_url='application:login')
 def classCompose(request):
@@ -89,6 +91,7 @@ def numberOfStudents():
     number = Student.objects.filter(classID=None).count()
     print(number)
     return number
+
 
 @login_required(login_url='application:login')
 def parentSignup(request):
@@ -162,12 +165,13 @@ class CourseDetailView(generic.ListView):
         context['courseID'] = self.kwargs['courseID']
         return context
 
+
 class MaterialView(generic.ListView):
     template_name = 'parent/material.html'
     context_object_name = 'courseID'
 
     def get_queryset(self):
-        return  self.kwargs['courseID']
+        return self.kwargs['courseID']
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(MaterialView, self).get_context_data(**kwargs)
@@ -178,6 +182,7 @@ class MaterialView(generic.ListView):
         else:
             context['assignmentName'] = "No assignments yet!"
         return context
+
 
 class ParentView(generic.ListView):
     template_name = 'parent/afterloginparent.html'
@@ -235,6 +240,7 @@ class ParentGradeView(generic.ListView):
         context['columns'] = range(columns)
         return context
 
+
 @login_required(login_url='application:login')
 def change_password(request):
     if request.method == 'POST':
@@ -291,6 +297,7 @@ class AbsenceView(generic.ListView):
         context['courseDetails'] = Course.objects.get(ID=self.kwargs['courseID'])
         return context
 
+
 @login_required(login_url='application:login')
 def absenceForm(request, courseID):
     if request.method == 'POST':
@@ -302,6 +309,7 @@ def absenceForm(request, courseID):
         form = AbsenceForm(request.POST, courseID=courseID)
     return render(request, 'teacher/absence.html', {'form': form, 'courseID': courseID, })
 
+
 @login_required(login_url='application:login')
 def contentForm(request):
     if request.method == 'POST':
@@ -312,6 +320,7 @@ def contentForm(request):
     else:
         form = ContentForm(user=request.user)
     return render(request, 'teacher/addTopicORMaterial.html', {'form': form})
+
 
 @login_required(login_url='application:login')
 def gradeForm(request, courseID):
@@ -341,6 +350,7 @@ class LoginView(generic.ListView):
 
     def get_queryset(self):
         return "salam"
+
 
 @login_required(login_url='application:login')
 def logout_view(request):
