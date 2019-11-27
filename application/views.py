@@ -227,7 +227,8 @@ class ParentAttendanceView(generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ParentAttendanceView, self).get_context_data(**kwargs)
         context['courseID'] = self.kwargs['courseID']
-        context['attendances'] = Attendance.objects.filter(Q(studentCourseID__studentID=self.kwargs['studentID']), Q(studentCourseID__courseID=self.kwargs['courseID']))
+        context['attendances'] = Attendance.objects.filter(Q(studentCourseID__studentID=self.kwargs['studentID']),
+                                                           Q(studentCourseID__courseID=self.kwargs['courseID'])).order_by('date')
         return context
 
 
