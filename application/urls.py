@@ -30,6 +30,8 @@ urlpatterns = [
     path('teacher/', views.TeacherView.as_view(), name='teacher'),
     path('teacher/addtopic/', views.contentForm, name='contentForm'),
     url(r'^teacher/course/(?P<courseID>[0-9]+)/addPerformanceGrade/$', views.gradeForm, name='gradeForm'),
+
+    url(r'^teacher/course/(?P<courseID>[0-9]+)/behaviour/$', views.absenceForm, name='absenceForm'),
     url(r'^parent/(?P<studentID>[0-9]+)/course/(?P<courseID>[0-9]+)/materials/$', views.MaterialView.as_view(), name='materials'),
 ]
 

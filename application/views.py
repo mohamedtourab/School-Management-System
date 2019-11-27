@@ -12,7 +12,8 @@ import csv,io
 from .models import StudentCourse, PerformanceGrade, Parent, Content, Course, Student, ClassInfo, TeacherCourse, \
     ParentStudent
 from django.views import generic
-from application.forms import StudentForm, ParentSignUpForm, ClassComposeForm, ContentForm, PerformanceGradeForm
+from application.forms import StudentForm, ParentSignUpForm, ClassComposeForm, ContentForm, PerformanceGradeForm, \
+ AbsenceForm
 
 
 # Create your views here.
@@ -275,6 +276,31 @@ class TeacherCourseDetailView(generic.ListView):
         context['courseID'] = self.kwargs['courseID']
         context['courseDetails'] = Course.objects.get(ID=self.kwargs['courseID'])
         return context
+
+
+class AbsenceView(generic.ListView):
+    template_name = 'teacher/absence.html'
+    context_object_name = 'behaviour'
+
+    def get_queryset(self):
+        return Content.objects.filter(courseID=self.kwargs['courseID'])
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(AbsenceView, self).get_context_data(**kwargs)
+        context['courseID'] = self.kwargs['courseID']
+        context['courseDetails'] = Course.objects.get(ID=self.kwargs['courseID'])
+        return context
+
+
+def absenceForm(request, courseID):
+    if request.method == 'POST':
+        form = AbsenceForm(request.POST, courseID=courseID)
+        if form.is_valid():
+            form.save()
+            return redirect('application:teacher')
+    else:
+        form = AbsenceForm(request.POST, courseID=courseID)
+    return render(request, 'teacher/absence.html', {'form': form, 'courseID': courseID, })
 
 
 def contentForm(request):
