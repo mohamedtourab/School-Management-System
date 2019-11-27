@@ -47,6 +47,8 @@ urlpatterns = [
         login_required(views.MaterialView.as_view(), login_url='application:login'), name='materials'),
     url(r'^parent/(?P<studentID>[0-9]+)/course/(?P<courseID>[0-9]+)/attendance/$',
         login_required(views.ParentAttendanceView.as_view(), login_url='application:login'), name='parentAttendance'),
+    path('communication/', views.communicationWithParent, name='communication'),
+    path('announcement/', views.Announcement, name='announcement'),
 ]
 
 if settings.DEBUG:

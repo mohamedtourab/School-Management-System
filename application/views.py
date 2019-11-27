@@ -138,9 +138,13 @@ def sendmailtoparent(username, email, password):
               fail_silently=False)
 
 
+def communicationWithParent(request):
+    return render(request, 'administrativeOfficer/communication.html')
+
 # -----------------------------------------------------------------------------------------------
 ####### PARENT AREA##########
 # -----------------------------------------------------------------------------------------------
+
 class TestView(generic.ListView):
     template_name = 'parent/afterloginparent.html'
 
@@ -269,6 +273,9 @@ def change_password(request):
     else:
         return render(request, 'parent/change_password.html', {'form': PasswordChangeForm(user=request.user)})
 
+
+def Announcement(request):
+    return render(request, 'parent/announcement.html')
 
 # -----------------------------------------------------------------------------------------------
 ####### TEACHER AREA##########
