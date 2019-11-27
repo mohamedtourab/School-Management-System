@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth.models import User
 from django.db.models import Sum
@@ -21,14 +22,13 @@ from application.forms import StudentForm, ParentSignUpForm, ClassComposeForm, C
 # -----------------------------------------------------------------------------------------------
 ####### ADMINISTRATIVE OFFICER AREA##########
 # -----------------------------------------------------------------------------------------------
-
 class AdministrativeOfficer(generic.ListView):
     template_name = 'administrativeOfficer/base.html'
 
     def get_queryset(self):
         return "salam"
 
-
+@login_required(login_url='application:login')
 def enrollStudent(request):
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
@@ -48,7 +48,7 @@ def enrollStudent(request):
 
     return render(request, 'administrativeOfficer/enrollStudent.html', {'form': form})
 
-
+@login_required(login_url='application:login')
 def classCompose(request):
     if request.method == 'POST':
         form = ClassComposeForm(request.POST)
@@ -90,7 +90,7 @@ def numberOfStudents():
     print(number)
     return number
 
-
+@login_required(login_url='application:login')
 def parentSignup(request):
     if request.method == 'POST':
         form = ParentSignUpForm(request.POST)
@@ -235,7 +235,7 @@ class ParentGradeView(generic.ListView):
         context['columns'] = range(columns)
         return context
 
-
+@login_required(login_url='application:login')
 def change_password(request):
     if request.method == 'POST':
         form = PasswordChangeForm(data=request.POST, user=request.user)
@@ -291,7 +291,7 @@ class AbsenceView(generic.ListView):
         context['courseDetails'] = Course.objects.get(ID=self.kwargs['courseID'])
         return context
 
-
+@login_required(login_url='application:login')
 def absenceForm(request, courseID):
     if request.method == 'POST':
         form = AbsenceForm(request.POST, courseID=courseID)
@@ -302,7 +302,7 @@ def absenceForm(request, courseID):
         form = AbsenceForm(request.POST, courseID=courseID)
     return render(request, 'teacher/absence.html', {'form': form, 'courseID': courseID, })
 
-
+@login_required(login_url='application:login')
 def contentForm(request):
     if request.method == 'POST':
         form = ContentForm(request.POST, user=request.user)
@@ -313,7 +313,7 @@ def contentForm(request):
         form = ContentForm(user=request.user)
     return render(request, 'teacher/addTopicORMaterial.html', {'form': form})
 
-
+@login_required(login_url='application:login')
 def gradeForm(request, courseID):
     if request.method == 'POST':
         form = PerformanceGradeForm(request.POST, courseID=courseID)
@@ -342,7 +342,7 @@ class LoginView(generic.ListView):
     def get_queryset(self):
         return "salam"
 
-
+@login_required(login_url='application:login')
 def logout_view(request):
     logout(request)
     return redirect('application:index')
