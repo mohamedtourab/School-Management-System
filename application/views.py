@@ -228,7 +228,9 @@ class ParentAttendanceView(generic.ListView):
         context = super(ParentAttendanceView, self).get_context_data(**kwargs)
         context['courseID'] = self.kwargs['courseID']
         context['attendances'] = Attendance.objects.filter(Q(studentCourseID__studentID=self.kwargs['studentID']),
-                                                           Q(studentCourseID__courseID=self.kwargs['courseID'])).order_by('date')
+                                                           Q(studentCourseID__courseID=self.kwargs['courseID']),).order_by('date')
+        # create new Vew for handling attendance divided into months, need to add new constraint to the query,
+        # and send Month_Name into next url
         return context
 
 
