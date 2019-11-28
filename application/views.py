@@ -138,9 +138,13 @@ def sendmailtoparent(username, email, password):
               fail_silently=False)
 
 
+def communicationWithParent(request):
+    return render(request, 'administrativeOfficer/communication.html')
+
 # -----------------------------------------------------------------------------------------------
 ####### PARENT AREA##########
 # -----------------------------------------------------------------------------------------------
+
 class TestView(generic.ListView):
     template_name = 'parent/afterloginparent.html'
 
@@ -223,7 +227,10 @@ class ParentAttendanceView(generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ParentAttendanceView, self).get_context_data(**kwargs)
         context['courseID'] = self.kwargs['courseID']
-        context['attendances'] = Attendance.objects.filter(Q(studentCourseID__studentID=self.kwargs['studentID']), Q(studentCourseID__courseID=self.kwargs['courseID']))
+        context['attendances'] = Attendance.objects.filter(Q(studentCourseID__studentID=self.kwargs['studentID']),
+                                                           Q(studentCourseID__courseID=self.kwargs['courseID']),).order_by('date')
+        # create new Vew for handling attendance divided into months, need to add new constraint to the query,
+        # and send Month_Name into next url
         return context
 
 
@@ -269,6 +276,9 @@ def change_password(request):
     else:
         return render(request, 'parent/change_password.html', {'form': PasswordChangeForm(user=request.user)})
 
+
+def Announcement(request):
+    return render(request, 'parent/announcement.html')
 
 # -----------------------------------------------------------------------------------------------
 ####### TEACHER AREA##########

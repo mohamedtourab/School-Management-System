@@ -1,0 +1,10 @@
+{% extends 'parent/baseChangePassword.html' %}
+
+{% block body %}
+    <h1 id="title"></h1>
+    <script type="text/javascript">
+
+    var text = document.cookie.split(";")[0].split("=")[1];
+    document.getElementById("title").innerHTML = text;
+</script>
+{% endblock %}

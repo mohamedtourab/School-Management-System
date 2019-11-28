@@ -5,7 +5,7 @@
 {% load crispy_forms_tags %}
 
 {% block body %}
-    <div style="padding-left: 2%">
+    <div style="padding-left: 2%; padding-top: 1%;padding-bottom: 5%;width: 90%;">
         {% if messages %}
             <ul class="messages">
                 {% for message in messages %}
@@ -26,7 +26,6 @@
             <button type="submit" class="btn btn-primary btn-lg" onclick="{% url 'application:classCompose' %}">Add Class
             </button>
         </form>
-        <br><br>
     </div>
 
 
