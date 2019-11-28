@@ -12,7 +12,7 @@ import csv, io
 from django.db.models import Q
 
 from .models import StudentCourse, PerformanceGrade, Parent, Content, Course, Student, ClassInfo, TeacherCourse, \
-    ParentStudent, Attendance
+    ParentStudent, Attendance, Assignment
 from django.views import generic
 from application.forms import StudentForm, ParentSignUpForm, ClassComposeForm, ContentForm, PerformanceGradeForm, \
     AbsenceForm, AssignmentForm
@@ -303,6 +303,7 @@ class TeacherCourseDetailView(generic.ListView):
         context = super(TeacherCourseDetailView, self).get_context_data(**kwargs)
         context['courseID'] = self.kwargs['courseID']
         context['courseDetails'] = Course.objects.get(ID=self.kwargs['courseID'])
+        context['assignments'] = Assignment.objects.filter(courseID=self.kwargs['courseID'])
         return context
 
 
