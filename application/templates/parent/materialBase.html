@@ -41,16 +41,19 @@
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light ftco_navbar ftco-navbar-light" id="ftco-navbar">
     <div class="container d-flex align-items-center">
-        <a class="navbar-brand" href="{% url 'application:parentWithID' studentID%}" style="font-size: 30px">Kiddos</a>
+        <a class="navbar-brand" href="{% url 'application:parentWithID' studentID %}" style="font-size: 30px">Kiddos</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
                 aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="oi oi-menu"></span> Menu
         </button>
         <div class="collapse navbar-collapse" id="ftco-nav" style="font-size: 14px">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item active"><a href="{% url 'application:parentWithID' studentID %}" class="nav-link pl-0">Home</a></li>
-                <li class="nav-item"><a href="{% url 'application:courseViewWithCourseId' studentID courseID %}" class="nav-link pl-0">Topics</a></li>
-                <li class="nav-item"><a href="{% url 'application:materials' studentID courseID  %}" class="nav-link pl-0">Assignments</a></li>
+                <li class="nav-item active"><a href="{% url 'application:parentWithID' studentID %}"
+                                               class="nav-link pl-0">Home</a></li>
+                <li class="nav-item"><a href="{% url 'application:courseViewWithCourseId' studentID courseID %}"
+                                        class="nav-link pl-0">Topics</a></li>
+                <li class="nav-item"><a href="{% url 'application:materials' studentID courseID %}"
+                                        class="nav-link pl-0">Assignments</a></li>
             </ul>
         </div>
     </div>

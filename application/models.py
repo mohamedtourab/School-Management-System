@@ -85,13 +85,14 @@ class Course(models.Model):
 class Assignment(models.Model):
     ID = models.AutoField(primary_key=True)
     assignmentTitle = models.CharField(max_length=50, verbose_name='Assignment Title')
-    courseID = models.ForeignKey(Course,on_delete=models.CASCADE,verbose_name='Course')
-    assignmentFile = models.FileField(verbose_name='File',upload_to='../media')
-    additionDate = models.DateField(default=datetime.date.today,verbose_name='Addition Date')
-    deadlineDate = models.DateField(default=None,verbose_name='Deadline Date')
+    courseID = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='Course')
+    assignmentFile = models.FileField(verbose_name='File', upload_to='../media')
+    additionDate = models.DateField(default=datetime.date.today, verbose_name='Addition Date')
+    deadlineDate = models.DateField(default=None, verbose_name='Deadline Date')
 
     def __str__(self):
         return self.assignmentTitle
+
 
 class Teacher(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

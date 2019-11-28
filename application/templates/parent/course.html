@@ -1,12 +1,10 @@
 {% extends 'parent/courseBase.html' %}
 {% block body %}
     {% if topics %}
-       <h2 style="padding-left: 1%">List of topics discussed in {{ courseDetails.name }}</h2><br>
-
-
+        <h2 style="padding-left: 1%">List of topics discussed in {{ courseDetails.name }}</h2><br>
         <ul>
             {% for topic in topics %}
-                <li >{{ topic.contentString }}</li>
+                <li>{{ topic.contentString }}</li>
             {% endfor %}
         </ul>
     {% endif %}

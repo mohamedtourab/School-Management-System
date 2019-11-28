@@ -1,33 +1,33 @@
 {% extends 'parent/attendanceBase.html' %}
 {% block body %}
     <div style="padding-bottom: 5%; padding-top: 1%;padding-left: 1%">
-    <table>
-    <tr>
-        <th style="text-align: center">Date</th>
-        <th style="text-align: center">Presence</th>
-        <th style="text-align: center">Came Late</th>
-        <th style="text-align: center">Left Early</th>
-    </tr>
-    {% for a in attendances %}
-        <tr>
-            <th>{{ a.date }}</th>
-            {% if a.presence == True %}
-                <td style="text-align: center; color: #34ce57"> &#10004; </td>
-                {% else %}
-                <td style="text-align: center; color: #a71d2a"> &times; </td>
-            {% endif %}
-            {% if a.cameLate == True %}
-                <td style="text-align: center; color: #34ce57"> &#10004; </td>
-                {% else %}
-                <td style="text-align: center; color: #a71d2a"> &times; </td>
-            {% endif %}
-            {% if a.leftEarly == True %}
-                <td style="text-align: center; color: #34ce57"> &#10004;</td>
-                {% else %}
-                <td style="text-align: center; color: #a71d2a"> &times; </td>
-            {% endif %}
-        </tr>
-    {% endfor %}
-    </table>
+        <table>
+            <tr>
+                <th style="text-align: center">Date</th>
+                <th style="text-align: center">Presence</th>
+                <th style="text-align: center">Came Late</th>
+                <th style="text-align: center">Left Early</th>
+            </tr>
+            {% for a in attendances %}
+                <tr>
+                    <th>{{ a.date }}</th>
+                    {% if a.presence == True %}
+                        <td style="text-align: center; color: #34ce57"> &#10004;</td>
+                    {% else %}
+                        <td style="text-align: center; color: #a71d2a"> &times;</td>
+                    {% endif %}
+                    {% if a.cameLate == True %}
+                        <td style="text-align: center; color: #34ce57"> &#10004;</td>
+                    {% else %}
+                        <td style="text-align: center; color: #a71d2a"> &times;</td>
+                    {% endif %}
+                    {% if a.leftEarly == True %}
+                        <td style="text-align: center; color: #34ce57"> &#10004;</td>
+                    {% else %}
+                        <td style="text-align: center; color: #a71d2a"> &times;</td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </table>
     </div>
 {% endblock %}
