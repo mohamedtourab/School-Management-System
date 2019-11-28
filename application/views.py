@@ -24,10 +24,19 @@ from application.forms import StudentForm, ParentSignUpForm, ClassComposeForm, C
 ####### ADMINISTRATIVE OFFICER AREA##########
 # -----------------------------------------------------------------------------------------------
 class AdministrativeOfficer(generic.ListView):
-    template_name = 'administrativeOfficer/base.html'
+    template_name = 'administrativeOfficer/aoAfterLogin.html'
+    context_object_name = 'allClasses'
 
     def get_queryset(self):
-        return "salam"
+        return ClassInfo.objects.all()
+
+
+class AdministrativeOfficerClassDetailView(generic.ListView):
+    template_name = 'administrativeOfficer/class.html'
+    context_object_name = 'class'
+
+    def get_queryset(self):
+        return ClassInfo.objects.filter(name=self.kwargs['name'])
 
 
 @login_required(login_url='application:login')

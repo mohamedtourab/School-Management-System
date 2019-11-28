@@ -49,6 +49,10 @@ urlpatterns = [
         login_required(views.ParentAttendanceView.as_view(), login_url='application:login'), name='parentAttendance'),
     path('communication/', views.communicationWithParent, name='communication'),
     path('announcement/', views.Announcement, name='announcement'),
+    path('ao/', login_required(views.AdministrativeOfficer.as_view(), login_url='application:login'), name='ao'),
+    url(r'^ao/class/(?P<name>[0-9][A-Z]+)/$',
+        login_required(views.AdministrativeOfficerClassDetailView.as_view(), login_url='application:login'),
+        name='aoClassViewWithName'),
 ]
 
 if settings.DEBUG:

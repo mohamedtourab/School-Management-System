@@ -1,0 +1,12 @@
+{% extends 'administrativeOfficer/base.html' %}
+{% block body %}
+
+    <div style="padding-left: 2%">
+        <h2> List of your classes </h2><br>
+        {% for classes in allClasses %}
+            <a href="class/{{ classes.name }}"
+               class="btn btn-primary btn-lg"> {{ classes.name }} </a><br><br>
+        {% endfor %}
+    </div>
+
+{% endblock %}
