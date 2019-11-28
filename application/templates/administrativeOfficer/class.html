@@ -1,0 +1,7 @@
+{% extends 'administrativeOfficer/classBase.html' %}
+{% block body %}
+    {% for c in class %}
+        <h2 style="padding-left: 1%" href="class/{{ c.name }}">Time Table of class {{ c.name }}</h2>
+        <br><br>
+    {% endfor %}
+{% endblock %}
