@@ -185,11 +185,13 @@ class MaterialView(generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(MaterialView, self).get_context_data(**kwargs)
         context['studentID'] = self.kwargs['studentID']
-        if Course.objects.get(ID=self.kwargs['courseID']).assignment:
-            context['assignments'] = Course.objects.get(ID=self.kwargs['courseID']).assignment.url
-            context['assignmentName'] = Course.objects.get(ID=self.kwargs['courseID']).assignment.name
+        if Assignment.objects.filter(courseID=self.kwargs['courseID']):
+            context['assignments'] = Assignment.objects.filter(courseID=self.kwargs['courseID'])
+        #if Course.objects.get(ID=self.kwargs['courseID']).assignment:
+           # context['assignments'] = Course.objects.get(ID=self.kwargs['courseID']).assignment.url
+            #context['assignmentName'] = Course.objects.get(ID=self.kwargs['courseID']).assignment.name
         else:
-            context['assignmentName'] = "No assignments yet!"
+            context['assignments'] = []
         return context
 
 
