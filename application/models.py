@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -62,7 +64,7 @@ class Student(models.Model):
     ID = models.AutoField(primary_key=True)
     first_name = models.CharField(max_length=50, verbose_name='First Name')
     last_name = models.CharField(max_length=50, verbose_name='Last Name')
-    classID = models.ForeignKey(ClassInfo, on_delete=models.CASCADE, verbose_name='Student Class Name', blank=True,
+    classID = models.ForeignKey(ClassInfo, on_delete=models.CASCADE, verbose_name='Student Class', blank=True,
                                 null=True)
     studentYear = models.CharField(max_length=20, choices=grade_choice, default=FIRST, verbose_name='Year Grade')
 
@@ -75,11 +77,21 @@ class Course(models.Model):
     name = models.CharField(max_length=50)
     numberOfHoursPerWeek = models.PositiveIntegerField()
     year = models.CharField(max_length=10)
-    assignment = models.FileField(blank=True, null=True)
 
     def __str__(self):
         return self.name
 
+
+class Assignment(models.Model):
+    ID = models.AutoField(primary_key=True)
+    assignmentTitle = models.CharField(max_length=50, verbose_name='Assignment Title')
+    courseID = models.ForeignKey(Course,on_delete=models.CASCADE,verbose_name='Course')
+    assignmentFile = models.FileField(verbose_name='File',upload_to='../media')
+    additionDate = models.DateField(default=datetime.date.today,verbose_name='Addition Date')
+    deadlineDate = models.DateField(default=None,verbose_name='Deadline Date')
+
+    def __str__(self):
+        return self.assignmentTitle
 
 class Teacher(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

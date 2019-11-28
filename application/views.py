@@ -15,7 +15,7 @@ from .models import StudentCourse, PerformanceGrade, Parent, Content, Course, St
     ParentStudent, Attendance
 from django.views import generic
 from application.forms import StudentForm, ParentSignUpForm, ClassComposeForm, ContentForm, PerformanceGradeForm, \
-    AbsenceForm
+    AbsenceForm, AssignmentForm
 
 
 # Create your views here.
@@ -347,6 +347,19 @@ def gradeForm(request, courseID):
         form = PerformanceGradeForm(courseID=courseID)
     return render(request, 'teacher/grade.html', {'form': form, 'courseID': courseID, })
 
+
+@login_required(login_url='application:login')
+def assignmentForm(request, courseID):
+    if request.method == 'POST':
+        form = AssignmentForm(request.POST,request.FILES)
+        if form.is_valid():
+            unsavedForm = form.save(commit=False)
+            unsavedForm.courseID = Course.objects.get(ID=courseID)
+            unsavedForm.save()
+            return redirect('application:teacher')
+    else:
+        form = AssignmentForm()
+    return render(request, 'teacher/addAssignment.html', {'form': form, 'courseID': courseID, })
 
 # -----------------------------------------------------------------------------------------------
 ####### GENERAL AREA##########

@@ -1,0 +1,12 @@
+{% extends 'teacher/course.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block body %}
+    <form enctype="multipart/form-data" method="post" action="{% url 'application:assignmentForm' courseID%}" style="padding-left: 2%">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <input type="submit" value="Submit" class="btn btn-primary btn-lg"/>
+    </form>
+    <br><br>
+{% endblock %}
