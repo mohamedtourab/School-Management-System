@@ -16,7 +16,7 @@
     {% if assignments %}
         <ul>
             {% for assignment in assignments %}
-                <li><a href="../../../media/QueueManagementSystem_Group_K.pdf" download>{{assignment.assignmentTitle}}</a></li>
+                <li><a href="../../../media/{{ assignment.assignmentFile.name }}" download>{{assignment.assignmentTitle}}</a>{{ '       ' }}Deadline:{{ assignment.deadlineDate }}</li>
             {% endfor %}
         </ul>
         <br><br>
