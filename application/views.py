@@ -331,7 +331,7 @@ def absenceForm(request, courseID):
             form.save()
             return redirect('application:teacher')
     else:
-        form = AbsenceForm(request.POST, courseID=courseID)
+        form = AbsenceForm(courseID=courseID)
     return render(request, 'teacher/absence.html', {'form': form, 'courseID': courseID, })
 
 
