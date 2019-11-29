@@ -12,10 +12,10 @@ import csv, io
 from django.db.models import Q
 
 from .models import StudentCourse, PerformanceGrade, Parent, Content, Course, Student, ClassInfo, TeacherCourse, \
-    ParentStudent, Attendance
+    ParentStudent, Attendance, Assignment
 from django.views import generic
 from application.forms import StudentForm, ParentSignUpForm, ClassComposeForm, ContentForm, PerformanceGradeForm, \
-    AbsenceForm
+    AbsenceForm, AssignmentForm
 
 
 # Create your views here.
@@ -137,10 +137,10 @@ def parentSignup(request):
 
 def sendmailtoparent(username, email, password):
     send_mail('School Account Credentials',
-              'Dear Sir/Madam,\n We hope that this email finds you in a good health.\n'+
-              'This is your credentials for accessing the school website\n'+
-              'Username: ' + username + '\nPassword: ' + password+'\n'+
-              'you can access our website by pressing this link: http://127.0.0.1:8000/application/login/'+'\n'+
+              'Dear Sir/Madam,\n We hope that this email finds you in a good health.\n' +
+              'This is your credentials for accessing the school website\n' +
+              'Username: ' + username + '\nPassword: ' + password + '\n' +
+              'you can access our website by pressing this link: http://127.0.0.1:8000/application/login/' + '\n' +
               'Have a nice day.',
               'admofficer658@gmail.com',
               [email],
@@ -149,6 +149,7 @@ def sendmailtoparent(username, email, password):
 
 def communicationWithParent(request):
     return render(request, 'administrativeOfficer/communication.html')
+
 
 # -----------------------------------------------------------------------------------------------
 ####### PARENT AREA##########
@@ -194,11 +195,13 @@ class MaterialView(generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(MaterialView, self).get_context_data(**kwargs)
         context['studentID'] = self.kwargs['studentID']
-        if Course.objects.get(ID=self.kwargs['courseID']).assignment:
-            context['assignments'] = Course.objects.get(ID=self.kwargs['courseID']).assignment.url
-            context['assignmentName'] = Course.objects.get(ID=self.kwargs['courseID']).assignment.name
+        if Assignment.objects.filter(courseID=self.kwargs['courseID']):
+            context['assignments'] = Assignment.objects.filter(courseID=self.kwargs['courseID'])
+        # if Course.objects.get(ID=self.kwargs['courseID']).assignment:
+        # context['assignments'] = Course.objects.get(ID=self.kwargs['courseID']).assignment.url
+        # context['assignmentName'] = Course.objects.get(ID=self.kwargs['courseID']).assignment.name
         else:
-            context['assignmentName'] = "No assignments yet!"
+            context['assignments'] = []
         return context
 
 
@@ -237,7 +240,10 @@ class ParentAttendanceView(generic.ListView):
         context = super(ParentAttendanceView, self).get_context_data(**kwargs)
         context['courseID'] = self.kwargs['courseID']
         context['attendances'] = Attendance.objects.filter(Q(studentCourseID__studentID=self.kwargs['studentID']),
-                                                           Q(studentCourseID__courseID=self.kwargs['courseID'])).order_by('date')
+                                                           Q(studentCourseID__courseID=self.kwargs[
+                                                               'courseID']), ).order_by('date')
+        # create new Vew for handling attendance divided into months, need to add new constraint to the query,
+        # and send Month_Name into next url
         return context
 
 
@@ -287,6 +293,7 @@ def change_password(request):
 def Announcement(request):
     return render(request, 'parent/announcement.html')
 
+
 # -----------------------------------------------------------------------------------------------
 ####### TEACHER AREA##########
 # -----------------------------------------------------------------------------------------------
@@ -311,6 +318,7 @@ class TeacherCourseDetailView(generic.ListView):
         context = super(TeacherCourseDetailView, self).get_context_data(**kwargs)
         context['courseID'] = self.kwargs['courseID']
         context['courseDetails'] = Course.objects.get(ID=self.kwargs['courseID'])
+        context['assignments'] = Assignment.objects.filter(courseID=self.kwargs['courseID'])
         return context
 
 
@@ -336,12 +344,12 @@ def absenceForm(request, courseID):
             form.save()
             return redirect('application:teacher')
     else:
-        form = AbsenceForm(request.POST, courseID=courseID)
+        form = AbsenceForm(courseID=courseID)
     return render(request, 'teacher/absence.html', {'form': form, 'courseID': courseID, })
 
 
 @login_required(login_url='application:login')
-def contentForm(request,courseID):
+def contentForm(request, courseID):
     if request.method == 'POST':
         form = ContentForm(request.POST, user=request.user)
         if form.is_valid():
@@ -351,7 +359,7 @@ def contentForm(request,courseID):
             return redirect('application:teacher')
     else:
         form = ContentForm(user=request.user)
-    return render(request, 'teacher/addTopicORMaterial.html', {'form': form,'courseID':courseID,})
+    return render(request, 'teacher/addTopicORMaterial.html', {'form': form, 'courseID': courseID, })
 
 
 @login_required(login_url='application:login')
@@ -364,6 +372,20 @@ def gradeForm(request, courseID):
     else:
         form = PerformanceGradeForm(courseID=courseID)
     return render(request, 'teacher/grade.html', {'form': form, 'courseID': courseID, })
+
+
+@login_required(login_url='application:login')
+def assignmentForm(request, courseID):
+    if request.method == 'POST':
+        form = AssignmentForm(request.POST, request.FILES)
+        if form.is_valid():
+            unsavedForm = form.save(commit=False)
+            unsavedForm.courseID = Course.objects.get(ID=courseID)
+            unsavedForm.save()
+            return redirect('application:teacher')
+    else:
+        form = AssignmentForm()
+    return render(request, 'teacher/addAssignment.html', {'form': form, 'courseID': courseID, })
 
 
 # -----------------------------------------------------------------------------------------------

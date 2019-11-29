@@ -47,12 +47,15 @@ urlpatterns = [
         login_required(views.MaterialView.as_view(), login_url='application:login'), name='materials'),
     url(r'^parent/(?P<studentID>[0-9]+)/course/(?P<courseID>[0-9]+)/attendance/$',
         login_required(views.ParentAttendanceView.as_view(), login_url='application:login'), name='parentAttendance'),
+
+    path('teacher/course/<int:courseID>/addAssignment', views.assignmentForm, name='assignmentForm'),
     path('communication/', views.communicationWithParent, name='communication'),
     path('announcement/', views.Announcement, name='announcement'),
     path('ao/', login_required(views.AdministrativeOfficer.as_view(), login_url='application:login'), name='ao'),
     url(r'^ao/class/(?P<name>[0-9][A-Z]+)/$',
         login_required(views.AdministrativeOfficerClassDetailView.as_view(), login_url='application:login'),
         name='aoClassViewWithName'),
+
 ]
 
 if settings.DEBUG:

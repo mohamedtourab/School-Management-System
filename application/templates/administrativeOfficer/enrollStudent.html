@@ -5,7 +5,7 @@
 {% load crispy_forms_tags %}
 
 {% block body %}
-    <br>
+    <div style="padding-left: 2%; padding-top: 1%;padding-bottom: 5%;width: 90%;">
     {% if messages %}
         <ul class="messages">
             {% for message in messages %}
@@ -17,13 +17,10 @@
         <p class="text-danger"><strong>{{ error_message }}</strong></p>
         <br>
     {% endif %}
-    <form method="post" action="{% url 'application:signup' %}" style="padding-left: 2%">
+    <form method="post" action="{% url 'application:signup' %}">
         {% csrf_token %}
         {{ form|crispy }}
         <button type="submit" class="btn btn-primary btn-lg">Add</button>
     </form>
-    <br>
-    <br>
-    <br>
-    <br>
+    </div>
 {% endblock %}

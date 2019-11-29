@@ -1,9 +1,17 @@
 {% extends 'parent/materialBase.html' %}
 {% block body %}
-    <div style="padding-left: 1%;padding-top: 2%;padding-bottom: 5%">
-        <h3>Assignment: {{ assignmentName }} </h3> <br><br>
-            {% if assignments %}
-                <a href="{% url 'application:index' %}{{ assignments }} " download class="btn btn-primary btn-lg">Download Assignment</a>
+    <div style="padding-left: 2%;padding-top: 1%;padding-bottom: 5%">
+        <h3 style="padding-bottom: 1%">Assignments</h3>
+        {% for assignment in assignments %}
+            {% if assignment %}
+                <ul>
+                    <li>
+                        <a href="{% url 'application:index' %}{{ assignment.assignmentFile.url }}"
+                           download>{{ assignment.assignmentTitle }}</a>{{ '       ' }}Deadline:{{ assignment.deadlineDate }}
+                    </li>
+                </ul>
+
             {% endif %}
+        {% endfor %}
     </div>
 {% endblock %}

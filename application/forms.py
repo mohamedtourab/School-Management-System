@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import ModelForm
 
-from .models import Student, ClassInfo, Content, TeacherCourse, Course, PerformanceGrade, StudentCourse, Attendance
+from .models import Student, ClassInfo, Content, TeacherCourse, Course, PerformanceGrade, StudentCourse, Attendance, Assignment
 
 
 class StudentForm(ModelForm):
@@ -64,3 +64,11 @@ class AbsenceForm(ModelForm):
     class Meta:
         model = Attendance
         fields = ['ID', 'studentCourseID', 'date', 'presence', 'cameLate', 'leftEarly', ]
+
+
+class AssignmentForm(ModelForm):
+    class Meta:
+        model = Assignment
+        exclude=('courseID','additionDate','fileName',)
+        fields = ['assignmentTitle', 'assignmentFile', 'deadlineDate']
+

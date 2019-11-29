@@ -54,8 +54,10 @@
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item active"><a href="{% url 'application:teacher' %}" class="nav-link pl-0">Home</a>
                 </li>
-                <li class="nav-item "><a href="{% url 'application:contentForm' courseID%}" class="nav-link pl-0">Add topic/Material</a></li>
-                <li class="nav-item"><a href="#" class="nav-link pl-0">Assignment</a></li>
+                <li class="nav-item "><a href="{% url 'application:contentForm' courseID %}" class="nav-link pl-0">Add
+                    topic/Material</a></li>
+                <li class="nav-item"><a href="{% url 'application:assignmentForm' courseID %}" class="nav-link pl-0">Assignment</a>
+                </li>
                 <li class="nav-item"><a href="{% url 'application:absenceForm' courseID %}"
                                         class="nav-link pl-0">Absence</a></li>
                 <li class="nav-item"><a href="{% url 'application:gradeForm' courseID %}"
