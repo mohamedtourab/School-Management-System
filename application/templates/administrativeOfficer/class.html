@@ -1,7 +1,10 @@
 {% extends 'administrativeOfficer/classBase.html' %}
 {% block body %}
+    {% load staticfiles %}
     {% for c in class %}
         <h2 style="padding-left: 1%" href="class/{{ c.name }}">Time Table of class {{ c.name }}</h2>
-        <br><br>
+        <br>
+            <img style="padding-left: 1%" src="localhost:8000/{{ c.timetable.url }}" alt="img"/>
+            <br><br>
     {% endfor %}
 {% endblock %}
