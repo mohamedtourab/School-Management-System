@@ -69,13 +69,13 @@ def classCompose(request):
             classInfo = form.save()
             classInfo.refresh_from_db()
 
-            if Student.objects.filter(classID=None).count() < classInfo.totalStudentsNumber:
-                for student in Student.objects.filter(classID=None):
+            if Student.objects.filter(classID=None, studentYear='FIRST').count() < classInfo.totalStudentsNumber:
+                for student in Student.objects.filter(classID=None, studentYear='FIRST'):
                     student.classID = classInfo
                     student.save()
             else:
                 i = 0
-                for student in Student.objects.filter(classID=None):
+                for student in Student.objects.filter(classID=None, studentYear='FIRST'):
                     if i < classInfo.totalStudentsNumber:
                         i += 1
                         student.classID = classInfo
