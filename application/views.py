@@ -36,7 +36,6 @@ class AdministrativeOfficerClassDetailView(generic.ListView):
     context_object_name = 'class'
 
     def get_queryset(self):
-        print (ClassInfo.objects.filter(name=self.kwargs['name']))
         return ClassInfo.objects.filter(name=self.kwargs['name'])
 
 
