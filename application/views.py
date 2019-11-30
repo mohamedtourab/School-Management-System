@@ -290,8 +290,8 @@ def change_password(request):
         return render(request, 'parent/change_password.html', {'form': PasswordChangeForm(user=request.user)})
 
 
-def Announcement(request):
-    return render(request, 'parent/announcement.html')
+def announcement(request,studentID):
+    return render(request, 'parent/announcement.html',{'studentID':studentID,})
 
 
 # -----------------------------------------------------------------------------------------------

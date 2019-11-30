@@ -15,4 +15,39 @@
 
     </div>
     <br><br>
+
+    <!-- Popup Part Starts Here -->
+    <script type="text/javascript">
+        if(localStorage.getItem('seen')==='no'){
+            window.onload = function() {
+		        var button = document.getElementById('clicker');
+                button.click();
+            }
+	    }
+    </script>
+
+    <!-- Trigger the modal with a hidden button -->
+    <button id="clicker" type="button" hidden="hidden"
+        data-toggle="modal" data-target="#myModal"></button>
+
+    <div class="modal" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">YOU HAVE A NEW ANNOUNCEMENT</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Popup Part Ends Here -->
+
 {% endblock %}
