@@ -3,7 +3,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import ModelForm
 
-from .models import Student, ClassInfo, Content, TeacherCourse, Course, PerformanceGrade, StudentCourse, Attendance, Assignment
+from .models import Student, ClassInfo, Content, TeacherCourse, Course, PerformanceGrade, StudentCourse, Attendance, \
+    Assignment
 
 
 class StudentForm(ModelForm):
@@ -27,13 +28,34 @@ class ClassComposeForm(ModelForm):
 
 
 class ManualEnrollmentForm(ModelForm):
+    def getListOfFreeClasses(self):
+        studentList = Student.objects.filter(studentYear='FIRST')
+        classInformation = dict()
+        for student in studentList:
+            if (classInformation.get(student.classID.name) != None):
+                classInformation[student.classID.name] = classInformation.get(student.classID.name) + 1
+            else:
+                classInformation[student.classID.name] = 1
+        listOfClassNames = []
+        for key, value in classInformation.items():
+            classDetails = ClassInfo.objects.get(name=key)
+            if (classDetails.totalStudentsNumber > value):
+                listOfClassNames.append(key)
+
+    classes = forms.ModelChoiceField(queryset=ClassInfo.objects.all())
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super(ManualEnrollmentForm, self).__init__(*args, **kwargs)
+        self.classes = forms.ModelChoiceField(queryset=ClassInfo.objects.filter(name__in=self.getListOfFreeClasses()))
+
     student = forms.ModelMultipleChoiceField(queryset=Student.objects.filter(classID__isnull=True))
-    classes = forms.ModelMultipleChoiceField(queryset=ClassInfo.objects.all())
 
     class Meta:
         model = Student
         exclude = ['ID']
         fields = ['classes', 'student']
+
 
 class ContentForm(ModelForm):
 
@@ -43,7 +65,7 @@ class ContentForm(ModelForm):
         # listOfCoursesID = (TeacherCourse.objects.filter(teacherID=self.user.teacher.ID)).values('courseID')
         # listOfCourses = Course.objects.filter(ID__in=listOfCoursesID)
         # self.courseID = forms.ModelChoiceField(queryset=listOfCourses)
-        #self.fields['courseID'] = self.courseID
+        # self.fields['courseID'] = self.courseID
 
     class Meta:
         model = Content
@@ -78,5 +100,5 @@ class AbsenceForm(ModelForm):
 class AssignmentForm(ModelForm):
     class Meta:
         model = Assignment
-        exclude=('courseID','additionDate','fileName',)
+        exclude = ('courseID', 'additionDate', 'fileName',)
         fields = ['assignmentTitle', 'assignmentFile', 'deadlineDate']
