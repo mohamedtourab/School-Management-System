@@ -26,6 +26,15 @@ class ClassComposeForm(ModelForm):
         fields = ['ID', 'name', 'totalStudentsNumber']
 
 
+class ManualEnrollmentForm(ModelForm):
+    student = forms.ModelMultipleChoiceField(queryset=Student.objects.filter(classID__isnull=True))
+    classes = forms.ModelMultipleChoiceField(queryset=ClassInfo.objects.all())
+
+    class Meta:
+        model = Student
+        exclude = ['ID']
+        fields = ['classes', 'student']
+
 class ContentForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
@@ -71,4 +80,3 @@ class AssignmentForm(ModelForm):
         model = Assignment
         exclude=('courseID','additionDate','fileName',)
         fields = ['assignmentTitle', 'assignmentFile', 'deadlineDate']
-

@@ -29,5 +29,16 @@
         </form>
     </div>
 
+    <div style="padding-left: 2%; padding-top: 1%;padding-bottom: 5%;width: 90%;">
+
+    <form method="post">
+            {% csrf_token %}
+            {{ form2|crispy }}
+            <button type="submit" class="btn btn-primary btn-lg" onclick="{% url 'application:classCompose' %}">Manual
+            </button>
+        </form>
+
+    </div>
+
 
 {% endblock %}
