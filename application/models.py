@@ -212,6 +212,9 @@ class Attendance(models.Model):
     cameLate = models.BooleanField(default=False)
     leftEarly = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.studentCourseID.studentID.first_name+' '+self.studentCourseID.studentID.last_name+':'+self.studentCourseID.courseID.name
+
 
 class FreeSlots(models.Model):
     teacherID = models.ForeignKey(Teacher, on_delete=models.CASCADE)  # check ONDELETE
