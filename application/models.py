@@ -208,7 +208,7 @@ class Attendance(models.Model):
     ID = models.AutoField(primary_key=True)
     studentCourseID = models.ForeignKey(StudentCourse, on_delete=models.CASCADE)
     presence = models.BooleanField(default=True)
-    date = models.DateField()
+    date = models.DateField(default=datetime.date.today)
     cameLate = models.BooleanField(default=False)
     leftEarly = models.BooleanField(default=False)
 

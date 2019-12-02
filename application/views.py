@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -5,10 +7,10 @@ from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth.models import User
 from django.db.models import Sum
 from django.core.mail import send_mail
+from django.forms import inlineformset_factory
 from django.http import HttpResponse
 from django.shortcuts import render, redirect  # , render_to_response
 from django.urls import reverse
-import csv, io
 from django.db.models import Q
 
 from .models import StudentCourse, PerformanceGrade, Parent, Content, Course, Student, ClassInfo, TeacherCourse, \
@@ -107,7 +109,6 @@ def numberOfSeats():
 
 def numberOfStudents():
     number = Student.objects.filter(classID=None).count()
-    print(number)
     return number
 
 
@@ -311,7 +312,6 @@ class TeacherView(generic.ListView):
     context_object_name = 'allTeacherCourses'
 
     def get_queryset(self):
-
         return TeacherCourse.objects.filter(teacherID=self.request.user.teacher.ID)
 
 
@@ -346,14 +346,31 @@ class AbsenceView(generic.ListView):
 
 @login_required(login_url='application:login')
 def absenceForm(request, courseID):
+    studentCourses = StudentCourse.objects.filter(courseID=courseID)
+    studentList = []
+    studentID = []
+    for studentcourse in studentCourses:
+        studentList.append(studentcourse.studentID.first_name + " " + studentcourse.studentID.last_name)
+        studentID.append(studentcourse.studentID)
+
+    absenceFormset = inlineformset_factory(model=Attendance, parent_model=StudentCourse, form=AbsenceForm,
+                                           extra=studentCourses.count())
+
     if request.method == 'POST':
-        form = AbsenceForm(request.POST, courseID=courseID)
-        if form.is_valid():
-            form.save()
+        studentCourse = StudentCourse.objects.get(courseID=courseID, studentID=studentID.pop())
+        formset = absenceFormset(request.POST, instance=studentCourse)
+
+        if formset.is_valid():
+            formset.save()
+            print(formset.data)
             return redirect('application:teacher')
     else:
-        form = AbsenceForm(courseID=courseID)
-    return render(request, 'teacher/absence.html', {'form': form, 'courseID': courseID, })
+        formset = inlineformset_factory(model=Attendance, parent_model=StudentCourse, form=AbsenceForm,
+                                        extra=studentCourses.count())
+
+    return render(request, 'teacher/absence.html', {'formset': formset, 'courseID': courseID,
+                                                    'studentList': studentList,
+                                                    'date': str(datetime.date.today())})
 
 
 @login_required(login_url='application:login')

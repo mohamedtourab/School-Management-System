@@ -1,7 +1,8 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from django.forms import ModelForm
+from django.forms import ModelForm, inlineformset_factory, formset_factory
+import datetime
 
 from .models import Student, ClassInfo, Content, TeacherCourse, Course, PerformanceGrade, StudentCourse, Attendance, \
     Assignment
@@ -90,7 +91,9 @@ class AbsenceForm(ModelForm):
         self.courseID = kwargs.pop('courseID', None)
         super(AbsenceForm, self).__init__(*args, **kwargs)
         self.studentCourseID = forms.ModelChoiceField(queryset=StudentCourse.objects.filter(courseID=self.courseID))
+        self.date = forms.DateField(initial=datetime.date.today)
         self.fields['studentCourseID'] = self.studentCourseID
+        self.fields['date'] = self.date
 
     class Meta:
         model = Attendance
