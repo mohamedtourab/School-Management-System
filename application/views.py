@@ -17,7 +17,7 @@ from .models import StudentCourse, PerformanceGrade, Parent, Content, Course, St
     ParentStudent, Attendance, Assignment
 from django.views import generic
 from application.forms import StudentForm, ParentSignUpForm, ClassComposeForm, ContentForm, PerformanceGradeForm, \
-    AbsenceForm, AssignmentForm, ManualEnrollmentForm
+    AbsenceForm, AssignmentForm
 
 
 # Create your views here.
@@ -66,7 +66,7 @@ def enrollStudent(request):
 def classCompose(request):
     if request.method == 'POST':
         form = ClassComposeForm(request.POST)
-        form2 = ManualEnrollmentForm(request.POST)
+        #form2 = ManualEnrollmentForm(request.POST)
         # check whether it's valid:
         if form.is_valid():
             classInfo = form.save()
@@ -88,18 +88,18 @@ def classCompose(request):
 
             messages.success(request, 'Class has been successfully added')
 
-            if form2.is_valid():
-                form2.save()
-                messages.success(request, 'Student has been assigned manually')
+           # if form2.is_valid():
+            #    form2.save()
+             #   messages.success(request, 'Student has been assigned manually')
 
             return render(request, 'administrativeOfficer/classCompose.html',
-                          {'form': form, 'form2': form2, 'numberOfSeats': numberOfSeats(), 'numberOfStudents': numberOfStudents()})
+                          {'form': form,  'numberOfSeats': numberOfSeats(), 'numberOfStudents': numberOfStudents()})
     else:
         form = ClassComposeForm()
-        form2 = ManualEnrollmentForm()
+       #form2 = ManualEnrollmentForm()
 
     return render(request, 'administrativeOfficer/classCompose.html',
-                  {'form': form, 'form2': form2, 'numberOfSeats': numberOfSeats(), 'numberOfStudents': numberOfStudents()})
+                  {'form': form,  'numberOfSeats': numberOfSeats(), 'numberOfStudents': numberOfStudents()})
 
 
 def numberOfSeats():

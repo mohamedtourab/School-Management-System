@@ -20,7 +20,7 @@
     <form method="post" action="{% url 'application:parentSignup' %}">
         {% csrf_token %}
         {{ form|crispy }}
-        <button type="submit" class="btn btn-primary btn-lg">Add</button>
+        <button type="submit" class="btn btn-primary btn-lg" style="font-size: 20px">Add</button>
     </form>
     </div>
 {% endblock %}

@@ -7,7 +7,7 @@
         <h2> List of your courses </h2><br>
         {% for teachercourse in allTeacherCourses %}
             <a href="course/{{ teachercourse.courseID.ID }}"
-               class="btn btn-primary btn-lg"> {{ teachercourse.courseID.name }} </a><br><br>
+               class="btn btn-primary btn-lg" style="font-size: 20px"> {{ teachercourse.courseID.name }} </a><br><br>
         {% endfor %}
     </div>
 

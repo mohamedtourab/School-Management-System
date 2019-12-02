@@ -3,6 +3,7 @@
 {% load crispy_forms_tags %}
 
 {% block body %}
+    <div style="padding-left: 2%; padding-top: 1%;padding-bottom: 5%;width: 90%;">
     <ul>
         CourseID : {{ courseID }}
     </ul>
@@ -31,6 +32,7 @@
                     </tr>
             {% endfor %}
         </table>
-        <input type="submit" value="Save"/> <a href="{% url 'application:absenceForm' courseID %}"></a>
+        <input type="submit" value="Save" style="font-size: 20px"/> <a href="{% url 'application:absenceForm' courseID %}"></a>
     </form>
+    </div>
 {% endblock %}
