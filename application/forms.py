@@ -69,6 +69,11 @@ class AbsenceForm(ModelForm):
 class AssignmentForm(ModelForm):
     class Meta:
         model = Assignment
-        exclude=('courseID','additionDate','fileName',)
+        exclude = ('courseID', 'additionDate', 'fileName',)
         fields = ['assignmentTitle', 'assignmentFile', 'deadlineDate']
 
+
+class TimetableForm(ModelForm):
+    class Meta:
+        model = ClassInfo
+        fields = ['timetable']

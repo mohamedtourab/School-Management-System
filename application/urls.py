@@ -55,7 +55,7 @@ urlpatterns = [
     url(r'^ao/class/(?P<name>[0-9][A-Z]+)/$',
         login_required(views.AdministrativeOfficerClassDetailView.as_view(), login_url='application:login'),
         name='aoClassViewWithName'),
-
+    url(r'^ao/class/(?P<name>[0-9][A-Z]+)/timetable/$', views.timetableForm, name='timetableForm'),
 ]
 
 if settings.DEBUG:

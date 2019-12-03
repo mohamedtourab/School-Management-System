@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth.models import User
+from django.core.files.storage import FileSystemStorage
 from django.db.models import Sum
 from django.core.mail import send_mail
 from django.http import HttpResponse
@@ -15,7 +16,7 @@ from .models import StudentCourse, PerformanceGrade, Parent, Content, Course, St
     ParentStudent, Attendance, Assignment
 from django.views import generic
 from application.forms import StudentForm, ParentSignUpForm, ClassComposeForm, ContentForm, PerformanceGradeForm, \
-    AbsenceForm, AssignmentForm
+    AbsenceForm, AssignmentForm, TimetableForm
 
 
 # Create your views here.
@@ -37,6 +38,24 @@ class AdministrativeOfficerClassDetailView(generic.ListView):
 
     def get_queryset(self):
         return ClassInfo.objects.filter(name=self.kwargs['name'])
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(AdministrativeOfficerClassDetailView, self).get_context_data(**kwargs)
+        context['name'] = self.kwargs['name']
+        return context
+
+@login_required(login_url='application:login')
+def timetableForm(request, name):
+    if request.method == 'POST':
+        instance = ClassInfo.objects.get(name=name)
+        form = TimetableForm(request.POST, request.FILES, instance=instance)
+        if form.is_valid():
+            unsavedForm = form.save(commit=False)
+            unsavedForm.save()
+            return redirect('application:administrativeOfficer')
+    else:
+        form = TimetableForm()
+    return render(request, 'administrativeOfficer/chooseTimetable.html', {'form': form, 'name': name})
 
 
 @login_required(login_url='application:login')
