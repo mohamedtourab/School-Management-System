@@ -39,7 +39,7 @@ class AdministrativeOfficerClassDetailView(generic.ListView):
     context_object_name = 'class'
 
     def get_queryset(self):
-        return ClassInfo.objects.filter(name=self.kwargs['name'])
+        return ClassInfo.objects.get(name=self.kwargs['name'])
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(AdministrativeOfficerClassDetailView, self).get_context_data(**kwargs)
