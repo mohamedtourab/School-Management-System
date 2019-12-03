@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -6,10 +8,10 @@ from django.contrib.auth.models import User
 from django.core.files.storage import FileSystemStorage
 from django.db.models import Sum
 from django.core.mail import send_mail
+from django.forms import inlineformset_factory
 from django.http import HttpResponse
 from django.shortcuts import render, redirect  # , render_to_response
 from django.urls import reverse
-import csv, io
 from django.db.models import Q
 
 from .models import StudentCourse, PerformanceGrade, Parent, Content, Course, Student, ClassInfo, TeacherCourse, \
@@ -83,32 +85,40 @@ def enrollStudent(request):
 def classCompose(request):
     if request.method == 'POST':
         form = ClassComposeForm(request.POST)
+        #form2 = ManualEnrollmentForm(request.POST)
         # check whether it's valid:
         if form.is_valid():
             classInfo = form.save()
             classInfo.refresh_from_db()
 
-            if Student.objects.filter(classID=None).count() < classInfo.totalStudentsNumber:
-                for student in Student.objects.filter(classID=None):
+            if Student.objects.filter(classID=None, studentYear='FIRST').count() < classInfo.totalStudentsNumber:
+                for student in Student.objects.filter(classID=None, studentYear='FIRST'):
                     student.classID = classInfo
                     student.save()
             else:
                 i = 0
-                for student in Student.objects.filter(classID=None):
+                for student in Student.objects.filter(classID=None, studentYear='FIRST'):
                     if i < classInfo.totalStudentsNumber:
                         i += 1
                         student.classID = classInfo
                         student.save()
 
+
+
             messages.success(request, 'Class has been successfully added')
 
+           # if form2.is_valid():
+            #    form2.save()
+             #   messages.success(request, 'Student has been assigned manually')
+
             return render(request, 'administrativeOfficer/classCompose.html',
-                          {'form': form, 'numberOfSeats': numberOfSeats(), 'numberOfStudents': numberOfStudents()})
+                          {'form': form,  'numberOfSeats': numberOfSeats(), 'numberOfStudents': numberOfStudents()})
     else:
         form = ClassComposeForm()
+       #form2 = ManualEnrollmentForm()
 
     return render(request, 'administrativeOfficer/classCompose.html',
-                  {'form': form, 'numberOfSeats': numberOfSeats(), 'numberOfStudents': numberOfStudents()})
+                  {'form': form,  'numberOfSeats': numberOfSeats(), 'numberOfStudents': numberOfStudents()})
 
 
 def numberOfSeats():
@@ -118,7 +128,6 @@ def numberOfSeats():
 
 def numberOfStudents():
     number = Student.objects.filter(classID=None).count()
-    print(number)
     return number
 
 
@@ -309,8 +318,8 @@ def change_password(request):
         return render(request, 'parent/change_password.html', {'form': PasswordChangeForm(user=request.user)})
 
 
-def Announcement(request):
-    return render(request, 'parent/announcement.html')
+def announcement(request,studentID):
+    return render(request, 'parent/announcement.html',{'studentID':studentID,})
 
 
 # -----------------------------------------------------------------------------------------------
@@ -322,7 +331,6 @@ class TeacherView(generic.ListView):
     context_object_name = 'allTeacherCourses'
 
     def get_queryset(self):
-
         return TeacherCourse.objects.filter(teacherID=self.request.user.teacher.ID)
 
 
@@ -357,14 +365,31 @@ class AbsenceView(generic.ListView):
 
 @login_required(login_url='application:login')
 def absenceForm(request, courseID):
+    studentCourses = StudentCourse.objects.filter(courseID=courseID)
+    studentList = []
+    studentID = []
+    for studentcourse in studentCourses:
+        studentList.append(studentcourse.studentID.first_name + " " + studentcourse.studentID.last_name)
+        studentID.append(studentcourse.studentID)
+
+    absenceFormset = inlineformset_factory(model=Attendance, parent_model=StudentCourse, form=AbsenceForm,
+                                           extra=studentCourses.count())
+
     if request.method == 'POST':
-        form = AbsenceForm(request.POST, courseID=courseID)
-        if form.is_valid():
-            form.save()
+        studentCourse = StudentCourse.objects.get(courseID=courseID, studentID=studentID.pop())
+        formset = absenceFormset(request.POST, instance=studentCourse)
+
+        if formset.is_valid():
+            formset.save()
+            print(formset.data)
             return redirect('application:teacher')
     else:
-        form = AbsenceForm(courseID=courseID)
-    return render(request, 'teacher/absence.html', {'form': form, 'courseID': courseID, })
+        formset = inlineformset_factory(model=Attendance, parent_model=StudentCourse, form=AbsenceForm,
+                                        extra=studentCourses.count())
+
+    return render(request, 'teacher/absence.html', {'formset': formset, 'courseID': courseID,
+                                                    'studentList': studentList,
+                                                    'date': str(datetime.date.today())})
 
 
 @login_required(login_url='application:login')

@@ -3,12 +3,36 @@
 {% load crispy_forms_tags %}
 
 {% block body %}
+    <div style="padding-left: 2%; padding-top: 1%;padding-bottom: 5%;width: 90%;">
     <ul>
-        CourseID : {{ courseDetails.name }}
+        CourseID : {{ courseID }}
     </ul>
-    <form method="post" action="{% url 'application:absenceForm' courseID %}" style="padding-left: 2%">
-        {% csrf_token %}
-        {{ form|crispy }}
-        <button type="submit" class="btn btn-info btn-lg">Add Absence Note</button>
+    <ul>
+        date : {{ date }}
+    </ul>
+    <form action="" method="post">{% csrf_token %}
+        {{ form.as_p }}
+
+        <table class="table">
+            {{ formset.management_form }}
+            <tr>
+                <th> date</th>
+                <th> Student</th>
+                <th> presence</th>
+                <th> came late</th>
+                <th> left early</th>
+            </tr>
+            {% for form in formset.forms %}
+                    <tr>
+                    <th>{{ form.date }}</th>
+                        <th>{{ studentList.pop }}</th>
+                        <th>{{ form.presence }}</th>
+                        <th>{{ form.cameLate }}</th>
+                        <th>{{ form.leftEarly }}</th>
+                    </tr>
+            {% endfor %}
+        </table>
+        <input type="submit" value="Save" style="font-size: 20px"/> <a href="{% url 'application:absenceForm' courseID %}"></a>
     </form>
+    </div>
 {% endblock %}

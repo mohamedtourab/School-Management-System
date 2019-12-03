@@ -3,10 +3,11 @@
 {% load crispy_forms_tags %}
 
 {% block body %}
+    <div style="padding-left: 2%; padding-top: 1%;padding-bottom: 5%;width: 90%;">
     <form method="post" action="{% url 'application:contentForm' courseID %}" style="padding-left: 2%">
         {% csrf_token %}
         {{ form|crispy }}
-        <input type="submit" value="Submit" class="btn btn-primary btn-lg"/>
+        <input type="submit" value="Submit" class="btn btn-primary btn-lg" style="font-size: 20px"/>
     </form>
-    <br><br>
+    </div>
 {% endblock %}

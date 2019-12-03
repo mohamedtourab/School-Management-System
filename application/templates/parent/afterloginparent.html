@@ -8,11 +8,14 @@
         <h3> Student Courses</h3>
         <ul>
             {% for studentcourse in allStudentCourses %}
-                <li><a href="{% url 'application:courseView' studentID %}{{ studentcourse.ID }}"
-                       class="btn btn-primary btn-lg"> {{ studentcourse.name }} </a></li>
+                <li style="padding-bottom: 1%"><a href="{% url 'application:courseView' studentID %}{{ studentcourse.ID }}"
+                       class="btn btn-primary btn-lg" style="font-size: 20px"> {{ studentcourse.name }} </a></li>
             {% endfor %}
         </ul>
 
     </div>
     <br><br>
+
+
+
 {% endblock %}

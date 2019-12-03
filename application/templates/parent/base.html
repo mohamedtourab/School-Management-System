@@ -77,8 +77,8 @@
                 </li>
                 <li class="nav-item {% block notes_active %}{% endblock %}"><a href="#" class="nav-link pl-0">Notes</a>
                 </li>
-                <li class="nav-item {% block announcement_active %}{% endblock %}"><a
-                        href="{% url 'application:announcement' %}" class="nav-link pl-0">Announcements</a></li>
+               <li class="nav-item {% block announcement_active %}{% endblock %}"><a
+                        href="{% url 'application:announcement' studentID%}" class="nav-link pl-0">Announcements</a></li>
                 <li class="nav-item"><a href="{% url 'application:chooseChild' %}" class="nav-link pl-0">Choose
                     Child</a></li>
             </ul>

@@ -8,14 +8,30 @@ from django.conf import settings
 app_name = 'application'
 
 urlpatterns = [
+    # -------------------------------------------------------------------------------------------
+    #               GENERAL URLS
+    # -------------------------------------------------------------------------------------------
     path('', views.IndexView.as_view(), name='index'),
     path('index/', views.IndexView.as_view(), name='index1'),
     path('login/', views.loginUser, name='login'),
     path('logout/', views.logout_view, name='logout'),
     path('test/', views.TestView.as_view(), name='test'),
-    path('signup/', views.enrollStudent, name='signup'),  # student signup
-    path('ao/', login_required(views.AdministrativeOfficer.as_view(), login_url='application:login'),
-         name='administrativeOfficer'),
+
+    # -------------------------------------------------------------------------------------------
+    #               TEACHER URLS
+    # -------------------------------------------------------------------------------------------
+    url(r'^teacher/course/(?P<courseID>[0-9]+)/$',
+        login_required(views.TeacherCourseDetailView.as_view(), login_url='application:login'),
+        name='teacherCourseViewWithCourseId'),
+    path('teacher/', login_required(views.TeacherView.as_view(), login_url='application:login'), name='teacher'),
+    path('teacher/course/<int:courseID>/addtopic', views.contentForm, name='contentForm'),
+    url(r'^teacher/course/(?P<courseID>[0-9]+)/addPerformanceGrade/$', views.gradeForm, name='gradeForm'),
+    path('teacher/course/<int:courseID>/addAssignment', views.assignmentForm, name='assignmentForm'),
+    url(r'^teacher/course/(?P<courseID>[0-9]+)/behaviour/$', views.absenceForm, name='absenceForm'),
+
+    # -------------------------------------------------------------------------------------------
+    #               PARENT URLS
+    # -------------------------------------------------------------------------------------------
     path('parent/', login_required(views.ParentView.as_view(), login_url='application:login'), name='parent'),
     url(r'^parent/(?P<studentID>[0-9]+)/$', login_required(views.ParentView.as_view(), login_url='application:login'),
         name='parentWithID'),
@@ -35,22 +51,20 @@ urlpatterns = [
     url(r'^parent/(?P<studentID>[0-9]+)/course/(?P<courseID>[0-9]+)/$',
         login_required(views.CourseDetailView.as_view(), login_url='application:login'), name='courseViewWithCourseId'),
     path('change-password/', views.change_password, name='change_password'),
-    url(r'^teacher/course/(?P<courseID>[0-9]+)/$',
-        login_required(views.TeacherCourseDetailView.as_view(), login_url='application:login'),
-        name='teacherCourseViewWithCourseId'),
-    path('teacher/', login_required(views.TeacherView.as_view(), login_url='application:login'), name='teacher'),
-    path('teacher/course/<int:courseID>/addtopic', views.contentForm, name='contentForm'),
-    url(r'^teacher/course/(?P<courseID>[0-9]+)/addPerformanceGrade/$', views.gradeForm, name='gradeForm'),
-
-    url(r'^teacher/course/(?P<courseID>[0-9]+)/behaviour/$', views.absenceForm, name='absenceForm'),
     url(r'^parent/(?P<studentID>[0-9]+)/course/(?P<courseID>[0-9]+)/materials/$',
         login_required(views.MaterialView.as_view(), login_url='application:login'), name='materials'),
     url(r'^parent/(?P<studentID>[0-9]+)/course/(?P<courseID>[0-9]+)/attendance/$',
         login_required(views.ParentAttendanceView.as_view(), login_url='application:login'), name='parentAttendance'),
+    path('parent/<int:studentID>/announcement/', views.announcement, name='announcement'),
 
-    path('teacher/course/<int:courseID>/addAssignment', views.assignmentForm, name='assignmentForm'),
+    # -------------------------------------------------------------------------------------------
+    #               ADMINISTRATIVE OFFICER URLS
+    # -------------------------------------------------------------------------------------------
+    path('signup/', views.enrollStudent, name='signup'),  # student signup
+    path('ao/', login_required(views.AdministrativeOfficer.as_view(), login_url='application:login'),
+         name='administrativeOfficer'),
+    path('ao/', login_required(views.AdministrativeOfficer.as_view(), login_url='application:login'), name='ao'),
     path('communication/', views.communicationWithParent, name='communication'),
-    path('announcement/', views.Announcement, name='announcement'),
     path('ao/', login_required(views.AdministrativeOfficer.as_view(), login_url='application:login'), name='ao'),
     url(r'^ao/class/(?P<name>[0-9][A-Z]+)/$',
         login_required(views.AdministrativeOfficerClassDetailView.as_view(), login_url='application:login'),

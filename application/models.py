@@ -64,7 +64,7 @@ class Student(models.Model):
     ID = models.AutoField(primary_key=True)
     first_name = models.CharField(max_length=50, verbose_name='First Name')
     last_name = models.CharField(max_length=50, verbose_name='Last Name')
-    classID = models.ForeignKey(ClassInfo, on_delete=models.CASCADE, verbose_name='Student Class', blank=True,
+    classID = models.ForeignKey(ClassInfo, on_delete=models.SET_NULL, verbose_name='Student Class', blank=True,
                                 null=True)
     studentYear = models.CharField(max_length=20, choices=grade_choice, default=FIRST, verbose_name='Year Grade')
 
@@ -73,13 +73,42 @@ class Student(models.Model):
 
 
 class Course(models.Model):
+    FIRST = 'FIRST'
+    SECOND = 'SECOND'
+    THIRD = 'THIRD'
+    FOURTH = 'FOURTH'
+    FIFTH = 'FIFTH'
+    SIXTH = 'SIXTH'
+    SEVENTH = 'SEVENTH'
+    EIGHTH = 'EIGHTH'
+    NINTH = 'NINTH'
+    TENTH = 'TENTH'
+    year_choice = ((FIRST, 'FIRST'),
+                    (SECOND, 'SECOND'),
+                    (THIRD, 'THIRD'),
+                    (FOURTH, 'FOURTH'),
+                    (FIFTH, 'FIFTH'),
+                    (SIXTH, 'SIXTH'),
+                    (SEVENTH, 'SEVENTH'),
+                    (EIGHTH, 'EIGHTH'),
+                    (NINTH, 'NINTH'),
+                    (TENTH, 'TENTH'),)
     ID = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50)
     numberOfHoursPerWeek = models.PositiveIntegerField()
-    year = models.CharField(max_length=10)
+    year = models.CharField(max_length=20,choices=year_choice, default=FIRST,verbose_name='Course Year')
 
     def __str__(self):
         return self.name
+
+
+class ClassCourse(models.Model):
+    ID = models.AutoField(primary_key=True)
+    classID = models.ForeignKey(ClassInfo, on_delete=models.CASCADE)
+    courseID = models.ForeignKey(Course, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.classID.name + ':' + self.courseID.name
 
 
 class Assignment(models.Model):
@@ -179,9 +208,12 @@ class Attendance(models.Model):
     ID = models.AutoField(primary_key=True)
     studentCourseID = models.ForeignKey(StudentCourse, on_delete=models.CASCADE)
     presence = models.BooleanField(default=True)
-    date = models.DateField()
+    date = models.DateField(default=datetime.date.today)
     cameLate = models.BooleanField(default=False)
     leftEarly = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.studentCourseID.studentID.first_name+' '+self.studentCourseID.studentID.last_name+':'+self.studentCourseID.courseID.name
 
 
 class FreeSlots(models.Model):

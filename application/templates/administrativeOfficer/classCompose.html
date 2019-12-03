@@ -5,6 +5,7 @@
 {% load crispy_forms_tags %}
 
 {% block body %}
+
     <div style="padding-left: 2%; padding-top: 1%;padding-bottom: 5%;width: 90%;">
         {% if messages %}
             <ul class="messages">
@@ -13,7 +14,7 @@
                 {% endfor %}
             </ul>
         {% endif %}
-
+        <h2>Automatic Enrollment</h2>
         <ul class="messages">
             <li class="messages">
                 Total number of Students Remaining : {{ numberOfStudents }}
@@ -23,10 +24,22 @@
         <form method="post">
             {% csrf_token %}
             {{ form|crispy }}
-            <button type="submit" class="btn btn-primary btn-lg" onclick="{% url 'application:classCompose' %}">Add Class
+            <button type="submit" class="btn btn-primary btn-lg" style="font-size: 20px" onclick="{% url 'application:classCompose' %}">Add
+                Class
             </button>
         </form>
     </div>
 
+   <!-- <div style="padding-left: 2%; padding-top: 1%;padding-bottom: 5%;width: 90%;">
+    <h2>Manual Enrollment</h2>
+    <form method="post">
+            {% csrf_token %}
+            {{ form2|crispy }}
+            <button type="submit" class="btn btn-primary btn-lg" style="font-size: 20px" onclick="{% url 'application:classCompose' %}">Manual
+            </button>
+        </form>
+
+    </div>
+-->
 
 {% endblock %}
