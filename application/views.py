@@ -52,8 +52,7 @@ def timetableForm(request, name):
         instance = ClassInfo.objects.get(name=name)
         form = TimetableForm(request.POST, request.FILES, instance=instance)
         if form.is_valid():
-            unsavedForm = form.save(commit=False)
-            unsavedForm.save()
+            form.save()
             return redirect('application:administrativeOfficer')
     else:
         form = TimetableForm()
