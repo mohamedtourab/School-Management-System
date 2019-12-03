@@ -1,11 +1,12 @@
 {% extends 'administrativeOfficer/timetableBase.html' %}
 {% load crispy_forms_tags %}
 {% block body %}
+    <div style="padding-left: 2%; padding-top: 1%;padding-bottom: 5%;width: 90%;">
     <h1>Update Time Table</h1>
     <form method="post" enctype="multipart/form-data" action="." style="padding-left: 1%">
         {% csrf_token %}
         {{ form|crispy }}
-        <input type="submit" value="Update"/>
+        <input type="submit" class="btn btn-lg btn-primary" style="font-size: 20px" value="Update"/>
     </form>
-    <br><br>
+    </div>
 {% endblock %}
