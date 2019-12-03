@@ -46,6 +46,7 @@ class AdministrativeOfficerClassDetailView(generic.ListView):
         context['name'] = self.kwargs['name']
         return context
 
+
 @login_required(login_url='application:login')
 def timetableForm(request, name):
     if request.method == 'POST':
@@ -84,7 +85,7 @@ def enrollStudent(request):
 def classCompose(request):
     if request.method == 'POST':
         form = ClassComposeForm(request.POST)
-        #form2 = ManualEnrollmentForm(request.POST)
+        # form2 = ManualEnrollmentForm(request.POST)
         # check whether it's valid:
         if form.is_valid():
             classInfo = form.save()
@@ -102,22 +103,20 @@ def classCompose(request):
                         student.classID = classInfo
                         student.save()
 
-
-
             messages.success(request, 'Class has been successfully added')
 
-           # if form2.is_valid():
+            # if form2.is_valid():
             #    form2.save()
-             #   messages.success(request, 'Student has been assigned manually')
+            #   messages.success(request, 'Student has been assigned manually')
 
             return render(request, 'administrativeOfficer/classCompose.html',
-                          {'form': form,  'numberOfSeats': numberOfSeats(), 'numberOfStudents': numberOfStudents()})
+                          {'form': form, 'numberOfSeats': numberOfSeats(), 'numberOfStudents': numberOfStudents()})
     else:
         form = ClassComposeForm()
-       #form2 = ManualEnrollmentForm()
+    # form2 = ManualEnrollmentForm()
 
     return render(request, 'administrativeOfficer/classCompose.html',
-                  {'form': form,  'numberOfSeats': numberOfSeats(), 'numberOfStudents': numberOfStudents()})
+                  {'form': form, 'numberOfSeats': numberOfSeats(), 'numberOfStudents': numberOfStudents()})
 
 
 def numberOfSeats():
@@ -317,8 +316,8 @@ def change_password(request):
         return render(request, 'parent/change_password.html', {'form': PasswordChangeForm(user=request.user)})
 
 
-def announcement(request,studentID):
-    return render(request, 'parent/announcement.html',{'studentID':studentID,})
+def announcement(request, studentID):
+    return render(request, 'parent/announcement.html', {'studentID': studentID, })
 
 
 # -----------------------------------------------------------------------------------------------

@@ -6,21 +6,21 @@
 
 {% block body %}
     <div style="padding-left: 2%; padding-top: 1%;padding-bottom: 5%;width: 90%;">
-    {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-                <li  {% if message.tags %} class="text-success" {% endif %}> {{ message }} </li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-    {% if error_message %}
-        <p class="text-danger"><strong>{{ error_message }}</strong></p>
-        <br>
-    {% endif %}
-    <form method="post" action="{% url 'application:signup' %}">
-        {% csrf_token %}
-        {{ form|crispy }}
-        <button type="submit" class="btn btn-primary btn-lg" style="font-size: 20px">Add</button>
-    </form>
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li  {% if message.tags %} class="text-success" {% endif %}> {{ message }} </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        {% if error_message %}
+            <p class="text-danger"><strong>{{ error_message }}</strong></p>
+            <br>
+        {% endif %}
+        <form method="post" action="{% url 'application:signup' %}">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button type="submit" class="btn btn-primary btn-lg" style="font-size: 20px">Add</button>
+        </form>
     </div>
 {% endblock %}

@@ -24,13 +24,14 @@
         <form method="post">
             {% csrf_token %}
             {{ form|crispy }}
-            <button type="submit" class="btn btn-primary btn-lg" style="font-size: 20px" onclick="{% url 'application:classCompose' %}">Add
+            <button type="submit" class="btn btn-primary btn-lg" style="font-size: 20px"
+                    onclick="{% url 'application:classCompose' %}">Add
                 Class
             </button>
         </form>
     </div>
 
-   <!-- <div style="padding-left: 2%; padding-top: 1%;padding-bottom: 5%;width: 90%;">
+    <!-- <div style="padding-left: 2%; padding-top: 1%;padding-bottom: 5%;width: 90%;">
     <h2>Manual Enrollment</h2>
     <form method="post">
             {% csrf_token %}

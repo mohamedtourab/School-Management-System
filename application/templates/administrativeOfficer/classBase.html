@@ -52,9 +52,11 @@
         </button>
         <div class="collapse navbar-collapse" id="ftco-nav" style="font-size: 14px">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item active"><a href="{% url 'application:administrativeOfficer' %}" class="nav-link pl-0">Home</a>
+                <li class="nav-item active"><a href="{% url 'application:administrativeOfficer' %}"
+                                               class="nav-link pl-0">Home</a>
                 </li>
-                <li class="nav-item active"><a href="{% url 'application:timetableForm' name %}" class="nav-link pl-0">Choose Timetable</a>
+                <li class="nav-item active"><a href="{% url 'application:timetableForm' name %}" class="nav-link pl-0">Choose
+                    Timetable</a>
                 </li>
                 <li class="nav-item {% block enrollStudent_active %}{% endblock %}"><a
                         href="{% url 'application:signup' %}" class="nav-link">Enroll Student</a></li>

@@ -1,11 +1,11 @@
 {% extends 'administrativeOfficer/classBase.html' %}
 {% block body %}
     <div style="padding-left: 2%; padding-top: 1%;padding-bottom: 5%;width: 90%;">
-    {% if class %}
-        <h2 style="padding-left: 1%" href="class/{{ class.name }}">Time Table of class {{ class.name }}</h2>
-        <br>
-        <img style="padding-left: 1%" src="http://localhost:8000/{{ class.timetable.url }}" alt="img">
-        <br><br>
-    {% endif %}
+        {% if class %}
+            <h2 style="padding-left: 1%" href="class/{{ class.name }}">Time Table of class {{ class.name }}</h2>
+            <br>
+            <img style="padding-left: 1%" src="http://localhost:8000/{{ class.timetable.url }}" alt="img">
+            <br><br>
+        {% endif %}
     </div>
 {% endblock %}
