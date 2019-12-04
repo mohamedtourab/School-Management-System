@@ -482,17 +482,16 @@ def loginUser(request):
                                 return redirect('application:parentWithID', studentID)
                             else:
                                 return redirect('application:chooseChild')
-                        # return render(request,'parent/afterloginparent.html', {'studentID': studentID, 'studentCourses': studentCourses})
                     except:
                         try:
                             administrativeOfficer = user.administrativeofficer
-                            return redirect('application:administrativeOfficer')
+                            return redirect('application:ao')
                         except:
                             try:
                                 principle = user.principle
                                 return HttpResponse("<h1>you are logged in as principle</h1>")
                             except:
-                                return HttpResponse("<h1>you are a hacker</h1>")
+                                    return HttpResponse("<h1>you are a hacker</h1>")
         else:
             return render(request, 'application/login.html', {'error_message': 'Invalid login'})
     else:
