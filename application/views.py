@@ -34,19 +34,6 @@ class AdministrativeOfficer(generic.ListView):
         return ClassInfo.objects.all()
 
 
-class AdministrativeOfficerClassDetailView(generic.ListView):
-    template_name = 'administrativeOfficer/class.html'
-    context_object_name = 'class'
-
-    def get_queryset(self):
-        return ClassInfo.objects.get(name=self.kwargs['name'])
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(AdministrativeOfficerClassDetailView, self).get_context_data(**kwargs)
-        context['name'] = self.kwargs['name']
-        return context
-
-
 @login_required(login_url='application:login')
 def timetableForm(request, name):
     if request.method == 'POST':
@@ -57,7 +44,8 @@ def timetableForm(request, name):
             return redirect('application:administrativeOfficer')
     else:
         form = TimetableForm()
-    return render(request, 'administrativeOfficer/chooseTimetable.html', {'form': form, 'name': name})
+    return render(request, 'administrativeOfficer/chooseTimetable.html',
+                  {'form': form, 'name': name, 'class': ClassInfo.objects.get(name=name)})
 
 
 @login_required(login_url='application:login')
@@ -171,7 +159,6 @@ def sendmailtoparent(username, email, password):
               'admofficer658@gmail.com',
               [email],
               fail_silently=False)
-
 
 
 def communicationAO(request):

@@ -61,14 +61,8 @@ urlpatterns = [
     #               ADMINISTRATIVE OFFICER URLS
     # -------------------------------------------------------------------------------------------
     path('signup/', views.enrollStudent, name='signup'),  # student signup
-    path('ao/', login_required(views.AdministrativeOfficer.as_view(), login_url='application:login'),
-         name='administrativeOfficer'),
     path('ao/', login_required(views.AdministrativeOfficer.as_view(), login_url='application:login'), name='ao'),
-    path('ao/', login_required(views.AdministrativeOfficer.as_view(), login_url='application:login'), name='ao'),
-    url(r'^ao/class/(?P<name>[0-9][A-Z]+)/$',
-        login_required(views.AdministrativeOfficerClassDetailView.as_view(), login_url='application:login'),
-        name='aoClassViewWithName'),
-    url(r'^ao/class/(?P<name>[0-9][A-Z]+)/timetable/$', views.timetableForm, name='timetableForm'),
+    url(r'^ao/class/(?P<name>[0-9][A-Z]+)/$', views.timetableForm, name='timetableForm'),
     path('communicationAO/', views.communicationAO, name='communicationAO'),
 ]
 
