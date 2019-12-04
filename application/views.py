@@ -15,10 +15,10 @@ from django.urls import reverse
 from django.db.models import Q
 
 from .models import StudentCourse, PerformanceGrade, Parent, Content, Course, Student, ClassInfo, TeacherCourse, \
-    ParentStudent, Attendance, Assignment
+    ParentStudent, Attendance, Assignment, Announcement
 from django.views import generic
 from application.forms import StudentForm, ParentSignUpForm, ClassComposeForm, ContentForm, PerformanceGradeForm, \
-    AbsenceForm, AssignmentForm, TimetableForm
+    AbsenceForm, AssignmentForm, TimetableForm, AnnouncementForm
 
 
 # Create your views here.
@@ -173,8 +173,19 @@ def sendmailtoparent(username, email, password):
               fail_silently=False)
 
 
-def communicationWithParent(request):
-    return render(request, 'administrativeOfficer/communication.html')
+
+def communicationAO(request):
+    if request.method == 'POST':
+        form = AnnouncementForm(request.POST)
+        if form.is_valid():
+            new_announce = form.save()
+            new_announce.save()
+            messages.success(request, 'Announcement has benn sent successfully')
+            return render(request, 'administrativeOfficer/communication.html', {'form': AnnouncementForm()})
+    else:
+        form = AnnouncementForm()
+
+    return render(request, 'administrativeOfficer/communication.html', {'form': form})
 
 
 # -----------------------------------------------------------------------------------------------
@@ -316,8 +327,12 @@ def change_password(request):
         return render(request, 'parent/change_password.html', {'form': PasswordChangeForm(user=request.user)})
 
 
-def announcement(request, studentID):
-    return render(request, 'parent/announcement.html', {'studentID': studentID, })
+class AnnouncementView(generic.ListView):
+    template_name = 'parent/announcement.html'
+    context_object_name = 'allAnnouncements'
+
+    def get_queryset(self):
+        return Announcement.objects.all()
 
 
 # -----------------------------------------------------------------------------------------------

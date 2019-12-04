@@ -5,7 +5,13 @@ from django.forms import ModelForm, inlineformset_factory, formset_factory
 import datetime
 
 from .models import Student, ClassInfo, Content, TeacherCourse, Course, PerformanceGrade, StudentCourse, Attendance, \
-    Assignment
+    Assignment, Announcement
+
+
+class AnnouncementForm(ModelForm):
+    class Meta:
+        model = Announcement
+        fields = ['announcementTitle', 'announcementText', 'date']
 
 
 class StudentForm(ModelForm):

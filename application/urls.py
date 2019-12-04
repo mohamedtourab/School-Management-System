@@ -55,7 +55,7 @@ urlpatterns = [
         login_required(views.MaterialView.as_view(), login_url='application:login'), name='materials'),
     url(r'^parent/(?P<studentID>[0-9]+)/course/(?P<courseID>[0-9]+)/attendance/$',
         login_required(views.ParentAttendanceView.as_view(), login_url='application:login'), name='parentAttendance'),
-    path('parent/<int:studentID>/announcement/', views.announcement, name='announcement'),
+    path('parent/announcement/', views.AnnouncementView.as_view(), name='announcement'),
 
     # -------------------------------------------------------------------------------------------
     #               ADMINISTRATIVE OFFICER URLS
@@ -64,12 +64,12 @@ urlpatterns = [
     path('ao/', login_required(views.AdministrativeOfficer.as_view(), login_url='application:login'),
          name='administrativeOfficer'),
     path('ao/', login_required(views.AdministrativeOfficer.as_view(), login_url='application:login'), name='ao'),
-    path('communication/', views.communicationWithParent, name='communication'),
     path('ao/', login_required(views.AdministrativeOfficer.as_view(), login_url='application:login'), name='ao'),
     url(r'^ao/class/(?P<name>[0-9][A-Z]+)/$',
         login_required(views.AdministrativeOfficerClassDetailView.as_view(), login_url='application:login'),
         name='aoClassViewWithName'),
     url(r'^ao/class/(?P<name>[0-9][A-Z]+)/timetable/$', views.timetableForm, name='timetableForm'),
+    path('communicationAO/', views.communicationAO, name='communicationAO'),
 ]
 
 if settings.DEBUG:

@@ -199,9 +199,14 @@ class Content(models.Model):
         return self.courseID.name + '_Content' + self.ID.__str__()
 
 
-class Announcements(models.Model):
+class Announcement(models.Model):
     ID = models.AutoField(primary_key=True)
+    announcementTitle = models.CharField(max_length=100, default="")
     announcementText = models.CharField(max_length=500)
+    date = models.DateField(default=datetime.date.today)
+
+    def __str__(self):
+        return self.announcementTitle
 
 
 class Attendance(models.Model):
