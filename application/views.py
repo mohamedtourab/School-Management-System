@@ -319,7 +319,7 @@ class AnnouncementView(generic.ListView):
     context_object_name = 'allAnnouncements'
 
     def get_queryset(self):
-        return Announcement.objects.all()
+        return Announcement.objects.all().order_by('-ID')
 
 
 # -----------------------------------------------------------------------------------------------

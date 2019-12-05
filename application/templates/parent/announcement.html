@@ -1,4 +1,4 @@
-{% extends 'parent/baseChooseChild.html' %}
+{% extends 'parent/chooseChild.html' %}
 
 {% block body %}
 
@@ -7,8 +7,7 @@
 
             <div class="col-sm-3 sidenav">
                 <ul class="nav nav-pills nav-stacked">
-                    <li class="active"><a href="#">New Announcement</a></li>
-                    <li><a href="#">Old Announcements</a></li>
+                    <li class="active"><a href="#">Announcements</a></li>
                 </ul>
                 <br>
             </div>
@@ -16,15 +15,40 @@
             <div class="col-sm-9">
                 <h4><small>NEW ANNOUNCEMENT</small></h4>
                 <hr>
-                <h2>Dear Parents</h2>
-                {% for announcement in allAnnouncements %}
-                    <title>{{ announcement.announcementTitle }}</title>
-                    <p>{{ announcement.announcementText }}</p>
-                {% endfor %}
+                <ul class="nolist list-unstyled position-relative mb-0 px-lg-5 pt-lg-5">
+                    <div id="box">
+                        {% for announcement in allAnnouncements %}
+                            <li class="border-bottom pb-3 mt-3">
+                                <h2 style="color: #1eaaf1">{{ announcement.announcementTitle }}</h2>
+                                <time class="small">{{ announcement.date }}</time>
+                                <p class="m-0 post_intro">{{ announcement.announcementText }}</p>
+                            </li>
+                            <br>
+                        {% endfor %}
+                    </div>
+
+                </ul>
                 <br><br>
             </div>
 
+        <div>
+            <h1></h1>
         </div>
+
+        </div>
+
     </div>
+
+    <style media="screen">
+        #box {
+            height: 20em;
+            padding: 1em;
+            margin: auto;
+            border: 0.062em solid #999;
+            overflow: auto;
+            direction: ltr;
+            text-align: left;
+        }
+    </style>
 
 {% endblock %}
