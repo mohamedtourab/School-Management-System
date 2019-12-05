@@ -1,5 +1,5 @@
 certifi==2019.9.11
-Django==2.2.5
+Django==2.2.8
 django-crispy-forms==1.8.0
 numpy==1.17.2
 pytz==2019.3
