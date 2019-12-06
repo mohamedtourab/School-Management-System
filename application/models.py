@@ -203,7 +203,7 @@ class Announcement(models.Model):
     ID = models.AutoField(primary_key=True)
     announcementTitle = models.CharField(max_length=100, default="")
     announcementText = models.CharField(max_length=500)
-    date = models.DateTimeField(default=datetime.datetime.now(), blank=True)
+    date = models.DateTimeField(default=datetime.datetime.now, blank=True)
 
     def __str__(self):
         return self.announcementTitle
