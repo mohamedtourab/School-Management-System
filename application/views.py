@@ -367,9 +367,8 @@ class AbsenceView(generic.ListView):
 def absenceForm(request, courseID):
     studentCourses = StudentCourse.objects.filter(courseID=courseID)
     n = studentCourses.count()
-    print(n)
 
-    absenceFormset = modelformset_factory(model=Attendance, form=AbsenceForm, extra=n)
+    absenceFormset = modelformset_factory(model=Attendance, form=AbsenceForm, extra=n, max_num=n)
 
     if request.method == 'POST':
         studentCourse = StudentCourse.objects.filter(courseID=courseID)
@@ -387,7 +386,7 @@ def absenceForm(request, courseID):
                                                             'date': str(datetime.date.today())})
 
     else:
-        absenceFormset = modelformset_factory(model=Attendance, form=AbsenceForm, extra=n)
+        absenceFormset = modelformset_factory(model=Attendance, form=AbsenceForm, extra=n, max_num=2)
 
     return render(request, 'teacher/absence.html', {'formset': absenceFormset, 'courseID': courseID,
                                                     'date': str(datetime.date.today())})
