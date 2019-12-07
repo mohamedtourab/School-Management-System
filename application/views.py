@@ -217,7 +217,7 @@ class CourseDetailView(generic.ListView):
 
 
 class MaterialView(generic.ListView):
-    template_name = 'parent/material.html'
+    template_name = 'parent/assignment.html'
     context_object_name = 'courseID'
 
     def get_queryset(self):
