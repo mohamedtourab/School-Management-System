@@ -242,8 +242,16 @@ class MaterialView(generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(MaterialView, self).get_context_data(**kwargs)
         context['studentID'] = self.kwargs['studentID']
-        if Content.objects.filter(courseID=self.kwargs['courseID']):
-            context['materials'] = Content.objects.filter(courseID=self.kwargs['courseID'])
+        allContent = Content.objects.filter(courseID=self.kwargs['courseID'])
+        #check if there is any file uploaded yet in order to create material context
+        if allContent:
+            flag = 0
+            for content in allContent:
+                if  content.material :
+                    flag = 1
+                    break
+            if flag == 1:
+                context['materials'] = Content.objects.filter(courseID=self.kwargs['courseID'])
         return context
 
 
@@ -338,6 +346,11 @@ class AnnouncementView(generic.ListView):
 
     def get_queryset(self):
         return Announcement.objects.all().order_by('-ID')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(AnnouncementView, self).get_context_data(**kwargs)
+        context['studentID'] = self.kwargs['studentID']
+        return  context
 
 
 # -----------------------------------------------------------------------------------------------
