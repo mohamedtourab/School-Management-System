@@ -11,32 +11,34 @@
                 </ul>
                 <br>
             </div>
+            {% if allAnnouncements %}
+                <div class="col-sm-9">
+                    <h4><small>NEW ANNOUNCEMENT</small></h4>
+                    <hr>
+                    <ul class="nolist list-unstyled position-relative mb-0 px-lg-5 pt-lg-5">
+                        <div id="box">
+                            {% for announcement in allAnnouncements %}
+                                <li class="border-bottom pb-3 mt-3">
+                                    <h2 style="color: #1eaaf1">{{ announcement.announcementTitle }}</h2>
+                                    <time class="small">{{ announcement.date }}</time>
+                                    <p class="m-0 post_intro">{{ announcement.announcementText }}</p>
+                                </li>
+                                <br>
+                            {% endfor %}
+                        </div>
 
-            <div class="col-sm-9">
-                <h4><small>NEW ANNOUNCEMENT</small></h4>
-                <hr>
-                <ul class="nolist list-unstyled position-relative mb-0 px-lg-5 pt-lg-5">
-                    <div id="box">
-                        {% for announcement in allAnnouncements %}
-                            <li class="border-bottom pb-3 mt-3">
-                                <h2 style="color: #1eaaf1">{{ announcement.announcementTitle }}</h2>
-                                <time class="small">{{ announcement.date }}</time>
-                                <p class="m-0 post_intro">{{ announcement.announcementText }}</p>
-                            </li>
-                            <br>
-                        {% endfor %}
-                    </div>
-
+                    </ul>
+                    <br><br>
+                </div>
+            {% else %}
+                <ul>
+                    <li>
+                        No Announcements yet
+                    </li>
                 </ul>
-                <br><br>
-            </div>
-
-        <div>
-            <h1></h1>
-        </div>
+            {% endif %}
 
         </div>
-
     </div>
 
     <style media="screen">
