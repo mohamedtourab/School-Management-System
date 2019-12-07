@@ -39,20 +39,17 @@ urlpatterns = [
         login_required(views.ParentGradeView.as_view(), login_url='application:login'), name='parentGradeWithID'),
     path('parent/grades/', login_required(views.ParentGradeView.as_view(), login_url='application:login'),
          name='parentGrade'),
-    path('parentsignup/', views.parentSignup, name='parentSignup'),
     path('chooseChild/', login_required(views.ChooseChild.as_view(), login_url='application:login'),
          name='chooseChild'),
     path('parent/attendance', login_required(views.ParentAttendanceView.as_view(), login_url='application:login'),
          name='parentAttendance'),
     url(r'^parent/(?P<studentID>[0-9]+)/course/$',
-        login_required(views.CourseView.as_view(), login_url='application:login'), name='courseView'),
-    # NOT HANDLED URL PLEASE DONT USE
-    path('composeClass/', views.classCompose, name='classCompose'),
+        login_required(views.CourseView.as_view(), login_url='application:login'), name='courseView'),# NOT HANDLED URL PLEASE DONT USE
     url(r'^parent/(?P<studentID>[0-9]+)/course/(?P<courseID>[0-9]+)/$',
         login_required(views.CourseDetailView.as_view(), login_url='application:login'), name='courseViewWithCourseId'),
     path('change-password/', views.change_password, name='change_password'),
-    url(r'^parent/(?P<studentID>[0-9]+)/course/(?P<courseID>[0-9]+)/materials/$',
-        login_required(views.MaterialView.as_view(), login_url='application:login'), name='materials'),
+    url(r'^parent/(?P<studentID>[0-9]+)/course/(?P<courseID>[0-9]+)/assignments/$',
+        login_required(views.MaterialView.as_view(), login_url='application:login'), name='assignments'),
     url(r'^parent/(?P<studentID>[0-9]+)/course/(?P<courseID>[0-9]+)/attendance/$',
         login_required(views.ParentAttendanceView.as_view(), login_url='application:login'), name='parentAttendance'),
     path('parent/announcement/', views.AnnouncementView.as_view(), name='announcement'),
@@ -65,6 +62,8 @@ urlpatterns = [
     url(r'^ao/class/(?P<name>[0-9][A-Z]+)/$', views.timetableForm, name='timetableForm'),
     path('communicationAO/', views.communicationAO, name='communicationAO'),
     path('teacherMasterData/', views.GetTeacherMasterData.as_view(), name='teacherMasterData'),
+    path('parentsignup/', views.parentSignup, name='parentSignup'),
+    path('composeClass/', views.classCompose, name='classCompose'),
 ]
 
 if settings.DEBUG:
