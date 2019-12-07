@@ -229,8 +229,6 @@ class AssignmentView(generic.ListView):
         context['studentID'] = self.kwargs['studentID']
         if Assignment.objects.filter(courseID=self.kwargs['courseID']):
             context['assignments'] = Assignment.objects.filter(courseID=self.kwargs['courseID'])
-        else:
-            context['assignments'] = []
         return context
 
 
@@ -246,8 +244,6 @@ class MaterialView(generic.ListView):
         context['studentID'] = self.kwargs['studentID']
         if Content.objects.filter(courseID=self.kwargs['courseID']):
             context['materials'] = Content.objects.filter(courseID=self.kwargs['courseID'])
-        else:
-            context['materials'] = []
         return context
 
 
