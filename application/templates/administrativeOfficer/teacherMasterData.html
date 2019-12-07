@@ -1,0 +1,46 @@
+{% extends 'administrativeOfficer/base.html' %}
+{% block home_active %} passive {% endblock %}
+{% block teachersInfo_active %} active {% endblock %}
+
+{% block body %}
+
+    <div class="container mt-3">
+                <input class="form-control" id="myInput" type="text" placeholder="Search..">
+                <br>
+
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Fiscal Code</th>
+                    </tr>
+                    </thead>
+                    <tbody id="myTable">
+                    {% for teacher in allTeachers %}
+                        <tr>
+                                <td>{{ teacher.first_name }}</td>
+                                <td>{{ teacher.last_name }}</td>
+                                <td>{{ teacher.user }}</td>
+                                <td>{{ teacher.email }}</td>
+                                <td>{{ teacher.fiscalCode }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $("#myInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#myTable tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+
+{% endblock %}

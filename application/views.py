@@ -15,7 +15,7 @@ from django.urls import reverse
 from django.db.models import Q
 
 from .models import StudentCourse, PerformanceGrade, Parent, Content, Course, Student, ClassInfo, TeacherCourse, \
-    ParentStudent, Attendance, Assignment, Announcement
+    ParentStudent, Attendance, Assignment, Announcement, Teacher
 from django.views import generic
 from application.forms import StudentForm, ParentSignUpForm, ClassComposeForm, ContentForm, PerformanceGradeForm, \
     AbsenceForm, AssignmentForm, TimetableForm, AnnouncementForm
@@ -174,6 +174,13 @@ def communicationAO(request):
 
     return render(request, 'administrativeOfficer/communication.html', {'form': form})
 
+
+class GetTeacherMasterData(generic.ListView):
+    template_name = 'administrativeOfficer/teacherMasterData.html'
+    context_object_name = 'allTeachers'
+
+    def get_queryset(self):
+        return Teacher.objects.all()
 
 # -----------------------------------------------------------------------------------------------
 ####### PARENT AREA##########
@@ -432,7 +439,6 @@ def assignmentForm(request, courseID):
     return render(request, 'teacher/addAssignment.html', {'form': form, 'courseID': courseID, })
 
 
-
 # -----------------------------------------------------------------------------------------------
 ####### GENERAL AREA##########
 # -----------------------------------------------------------------------------------------------
@@ -492,7 +498,7 @@ def loginUser(request):
                                 principle = user.principle
                                 return HttpResponse("<h1>you are logged in as principle</h1>")
                             except:
-                                    return HttpResponse("<h1>you are a hacker</h1>")
+                                return HttpResponse("<h1>you are a hacker</h1>")
         else:
             return render(request, 'application/login.html', {'error_message': 'Invalid login'})
     else:

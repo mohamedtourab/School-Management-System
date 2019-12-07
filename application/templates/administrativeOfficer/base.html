@@ -5,6 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
     <link href="https://fonts.googleapis.com/css?family=Work+Sans:100,200,300,400,500,600,700,800,900" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Fredericka+the+Great" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
@@ -64,6 +66,8 @@
                         href="{% url 'application:communicationAO' %}" class="nav-link">Communication</a></li>
                 <li class="nav-item {% block composeClass_active %}{% endblock %}"><a
                         href="{% url 'application:classCompose' %}" class="nav-link">Compose Class</a></li>
+                <li class="nav-item {% block teachersInfo_active %}{% endblock %}"><a
+                        href="{% url 'application:teacherMasterData' %}" class="nav-link">Teachers Info</a></li>
             </ul>
         </div>
     </div>

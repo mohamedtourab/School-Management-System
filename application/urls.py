@@ -64,6 +64,7 @@ urlpatterns = [
     path('ao/', login_required(views.AdministrativeOfficer.as_view(), login_url='application:login'), name='ao'),
     url(r'^ao/class/(?P<name>[0-9][A-Z]+)/$', views.timetableForm, name='timetableForm'),
     path('communicationAO/', views.communicationAO, name='communicationAO'),
+    path('teacherMasterData/', views.GetTeacherMasterData.as_view(), name='teacherMasterData'),
 ]
 
 if settings.DEBUG:
