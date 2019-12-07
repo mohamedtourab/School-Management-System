@@ -44,12 +44,15 @@ urlpatterns = [
     path('parent/attendance', login_required(views.ParentAttendanceView.as_view(), login_url='application:login'),
          name='parentAttendance'),
     url(r'^parent/(?P<studentID>[0-9]+)/course/$',
-        login_required(views.CourseView.as_view(), login_url='application:login'), name='courseView'),# NOT HANDLED URL PLEASE DONT USE
+        login_required(views.CourseView.as_view(), login_url='application:login'), name='courseView'),
+    # NOT HANDLED URL PLEASE DONT USE
     url(r'^parent/(?P<studentID>[0-9]+)/course/(?P<courseID>[0-9]+)/$',
         login_required(views.CourseDetailView.as_view(), login_url='application:login'), name='courseViewWithCourseId'),
     path('change-password/', views.change_password, name='change_password'),
     url(r'^parent/(?P<studentID>[0-9]+)/course/(?P<courseID>[0-9]+)/assignments/$',
-        login_required(views.MaterialView.as_view(), login_url='application:login'), name='assignments'),
+        login_required(views.AssignmentView.as_view(), login_url='application:login'), name='assignments'),
+    url(r'^parent/(?P<studentID>[0-9]+)/course/(?P<courseID>[0-9]+)/materials/$',
+        login_required(views.MaterialView.as_view(), login_url='application:login'), name='materials'),
     url(r'^parent/(?P<studentID>[0-9]+)/course/(?P<courseID>[0-9]+)/attendance/$',
         login_required(views.ParentAttendanceView.as_view(), login_url='application:login'), name='parentAttendance'),
     path('parent/announcement/', views.AnnouncementView.as_view(), name='announcement'),

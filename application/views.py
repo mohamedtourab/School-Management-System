@@ -182,6 +182,7 @@ class GetTeacherMasterData(generic.ListView):
     def get_queryset(self):
         return Teacher.objects.all()
 
+
 # -----------------------------------------------------------------------------------------------
 ####### PARENT AREA##########
 # -----------------------------------------------------------------------------------------------
@@ -216,8 +217,25 @@ class CourseDetailView(generic.ListView):
         return context
 
 
-class MaterialView(generic.ListView):
+class AssignmentView(generic.ListView):
     template_name = 'parent/assignment.html'
+    context_object_name = 'courseID'
+
+    def get_queryset(self):
+        return self.kwargs['courseID']
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(AssignmentView, self).get_context_data(**kwargs)
+        context['studentID'] = self.kwargs['studentID']
+        if Assignment.objects.filter(courseID=self.kwargs['courseID']):
+            context['assignments'] = Assignment.objects.filter(courseID=self.kwargs['courseID'])
+        else:
+            context['assignments'] = []
+        return context
+
+
+class MaterialView(generic.ListView):
+    template_name = 'parent/material.html'
     context_object_name = 'courseID'
 
     def get_queryset(self):
@@ -226,13 +244,10 @@ class MaterialView(generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(MaterialView, self).get_context_data(**kwargs)
         context['studentID'] = self.kwargs['studentID']
-        if Assignment.objects.filter(courseID=self.kwargs['courseID']):
-            context['assignments'] = Assignment.objects.filter(courseID=self.kwargs['courseID'])
-        # if Course.objects.get(ID=self.kwargs['courseID']).assignment:
-        # context['assignments'] = Course.objects.get(ID=self.kwargs['courseID']).assignment.url
-        # context['assignmentName'] = Course.objects.get(ID=self.kwargs['courseID']).assignment.name
+        if Content.objects.filter(courseID=self.kwargs['courseID']):
+            context['materials'] = Content.objects.filter(courseID=self.kwargs['courseID'])
         else:
-            context['assignments'] = []
+            context['materials'] = []
         return context
 
 
