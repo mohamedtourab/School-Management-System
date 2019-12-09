@@ -72,11 +72,15 @@
                 <li class="nav-item {% block home_active %}{% endblock %}"><a
                         href="{% url 'application:parentWithID' studentID %}" class="nav-link pl-0">Home</a></li>
                 <li class="nav-item {% block grades_active %}{% endblock %}"><a
-                        href="{% url 'application:parentGradeWithID' studentID %}" class="nav-link pl-0">Grades</a></li>
+                        href="{% url 'application:parentGradeWithID' studentID %}" class="nav-link pl-0">Performance Grades</a></li>
                 <li class="nav-item {% block appointment_active %}{% endblock %}"><a href="#" class="nav-link pl-0">Appointment</a>
                 </li>
-               <li class="nav-item {% block announcement_active %}{% endblock %}"><a
-                        href="{% url 'application:announcement' studentID%}" class="nav-link pl-0">Announcements</a></li>
+                <li class="nav-item {% block announcement_active %}{% endblock %}"><a
+                        href="{% url 'application:announcement' studentID %}" class="nav-link pl-0">Announcements</a>
+                </li>
+                <li class="nav-item {% block finalGrade_active %}{% endblock %}"><a
+                        href="{% url 'application:finalResult' studentID %}" class="nav-link pl-0">Final Results</a>
+                </li>
                 <li class="nav-item"><a href="{% url 'application:chooseChild' %}" class="nav-link pl-0">Choose
                     Child</a></li>
             </ul>

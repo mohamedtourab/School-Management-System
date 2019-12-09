@@ -1,0 +1,23 @@
+{% extends 'parent/base.html' %}
+{% block finalGrade_active %} active {% endblock %}
+
+{% block body %}
+    <div style="padding-left: 2%">
+    <h2>Student Name: {{ studentData.first_name }} {{ studentData.last_name }}</h2><br>
+        <table>
+            <th>Course</th>
+            <th> Grade</th>
+            {% for finalGrade in finalGrades %}
+                <tr>
+                    <th> {{ finalGrade.courseID.name }}
+                        {% if finalGrade.publishFinalGrade%}
+                            <td> {{ finalGrade.finalGrade }}</td>
+                        {% else %}
+                            <td>Result is not published yet</td>
+                        {% endif %}
+                </tr>
+            {% endfor %}
+
+        </table>
+    </div><br><br>
+{% endblock %}

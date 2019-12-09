@@ -272,6 +272,19 @@ class NotesView(generic.ListView):
         return context
 
 
+class FinalGradeView(generic.ListView):
+    template_name = 'parent/finalGrade.html'
+    context_object_name = 'finalGrades'
+
+    def get_queryset(self):
+        return StudentCourse.objects.filter(studentID=self.kwargs['studentID'])
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(FinalGradeView, self).get_context_data(**kwargs)
+        context['studentID'] = self.kwargs['studentID']
+        context['studentData'] = Student.objects.get(ID=self.kwargs['studentID'])
+        return context
+
 class ParentView(generic.ListView):
     template_name = 'parent/afterloginparent.html'
     context_object_name = 'allStudentCourses'
