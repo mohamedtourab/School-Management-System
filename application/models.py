@@ -194,8 +194,9 @@ class Content(models.Model):
     ID = models.AutoField(primary_key=True)
     courseID = models.ForeignKey(Course, on_delete=models.CASCADE)
     contentString = models.CharField(max_length=100)
-    materialTitle = models.CharField(max_length=100,null=True,blank=True, default=None)
-    material = models.FileField(verbose_name='File', upload_to='../media', blank=True, null=True)
+    materialTitle = models.CharField(max_length=100, verbose_name="Material Title", default="FileName")
+    material = models.FileField(verbose_name='File', upload_to='../media', default="File")
+    additionDate = models.DateField(default=datetime.date.today, verbose_name='Addition Date')
 
     def __str__(self):
         return self.courseID.name + '_Content' + self.ID.__str__()

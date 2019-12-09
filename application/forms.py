@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from django.core.exceptions import ValidationError
 from django.forms import ModelForm, inlineformset_factory, formset_factory
 import datetime
 
@@ -77,7 +78,7 @@ class ContentForm(ModelForm):
     class Meta:
         model = Content
         exclude = ('courseID',)
-        fields = ['contentString', 'material', ]
+        fields = ['contentString', 'materialTitle', 'material', 'additionDate']
 
 
 class PerformanceGradeForm(ModelForm):

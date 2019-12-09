@@ -1,10 +1,14 @@
 {% extends 'teacher/courseBase.html' %}
 {% block body %}
-    <h2 style="padding-left: 1%">List of topics discussed in {{ courseDetails.name }}</h2>
+    <h2 style="padding-left: 1%">List of topics discussed & support material in {{ courseDetails.name }}</h2>
     {% if contents %}
         <ul>
             {% for content in contents %}
-                <li>{{ content.contentString }}</li>
+                <li><a href="../../../media/{{ content.material.name }}" download>
+                    {{ content.materialTitle }}</a>{{ '   ' }}
+                        | Content String: {{ content.contentString }} | Date Of Course: {{ content.additionDate }}
+                </li>
+
             {% endfor %}
         </ul>
         <br><br>
@@ -19,7 +23,7 @@
         <ul>
             {% for assignment in assignments %}
                 <li><a href="../../../media/{{ assignment.assignmentFile.name }}"
-                       download>{{ assignment.assignmentTitle }}</a>{{ '       ' }}Deadline:{{ assignment.deadlineDate }}
+                       download>{{ assignment.assignmentTitle }}</a>{{ '       ' }} | Deadline: {{ assignment.deadlineDate }}
                 </li>
             {% endfor %}
         </ul>
