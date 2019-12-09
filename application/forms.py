@@ -105,7 +105,7 @@ class AbsenceForm(ModelForm):
 
     class Meta:
         model = Attendance
-        fields = ['ID', 'studentCourseID', 'date', 'presence', 'cameLate', 'leftEarly', ]
+        fields = ['ID', 'studentCourseID', 'date', 'presence', 'cameLate', 'leftEarly', 'behaviour']
 
 
 class AssignmentForm(ModelForm):
@@ -119,3 +119,4 @@ class TimetableForm(ModelForm):
     class Meta:
         model = ClassInfo
         fields = ['timetable']
+
