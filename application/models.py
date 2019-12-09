@@ -168,7 +168,7 @@ class StudentCourse(models.Model):
     studentID = models.ForeignKey(Student, on_delete=models.CASCADE)
     courseID = models.ForeignKey(Course, on_delete=models.CASCADE)
     finalGrade = models.PositiveIntegerField(blank=True, null=True)
-
+    publishFinalGrade = models.BooleanField(blank=True,default=False)
     def __str__(self):
         return self.studentID.first_name + '_' + self.studentID.last_name + ':' + self.courseID.name
 
