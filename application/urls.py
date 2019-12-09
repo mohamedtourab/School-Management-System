@@ -55,6 +55,7 @@ urlpatterns = [
     url(r'^parent/(?P<studentID>[0-9]+)/course/(?P<courseID>[0-9]+)/attendance/$',
         login_required(views.ParentAttendanceView.as_view(), login_url='application:login'), name='parentAttendance'),
     path('parent/<int:studentID>/announcement/', views.AnnouncementView.as_view(), name='announcement'),
+    path('parent/<int:studentID>/course/<int:courseID>/notes/',views.NotesView.as_view(), name='CourseNote'),
 
     # -------------------------------------------------------------------------------------------
     #               ADMINISTRATIVE OFFICER URLS

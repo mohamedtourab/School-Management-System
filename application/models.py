@@ -187,6 +187,7 @@ class Note(models.Model):
     ID = models.AutoField(primary_key=True)
     studentCourseID = models.ForeignKey(StudentCourse, on_delete=models.CASCADE)
     noteText = models.CharField(max_length=300)
+    noteDate = models.DateField(default=datetime.date.today)
 
 
 class Content(models.Model):
