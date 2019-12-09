@@ -193,8 +193,8 @@ class Note(models.Model):
 class Content(models.Model):
     ID = models.AutoField(primary_key=True)
     courseID = models.ForeignKey(Course, on_delete=models.CASCADE)
-    contentString = models.CharField(max_length=100)
-    materialTitle = models.CharField(max_length=100,null=True,blank=True, default=None)
+    contentString = models.CharField(max_length=100,blank=True,verbose_name='Topic Title',default=None)
+    materialTitle = models.CharField(max_length=100,null=True,blank=True, default=None, verbose_name='File Title')
     material = models.FileField(verbose_name='File', upload_to='../media', blank=True, null=True)
 
     def __str__(self):

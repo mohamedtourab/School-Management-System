@@ -456,7 +456,7 @@ def absenceForm(request, courseID):
 @login_required(login_url='application:login')
 def contentForm(request, courseID):
     if request.method == 'POST':
-        form = ContentForm(request.POST, user=request.user)
+        form = ContentForm(request.POST, user=request.user,request=request)
         if form.is_valid():
             unsavedForm = form.save(commit=False)
             unsavedForm.courseID = Course.objects.get(ID=courseID)

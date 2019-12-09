@@ -6,7 +6,9 @@
             <h2 style="padding-left: 1%">List of topics discussed in {{ courseDetails.name }}</h2>
             <ul>
                 {% for topic in topics %}
+                    {% if topic.contentString %}
                     <li>{{ topic.contentString }}</li>
+                    {% endif %}
                 {% endfor %}
             </ul>
         {% else %}
