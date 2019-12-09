@@ -1,7 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from django.core.exceptions import ValidationError
 from django.forms import ModelForm, inlineformset_factory, formset_factory
 import datetime
 
@@ -69,12 +68,32 @@ class ContentForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
+        self.request = kwargs.pop('request', None)
         super(ContentForm, self).__init__(*args, **kwargs)
         # listOfCoursesID = (TeacherCourse.objects.filter(teacherID=self.user.teacher.ID)).values('courseID')
         # listOfCourses = Course.objects.filter(ID__in=listOfCoursesID)
         # self.courseID = forms.ModelChoiceField(queryset=listOfCourses)
         # self.fields['courseID'] = self.courseID
 
+    def clean(self):
+        cleaned_data = super().clean()
+        materialTitle = cleaned_data.get("materialTitle")
+        materialFile = self.request.POST.get('material')
+        contentString = cleaned_data.get("contentString")
+        if (not contentString):
+            if ((not materialFile) and (not materialTitle)):
+                # Only do something if both fields are not valid so far.
+                raise forms.ValidationError(
+                    "You have to submit either Topic Title or File and File title"
+                )
+            elif not materialTitle:
+                raise forms.ValidationError(
+                    "File title is missing"
+                )
+            elif not materialFile:
+                raise forms.ValidationError(
+                    "File is missing"
+                )
     class Meta:
         model = Content
         exclude = ('courseID',)
@@ -120,4 +139,3 @@ class TimetableForm(ModelForm):
     class Meta:
         model = ClassInfo
         fields = ['timetable']
-
