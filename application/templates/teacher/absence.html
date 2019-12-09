@@ -21,6 +21,7 @@
                     <th> presence</th>
                     <th> came late</th>
                     <th> left early</th>
+                    <th> behaviour</th>
                 </tr>
                 {% for form in formset.forms %}
 
@@ -31,6 +32,7 @@
                         <th>{{ form.presence }}</th>
                         <th>{{ form.cameLate }}</th>
                         <th>{{ form.leftEarly }}</th>
+                        <th>{{ form.behaviour }}</th>
                     </tr>
                 {% endfor %}
             </table>

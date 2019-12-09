@@ -27,8 +27,7 @@ urlpatterns = [
     path('teacher/course/<int:courseID>/addtopic', views.contentForm, name='contentForm'),
     url(r'^teacher/course/(?P<courseID>[0-9]+)/addPerformanceGrade/$', views.gradeForm, name='gradeForm'),
     path('teacher/course/<int:courseID>/addAssignment', views.assignmentForm, name='assignmentForm'),
-    url(r'^teacher/course/(?P<courseID>[0-9]+)/behaviour/$', views.absenceForm, name='absenceForm'),
-
+    url(r'^teacher/course/(?P<courseID>[0-9]+)/absence/$', views.absenceForm, name='absenceForm'),
     # -------------------------------------------------------------------------------------------
     #               PARENT URLS
     # -------------------------------------------------------------------------------------------
@@ -69,6 +68,7 @@ urlpatterns = [
     path('teacherMasterData/', views.GetTeacherMasterData.as_view(), name='teacherMasterData'),
     path('parentsignup/', views.parentSignup, name='parentSignup'),
     path('composeClass/', views.classCompose, name='classCompose'),
+
 ]
 
 if settings.DEBUG:
