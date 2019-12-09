@@ -1,0 +1,26 @@
+{% extends 'parent/assignmentBase.html' %}
+{% block body %}
+    <div style="padding-left: 2%;padding-top: 1%;padding-bottom: 5%">
+    <h3 style="padding-bottom: 1%">{{ courseDetails.name }} Notes</h3>
+        {% if notes %}
+            <table>
+                <ul>
+                    {% for note in notes %}
+                        <tr>
+                            <td>
+                                <li>{{ note.noteText }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+                            </td>
+                            <td> Date: {{ note.noteDate }}</td>
+                        </tr>
+                    {% endfor %}
+                </ul>
+            </table>
+        {% else %}
+            <ul>
+                <li>
+                    No Notes available.
+                </li>
+            </ul>
+        {% endif %}
+    </div>
+{% endblock %}

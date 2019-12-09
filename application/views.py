@@ -15,7 +15,7 @@ from django.urls import reverse
 from django.db.models import Q
 
 from .models import StudentCourse, PerformanceGrade, Parent, Content, Course, Student, ClassInfo, TeacherCourse, \
-    ParentStudent, Attendance, Assignment, Announcement, Teacher
+    ParentStudent, Attendance, Assignment, Announcement, Teacher, Note
 from django.views import generic
 from application.forms import StudentForm, ParentSignUpForm, ClassComposeForm, ContentForm, PerformanceGradeForm, \
     AbsenceForm, AssignmentForm, TimetableForm, AnnouncementForm
@@ -243,15 +243,32 @@ class MaterialView(generic.ListView):
         context = super(MaterialView, self).get_context_data(**kwargs)
         context['studentID'] = self.kwargs['studentID']
         allContent = Content.objects.filter(courseID=self.kwargs['courseID'])
-        #check if there is any file uploaded yet in order to create material context
+        # check if there is any file uploaded yet in order to create material context
         if allContent:
             flag = 0
             for content in allContent:
-                if  content.material :
+                if content.material:
                     flag = 1
                     break
             if flag == 1:
                 context['materials'] = Content.objects.filter(courseID=self.kwargs['courseID'])
+        return context
+
+
+class NotesView(generic.ListView):
+    template_name = 'parent/note.html'
+    context_object_name = 'notes'
+
+    def get_queryset(self):
+        studentCourseID = StudentCourse.objects.get(studentID=self.kwargs['studentID'],
+                                                    courseID=self.kwargs['courseID'])
+        return Note.objects.filter(studentCourseID=studentCourseID)
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(NotesView, self).get_context_data(**kwargs)
+        context['studentID'] = self.kwargs['studentID']
+        context['courseDetails'] = Course.objects.get(ID=self.kwargs['courseID'])
+        context['courseID'] = self.kwargs['courseID']
         return context
 
 
@@ -350,7 +367,7 @@ class AnnouncementView(generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(AnnouncementView, self).get_context_data(**kwargs)
         context['studentID'] = self.kwargs['studentID']
-        return  context
+        return context
 
 
 # -----------------------------------------------------------------------------------------------

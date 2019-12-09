@@ -1,11 +1,11 @@
 {% extends 'parent/base.html' %}
 {% block body %}
-    <h1 style="padding-left: 1%">Welcome {{ user.first_name }}<br></h1>
+    <h1 style="padding-left: 2%">Welcome {{ user.first_name }}<br></h1>
     <h3 style="padding-left: 2%">Your child:{% for p in parentStudent %} {{ p.studentID }} {% endfor %}
         <br>Class: {{ studentClass }} </h3>
 
     <div style="padding-left: 2%">
-        <h3> Student Courses</h3>
+        <h2> Student Courses</h2>
         <ul>
             {% for studentcourse in allStudentCourses %}
                 <li style="padding-bottom: 1%"><a href="{% url 'application:courseView' studentID %}{{ studentcourse.ID }}"
