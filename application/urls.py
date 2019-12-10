@@ -13,7 +13,7 @@ urlpatterns = [
     # -------------------------------------------------------------------------------------------
     path('', views.IndexView.as_view(), name='index'),
     path('index/', views.IndexView.as_view(), name='index1'),
-    path('login/', views.loginUser, name='login'),
+    path('login/', views.login_user, name='login'),
     path('logout/', views.logout_view, name='logout'),
     path('test/', views.TestView.as_view(), name='test'),
 
@@ -24,10 +24,10 @@ urlpatterns = [
         login_required(views.TeacherCourseDetailView.as_view(), login_url='application:login'),
         name='teacherCourseViewWithCourseId'),
     path('teacher/', login_required(views.TeacherView.as_view(), login_url='application:login'), name='teacher'),
-    path('teacher/course/<int:courseID>/addtopic', views.contentForm, name='contentForm'),
-    url(r'^teacher/course/(?P<courseID>[0-9]+)/addPerformanceGrade/$', views.gradeForm, name='gradeForm'),
-    path('teacher/course/<int:courseID>/addAssignment', views.assignmentForm, name='assignmentForm'),
-    url(r'^teacher/course/(?P<courseID>[0-9]+)/absence/$', views.absenceForm, name='absenceForm'),
+    path('teacher/course/<int:courseID>/addtopic', views.content_form, name='contentForm'),
+    url(r'^teacher/course/(?P<courseID>[0-9]+)/addPerformanceGrade/$', views.grade_form, name='gradeForm'),
+    path('teacher/course/<int:courseID>/addAssignment', views.assignment_form, name='assignmentForm'),
+    url(r'^teacher/course/(?P<courseID>[0-9]+)/absence/$', views.absence_form, name='absenceForm'),
     # -------------------------------------------------------------------------------------------
     #               PARENT URLS
     # -------------------------------------------------------------------------------------------
@@ -61,13 +61,13 @@ urlpatterns = [
     # -------------------------------------------------------------------------------------------
     #               ADMINISTRATIVE OFFICER URLS
     # -------------------------------------------------------------------------------------------
-    path('signup/', views.enrollStudent, name='signup'),  # student signup
+    path('signup/', views.enroll_student, name='signup'),  # student signup
     path('ao/', login_required(views.AdministrativeOfficer.as_view(), login_url='application:login'), name='ao'),
-    url(r'^ao/class/(?P<name>[0-9][A-Z]+)/$', views.timetableForm, name='timetableForm'),
-    path('communicationAO/', views.communicationAO, name='communicationAO'),
+    url(r'^ao/class/(?P<name>[0-9][A-Z]+)/$', views.timetable_form, name='timetableForm'),
+    path('communicationAO/', views.communication_ao, name='communicationAO'),
     path('teacherMasterData/', views.GetTeacherMasterData.as_view(), name='teacherMasterData'),
-    path('parentsignup/', views.parentSignup, name='parentSignup'),
-    path('composeClass/', views.classCompose, name='classCompose'),
+    path('parentsignup/', views.parent_signup, name='parentSignup'),
+    path('composeClass/', views.class_compose, name='classCompose'),
 
 ]
 

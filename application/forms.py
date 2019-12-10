@@ -51,7 +51,7 @@ class ContentForm(ModelForm):
         material_file = self.request.POST.get('material')
         content_string = cleaned_data.get("contentString")
         if not content_string:
-            if ((not material_file) and (not material_title)):
+            if (not material_file) and (not material_title):
                 # Only do something if both fields are not valid so far.
                 raise forms.ValidationError(
                     "You have to submit either Topic Title or File and File title"

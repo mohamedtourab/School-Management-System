@@ -35,7 +35,7 @@ class AdministrativeOfficer(generic.ListView):
 
 
 @login_required(login_url='application:login')
-def timetableForm(request, name):
+def timetable_form(request, name):
     if request.method == 'POST':
         instance = ClassInfo.objects.get(name=name)
         form = TimetableForm(request.POST, request.FILES, instance=instance)
@@ -49,7 +49,7 @@ def timetableForm(request, name):
 
 
 @login_required(login_url='application:login')
-def enrollStudent(request):
+def enroll_student(request):
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
@@ -70,25 +70,25 @@ def enrollStudent(request):
 
 
 @login_required(login_url='application:login')
-def classCompose(request):
+def class_compose(request):
     if request.method == 'POST':
         form = ClassComposeForm(request.POST)
         # form2 = ManualEnrollmentForm(request.POST)
         # check whether it's valid:
         if form.is_valid():
-            classInfo = form.save()
-            classInfo.refresh_from_db()
+            class_info = form.save()
+            class_info.refresh_from_db()
 
-            if Student.objects.filter(classID=None, studentYear='FIRST').count() < classInfo.totalStudentsNumber:
+            if Student.objects.filter(classID=None, studentYear='FIRST').count() < class_info.totalStudentsNumber:
                 for student in Student.objects.filter(classID=None, studentYear='FIRST'):
-                    student.classID = classInfo
+                    student.classID = class_info
                     student.save()
             else:
                 i = 0
                 for student in Student.objects.filter(classID=None, studentYear='FIRST'):
-                    if i < classInfo.totalStudentsNumber:
+                    if i < class_info.totalStudentsNumber:
                         i += 1
-                        student.classID = classInfo
+                        student.classID = class_info
                         student.save()
 
             messages.success(request, 'Class has been successfully added')
@@ -98,27 +98,27 @@ def classCompose(request):
             #   messages.success(request, 'Student has been assigned manually')
 
             return render(request, 'administrativeOfficer/classCompose.html',
-                          {'form': form, 'numberOfSeats': numberOfSeats(), 'numberOfStudents': numberOfStudents()})
+                          {'form': form, 'numberOfSeats': number_of_seats(), 'numberOfStudents': number_of_students()})
     else:
         form = ClassComposeForm()
     # form2 = ManualEnrollmentForm()
 
     return render(request, 'administrativeOfficer/classCompose.html',
-                  {'form': form, 'numberOfSeats': numberOfSeats(), 'numberOfStudents': numberOfStudents()})
+                  {'form': form, 'numberOfSeats': number_of_seats(), 'numberOfStudents': number_of_students()})
 
 
-def numberOfSeats():
+def number_of_seats():
     number = ClassInfo.objects.aggregate((Sum('totalStudentsNumber')))['totalStudentsNumber__sum']
     return number
 
 
-def numberOfStudents():
+def number_of_students():
     number = Student.objects.filter(classID=None).count()
     return number
 
 
 @login_required(login_url='application:login')
-def parentSignup(request):
+def parent_signup(request):
     if request.method == 'POST':
         form = ParentSignUpForm(request.POST)
         try:
@@ -138,7 +138,7 @@ def parentSignup(request):
                 username = request.POST['username']
                 email = request.POST['email']
                 password = request.POST['password2']
-                sendmailtoparent(username, email, password)  # send credentials to a parent
+                send_mail_to_parent(username, email, password)  # send credentials to a parent
 
                 return render(request, 'administrativeOfficer/parentSignup.html', {'form': ParentSignUpForm()})
             else:
@@ -149,7 +149,7 @@ def parentSignup(request):
     return render(request, 'administrativeOfficer/parentSignup.html', {'form': form})
 
 
-def sendmailtoparent(username, email, password):
+def send_mail_to_parent(username, email, password):
     send_mail('School Account Credentials',
               'Dear Sir/Madam,\n We hope that this email finds you in a good health.\n' +
               'This is your credentials for accessing the school website\n' +
@@ -161,7 +161,7 @@ def sendmailtoparent(username, email, password):
               fail_silently=False)
 
 
-def communicationAO(request):
+def communication_ao(request):
     if request.method == 'POST':
         form = AnnouncementForm(request.POST)
         if form.is_valid():
@@ -285,6 +285,7 @@ class FinalGradeView(generic.ListView):
         context['studentData'] = Student.objects.get(ID=self.kwargs['studentID'])
         return context
 
+
 class ParentView(generic.ListView):
     template_name = 'parent/afterloginparent.html'
     context_object_name = 'allStudentCourses'
@@ -342,13 +343,13 @@ class ParentGradeView(generic.ListView):
             studentID=self.kwargs['studentID'])  # GET STUDENT ID HERE
 
         columns = 0
-        for studentcourse in context['studentCourse']:
-            gradeCounter = 0
+        for student_course in context['studentCourse']:
+            grade_counter = 0
             for grade in context['allGrades']:
-                if grade.studentCourseID.courseID.name == studentcourse.courseID.name:
-                    gradeCounter += 1
-            if gradeCounter > columns:
-                columns = gradeCounter
+                if grade.studentCourseID.courseID.name == student_course.courseID.name:
+                    grade_counter += 1
+            if grade_counter > columns:
+                columns = grade_counter
         context['columns'] = range(columns)
         return context
 
@@ -425,72 +426,72 @@ class AbsenceView(generic.ListView):
 
 
 @login_required(login_url='application:login')
-def absenceForm(request, courseID):
-    studentCourses = StudentCourse.objects.filter(courseID=courseID)
-    n = studentCourses.count()
+def absence_form(request, courseID):
+    student_courses = StudentCourse.objects.filter(courseID=courseID)
+    n = student_courses.count()
 
-    absenceFormset = modelformset_factory(model=Attendance, form=AbsenceForm, extra=n, max_num=n)
+    absence_formset = modelformset_factory(model=Attendance, form=AbsenceForm, extra=n, max_num=n)
 
     if request.method == 'POST':
-        studentCourse = StudentCourse.objects.filter(courseID=courseID)
-        absenceFormset = absenceFormset(request.POST, queryset=studentCourse)
+        student_course = StudentCourse.objects.filter(courseID=courseID)
+        absence_formset = absence_formset(request.POST, queryset=student_course)
 
         i = 0
-        for f in absenceFormset:
-            if i < studentCourses.count():
-                f.studentCourseID = studentCourses[i].studentID
+        for f in absence_formset:
+            if i < student_courses.count():
+                f.studentCourseID = student_courses[i].studentID
                 i += 1
 
-        if absenceFormset.is_valid():
-            absenceFormset.save()
-            return render(request, 'teacher/absence.html', {'formset': absenceFormset, 'courseID': courseID,
+        if absence_formset.is_valid():
+            absence_formset.save()
+            return render(request, 'teacher/absence.html', {'formset': absence_formset, 'courseID': courseID,
                                                             'date': str(datetime.date.today())})
 
     else:
-        absenceFormset = modelformset_factory(model=Attendance, form=AbsenceForm, extra=n, max_num=2)
+        absence_formset = modelformset_factory(model=Attendance, form=AbsenceForm, extra=n, max_num=2)
 
-    return render(request, 'teacher/absence.html', {'formset': absenceFormset, 'courseID': courseID,
+    return render(request, 'teacher/absence.html', {'formset': absence_formset, 'courseID': courseID,
                                                     'date': str(datetime.date.today())})
 
 
 @login_required(login_url='application:login')
-def contentForm(request, courseID):
+def content_form(request, course_id):
     if request.method == 'POST':
-        form = ContentForm(request.POST, user=request.user,request=request)
+        form = ContentForm(request.POST, user=request.user, request=request)
         if form.is_valid():
-            unsavedForm = form.save(commit=False)
-            unsavedForm.courseID = Course.objects.get(ID=courseID)
-            unsavedForm.save()
+            unsaved_form = form.save(commit=False)
+            unsaved_form.courseID = Course.objects.get(ID=course_id)
+            unsaved_form.save()
             return redirect('application:teacher')
     else:
         form = ContentForm(user=request.user)
-    return render(request, 'teacher/addTopicORMaterial.html', {'form': form, 'courseID': courseID, })
+    return render(request, 'teacher/addTopicORMaterial.html', {'form': form, 'courseID': course_id, })
 
 
 @login_required(login_url='application:login')
-def gradeForm(request, courseID):
+def grade_form(request, course_id):
     if request.method == 'POST':
-        form = PerformanceGradeForm(request.POST, courseID=courseID)
+        form = PerformanceGradeForm(request.POST, courseID=course_id)
         if form.is_valid():
             form.save()
             return redirect('application:teacher')
     else:
-        form = PerformanceGradeForm(courseID=courseID)
-    return render(request, 'teacher/grade.html', {'form': form, 'courseID': courseID, })
+        form = PerformanceGradeForm(courseID=course_id)
+    return render(request, 'teacher/grade.html', {'form': form, 'courseID': course_id, })
 
 
 @login_required(login_url='application:login')
-def assignmentForm(request, courseID):
+def assignment_form(request, course_id):
     if request.method == 'POST':
         form = AssignmentForm(request.POST, request.FILES)
         if form.is_valid():
-            unsavedForm = form.save(commit=False)
-            unsavedForm.courseID = Course.objects.get(ID=courseID)
-            unsavedForm.save()
+            unsaved_form = form.save(commit=False)
+            unsaved_form.courseID = Course.objects.get(ID=course_id)
+            unsaved_form.save()
             return redirect('application:teacher')
     else:
         form = AssignmentForm()
-    return render(request, 'teacher/addAssignment.html', {'form': form, 'courseID': courseID, })
+    return render(request, 'teacher/addAssignment.html', {'form': form, 'courseID': course_id, })
 
 
 # -----------------------------------------------------------------------------------------------
@@ -517,7 +518,7 @@ def logout_view(request):
     return redirect('application:index')
 
 
-def loginUser(request):
+def login_user(request):
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']
@@ -531,21 +532,21 @@ def loginUser(request):
                 except:
                     try:
                         parent = user.parent
-                        numberOfStudent = ParentStudent.objects.filter(parentID=parent.ID).count()
+                        number_of_student = ParentStudent.objects.filter(parentID=parent.ID).count()
 
                         if parent.lastLogin is False:
                             parent.lastLogin = True
                             parent.save()
                             return redirect('application:change_password')
                         else:
-                            if (numberOfStudent == 1):
-                                studentID = ParentStudent.objects.get(parentID=parent.ID).studentID.ID
-                                return redirect('application:parentWithID', studentID)
+                            if number_of_student == 1:
+                                student_id = ParentStudent.objects.get(parentID=parent.ID).studentID.ID
+                                return redirect('application:parentWithID', student_id)
                             else:
                                 return redirect('application:chooseChild')
                     except:
                         try:
-                            administrativeOfficer = user.administrativeofficer
+                            administrative_officer = user.administrativeofficer
                             return redirect('application:ao')
                         except:
                             try:
