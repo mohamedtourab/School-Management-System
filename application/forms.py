@@ -47,27 +47,28 @@ class ContentForm(ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        materialTitle = cleaned_data.get("materialTitle")
-        materialFile = self.request.POST.get('material')
-        contentString = cleaned_data.get("contentString")
-        if (not contentString):
-            if ((not materialFile) and (not materialTitle)):
+        material_title = cleaned_data.get("material_title")
+        material_file = self.request.POST.get('material')
+        content_string = cleaned_data.get("contentString")
+        if not content_string:
+            if ((not material_file) and (not material_title)):
                 # Only do something if both fields are not valid so far.
                 raise forms.ValidationError(
                     "You have to submit either Topic Title or File and File title"
                 )
-            elif not materialTitle:
+            elif not material_title:
                 raise forms.ValidationError(
                     "File title is missing"
                 )
-            elif not materialFile:
+            elif not material_file:
                 raise forms.ValidationError(
                     "File is missing"
                 )
+
     class Meta:
         model = Content
         exclude = ('courseID',)
-        fields = ['contentString', 'materialTitle', 'material',]
+        fields = ['contentString', 'materialTitle', 'material', ]
 
 
 class PerformanceGradeForm(ModelForm):
