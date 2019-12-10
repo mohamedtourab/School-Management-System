@@ -84,19 +84,19 @@ class Course(models.Model):
     NINTH = 'NINTH'
     TENTH = 'TENTH'
     year_choice = ((FIRST, 'FIRST'),
-                    (SECOND, 'SECOND'),
-                    (THIRD, 'THIRD'),
-                    (FOURTH, 'FOURTH'),
-                    (FIFTH, 'FIFTH'),
-                    (SIXTH, 'SIXTH'),
-                    (SEVENTH, 'SEVENTH'),
-                    (EIGHTH, 'EIGHTH'),
-                    (NINTH, 'NINTH'),
-                    (TENTH, 'TENTH'),)
+                   (SECOND, 'SECOND'),
+                   (THIRD, 'THIRD'),
+                   (FOURTH, 'FOURTH'),
+                   (FIFTH, 'FIFTH'),
+                   (SIXTH, 'SIXTH'),
+                   (SEVENTH, 'SEVENTH'),
+                   (EIGHTH, 'EIGHTH'),
+                   (NINTH, 'NINTH'),
+                   (TENTH, 'TENTH'),)
     ID = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50)
     numberOfHoursPerWeek = models.PositiveIntegerField()
-    year = models.CharField(max_length=20,choices=year_choice, default=FIRST,verbose_name='Course Year')
+    year = models.CharField(max_length=20, choices=year_choice, default=FIRST, verbose_name='Course Year')
 
     def __str__(self):
         return self.name
@@ -168,7 +168,8 @@ class StudentCourse(models.Model):
     studentID = models.ForeignKey(Student, on_delete=models.CASCADE)
     courseID = models.ForeignKey(Course, on_delete=models.CASCADE)
     finalGrade = models.PositiveIntegerField(blank=True, null=True)
-    publishFinalGrade = models.BooleanField(blank=True,default=False)
+    publishFinalGrade = models.BooleanField(blank=True, default=False)
+
     def __str__(self):
         return self.studentID.first_name + '_' + self.studentID.last_name + ':' + self.courseID.name
 
@@ -193,9 +194,9 @@ class Note(models.Model):
 class Content(models.Model):
     ID = models.AutoField(primary_key=True)
     courseID = models.ForeignKey(Course, on_delete=models.CASCADE)
-    contentString = models.CharField(max_length=100)
-    materialTitle = models.CharField(max_length=100, verbose_name="Material Title", default="FileName")
-    material = models.FileField(verbose_name='File', upload_to='../media', default="File")
+    contentString = models.CharField(max_length=100,null=True, blank=True, default=None,verbose_name='Topic Title')
+    materialTitle = models.CharField(max_length=100, null=True, blank=True, default=None)
+    material = models.FileField(verbose_name='File', upload_to='../media', blank=True, null=True)
     additionDate = models.DateField(default=datetime.date.today, verbose_name='Addition Date')
 
     def __str__(self):
@@ -222,7 +223,7 @@ class Attendance(models.Model):
     behaviour = models.CharField(max_length=200, default=" ")
 
     def __str__(self):
-        return self.studentCourseID.studentID.first_name+' '+self.studentCourseID.studentID.last_name+':'+self.studentCourseID.courseID.name
+        return self.studentCourseID.studentID.first_name + ' ' + self.studentCourseID.studentID.last_name + ':' + self.studentCourseID.courseID.name
 
 
 class FreeSlots(models.Model):

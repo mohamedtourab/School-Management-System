@@ -1,14 +1,10 @@
 {% extends 'teacher/courseBase.html' %}
 {% block body %}
-    <h2 style="padding-left: 1%">List of topics discussed & support material in {{ courseDetails.name }}</h2>
+    <h2 style="padding-left: 1%">List of topics discussed in {{ courseDetails.name }}</h2>
     {% if contents %}
         <ul>
             {% for content in contents %}
-                <li><a href="../../../media/{{ content.material.name }}" download>
-                    {{ content.materialTitle }}</a>{{ '   ' }}
-                        | Content String: {{ content.contentString }} | Date Of Course: {{ content.additionDate }}
-                </li>
-
+                <li>{{ content.contentString }}</li>
             {% endfor %}
         </ul>
         <br><br>

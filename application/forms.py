@@ -97,7 +97,7 @@ class ContentForm(ModelForm):
     class Meta:
         model = Content
         exclude = ('courseID',)
-        fields = ['contentString', 'materialTitle', 'material', 'additionDate']
+        fields = ['contentString', 'materialTitle', 'material',]
 
 
 class PerformanceGradeForm(ModelForm):
