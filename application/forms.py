@@ -34,36 +34,6 @@ class ClassComposeForm(ModelForm):
         fields = ['ID', 'name', 'totalStudentsNumber']
 
 
-# class ManualEnrollmentForm(ModelForm):
-#     def getListOfFreeClasses(self):
-#         studentList = Student.objects.filter(studentYear='FIRST')
-#         classInformation = dict()
-#         for student in studentList:
-#             if (classInformation.get(student.classID.name) != None):
-#                 classInformation[student.classID.name] = classInformation.get(student.classID.name) + 1
-#             else:
-#                 classInformation[student.classID.name] = 1
-#         listOfClassNames = []
-#         for key, value in classInformation.items():
-#             classDetails = ClassInfo.objects.get(name=key)
-#             if (classDetails.totalStudentsNumber > value):
-#                 listOfClassNames.append(key)
-#
-#     classes = forms.ModelChoiceField(queryset=ClassInfo.objects.all())
-#
-#     def __init__(self, *args, **kwargs):
-#         self.user = kwargs.pop('user', None)
-#         super(ManualEnrollmentForm, self).__init__(*args, **kwargs)
-#         self.classes = forms.ModelChoiceField(queryset=ClassInfo.objects.filter(name__in=self.getListOfFreeClasses()))
-#
-#     student = forms.ModelMultipleChoiceField(queryset=Student.objects.filter(classID__isnull=True))
-#
-#     class Meta:
-#         model = Student
-#         exclude = ['ID']
-#         fields = ['classes', 'student']
-
-
 class ContentForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
