@@ -1,0 +1,36 @@
+{% extends 'teacher/base2.html' %}
+{% block coordinatedClass_active %} active {% endblock %}
+
+{% block body %}
+    {% if user.teacher.coordinatedClass %}
+        <h1>Your Coordinated CLass is {{ user.teacher.coordinatedClass }}</h1>
+        <h2>List Of Students: </h2>
+        <div class="container">
+            <div class="col-sm-4">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th>Firstname</th>
+                        <th>Lastname</th>
+                        <th>Final Grades</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for classStudent in classStudents %}
+                        <tr>
+                            <td>{{ classStudent.studentID.first_name }}</td>
+                            <td>{{ classStudent.studentID.last_name }}</td>
+                            <td><a href="coordinatedClass/studentCourses/{{ classStudent.studentID.ID }}"
+                                   class="btn btn-primary btn-sm" style="font-size: 13px; margin-left: 13%"> ASSIGN </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% else %}
+        <h2>You are not a class coordinator</h2>
+    {% endif %}
+
+{% endblock %}

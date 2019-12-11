@@ -28,6 +28,10 @@ urlpatterns = [
     url(r'^teacher/course/(?P<courseID>[0-9]+)/addPerformanceGrade/$', views.grade_form, name='gradeForm'),
     path('teacher/course/<int:courseID>/addAssignment', views.assignment_form, name='assignmentForm'),
     url(r'^teacher/course/(?P<courseID>[0-9]+)/absence/$', views.absence_form, name='absenceForm'),
+    path('teacher/coordinatedClass', views.TeacherClassCoordinated.as_view(), name='TeacherCoordinator'),
+    url(r'^teacher/coordinatedClass/studentCourses/(?P<studentID>[0-9]+)/$',
+        login_required(views.PutFinalGrade.as_view(), login_url='application:login'),
+        name='putFinalGrade'),
     # -------------------------------------------------------------------------------------------
     #               PARENT URLS
     # -------------------------------------------------------------------------------------------
@@ -55,7 +59,7 @@ urlpatterns = [
     url(r'^parent/(?P<studentID>[0-9]+)/course/(?P<courseID>[0-9]+)/attendance/$',
         login_required(views.ParentAttendanceView.as_view(), login_url='application:login'), name='parentAttendance'),
     path('parent/<int:studentID>/announcement/', views.AnnouncementView.as_view(), name='announcement'),
-    path('parent/<int:studentID>/course/<int:courseID>/notes/',views.NotesView.as_view(), name='CourseNote'),
+    path('parent/<int:studentID>/course/<int:courseID>/notes/', views.NotesView.as_view(), name='CourseNote'),
     path('parent/<int:studentID>/finalResult/', views.FinalGradeView.as_view(), name='finalResult'),
 
     # -------------------------------------------------------------------------------------------

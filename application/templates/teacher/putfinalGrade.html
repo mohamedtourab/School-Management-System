@@ -1,0 +1,9 @@
+{#{% extends 'teacher/base2.html' %}#}
+
+{% block body %}
+
+    {% for x in studentCourses %}
+        <h2>{{ x.courseID }}</h2>
+    {% endfor %}
+
+{% endblock %}

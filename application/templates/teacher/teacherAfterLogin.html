@@ -1,14 +1,26 @@
 {% extends 'teacher/base2.html' %}
+{% block home_active %} active {% endblock %}
 {% block body %}
 
     <h1 style="padding-left: 2%"> Welcome {{ user.teacher.first_name }} {{ user.teacher.name }} </h1>
+    <hr><br>
+    <div class="container-fluid">
+        <div class="row content">
 
-    <div style="padding-left: 2%">
-        <h2> List of your courses </h2><br>
-        {% for teachercourse in allTeacherCourses %}
-            <a href="course/{{ teachercourse.courseID.ID }}"
-               class="btn btn-primary btn-lg" style="font-size: 20px"> {{ teachercourse.courseID.name }} </a><br><br>
-        {% endfor %}
+            <div class="col-sm-3 sidenav">
+                <div class="nav nav-pills">
+                    <li class="active"><a href="{% url 'application:teacher' %}">My courses</a></li>
+                </div>
+                <br>
+            </div>
+            <div class="col-sm-9">
+                <h2> List of your courses </h2><br>
+                {% for teachercourse in allTeacherCourses %}
+                    <a href="course/{{ teachercourse.courseID.ID }}"
+                       class="btn btn-primary btn-lg" style="font-size: 20px"> {{ teachercourse.courseID.name }} </a>
+                    <br><br>
+                {% endfor %}
+            </div>
+        </div>
     </div>
-
 {% endblock %}

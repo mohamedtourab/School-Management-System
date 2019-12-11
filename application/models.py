@@ -213,6 +213,15 @@ class Announcement(models.Model):
         return self.announcementTitle
 
 
+class ClassStudent(models.Model):
+    ID = models.AutoField(primary_key=True)
+    classID = models.ForeignKey(ClassInfo, on_delete=models.CASCADE)
+    studentID = models.ForeignKey(Student, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.classID.name + ':' + self.studentID.first_name + '_' + self.studentID.last_name
+
+
 class Attendance(models.Model):
     ID = models.AutoField(primary_key=True)
     studentCourseID = models.ForeignKey(StudentCourse, on_delete=models.CASCADE)

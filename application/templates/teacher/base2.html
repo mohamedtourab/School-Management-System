@@ -5,6 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
     <link href="https://fonts.googleapis.com/css?family=Work+Sans:100,200,300,400,500,600,700,800,900" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Fredericka+the+Great" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
@@ -54,6 +56,8 @@
                 <li class="nav-item active"><a href="{% url 'application:teacher' %}" class="nav-link pl-0">Home</a>
                 </li>
                 <li class="nav-item"><a href="#" class="nav-link">Appointment</a></li>
+                <li class="nav-item {% block coordinatedClass_active %}{% endblock %}"><a
+                        href="{% url 'application:TeacherCoordinator' %}" class="nav-link">Coordinated Class</a></li>
             </ul>
         </div>
     </div>
