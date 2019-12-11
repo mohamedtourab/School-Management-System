@@ -503,7 +503,7 @@ class TeacherClassCoordinated(generic.ListView):
 
 
 class PutFinalGrade(generic.ListView):
-    template_name = 'teacher/putFinalGrade.html'
+    template_name = 'teacher/putfinalGrade.html'
     context_object_name = 'studentCourses'
 
     def get_queryset(self):
