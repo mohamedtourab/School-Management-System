@@ -16,11 +16,11 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for classStudent in classStudents %}
+                    {% for student in students %}
                         <tr>
-                            <td>{{ classStudent.studentID.first_name }}</td>
-                            <td>{{ classStudent.studentID.last_name }}</td>
-                            <td><a href="coordinatedClass/studentCourses/{{ classStudent.studentID.ID }}"
+                            <td>{{ student.first_name }}</td>
+                            <td>{{ student.last_name }}</td>
+                            <td><a href="coordinatedClass/studentCourses/{{ student.ID }}"
                                    class="btn btn-primary btn-sm" style="font-size: 13px; margin-left: 13%"> ASSIGN </a>
                             </td>
                         </tr>

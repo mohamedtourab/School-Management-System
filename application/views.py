@@ -15,7 +15,7 @@ from django.urls import reverse
 from django.db.models import Q
 
 from .models import StudentCourse, PerformanceGrade, Parent, Content, Course, Student, ClassInfo, TeacherCourse, \
-    ParentStudent, Attendance, Assignment, Announcement, Teacher, Note, ClassStudent
+    ParentStudent, Attendance, Assignment, Announcement, Teacher, Note
 from django.views import generic
 from application.forms import StudentForm, ParentSignUpForm, ClassComposeForm, ContentForm, PerformanceGradeForm, \
     AbsenceForm, AssignmentForm, TimetableForm, AnnouncementForm
@@ -496,10 +496,10 @@ def assignment_form(request, course_id):
 
 class TeacherClassCoordinated(generic.ListView):
     template_name = 'teacher/coordinatedClass.html'
-    context_object_name = 'classStudents'
+    context_object_name = 'students'
 
     def get_queryset(self):
-        return ClassStudent.objects.filter(classID=self.request.user.teacher.coordinatedClass)
+        return Student.objects.filter(classID=self.request.user.teacher.coordinatedClass)
 
 
 class PutFinalGrade(generic.ListView):
