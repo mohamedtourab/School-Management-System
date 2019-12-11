@@ -3,8 +3,28 @@ import datetime
 from django.db import models
 from django.contrib.auth.models import User
 
-
 # Create your models here.
+FIRST = 'FIRST'
+SECOND = 'SECOND'
+THIRD = 'THIRD'
+FOURTH = 'FOURTH'
+FIFTH = 'FIFTH'
+SIXTH = 'SIXTH'
+SEVENTH = 'SEVENTH'
+EIGHTH = 'EIGHTH'
+NINTH = 'NINTH'
+TENTH = 'TENTH'
+choice = ((FIRST, 'FIRST'),
+          (SECOND, 'SECOND'),
+          (THIRD, 'THIRD'),
+          (FOURTH, 'FOURTH'),
+          (FIFTH, 'FIFTH'),
+          (SIXTH, 'SIXTH'),
+          (SEVENTH, 'SEVENTH'),
+          (EIGHTH, 'EIGHTH'),
+          (NINTH, 'NINTH'),
+          (TENTH, 'TENTH'),)
+
 
 class Principle(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -29,7 +49,6 @@ class AdministrativeOfficer(models.Model):
 
 
 # There is a missing field which is the TimeTable field to be done later
-# TODO add TimeTable field for the class
 class ClassInfo(models.Model):
     ID = models.AutoField(primary_key=True)
     name = models.CharField(max_length=30, unique=True)
@@ -41,26 +60,7 @@ class ClassInfo(models.Model):
 
 
 class Student(models.Model):
-    FIRST = 'FIRST'
-    SECOND = 'SECOND'
-    THIRD = 'THIRD'
-    FOURTH = 'FOURTH'
-    FIFTH = 'FIFTH'
-    SIXTH = 'SIXTH'
-    SEVENTH = 'SEVENTH'
-    EIGHTH = 'EIGHTH'
-    NINTH = 'NINTH'
-    TENTH = 'TENTH'
-    grade_choice = ((FIRST, 'FIRST'),
-                    (SECOND, 'SECOND'),
-                    (THIRD, 'THIRD'),
-                    (FOURTH, 'FOURTH'),
-                    (FIFTH, 'FIFTH'),
-                    (SIXTH, 'SIXTH'),
-                    (SEVENTH, 'SEVENTH'),
-                    (EIGHTH, 'EIGHTH'),
-                    (NINTH, 'NINTH'),
-                    (TENTH, 'TENTH'),)
+    grade_choice = choice
     ID = models.AutoField(primary_key=True)
     first_name = models.CharField(max_length=50, verbose_name='First Name')
     last_name = models.CharField(max_length=50, verbose_name='Last Name')
@@ -73,26 +73,7 @@ class Student(models.Model):
 
 
 class Course(models.Model):
-    FIRST = 'FIRST'
-    SECOND = 'SECOND'
-    THIRD = 'THIRD'
-    FOURTH = 'FOURTH'
-    FIFTH = 'FIFTH'
-    SIXTH = 'SIXTH'
-    SEVENTH = 'SEVENTH'
-    EIGHTH = 'EIGHTH'
-    NINTH = 'NINTH'
-    TENTH = 'TENTH'
-    year_choice = ((FIRST, 'FIRST'),
-                   (SECOND, 'SECOND'),
-                   (THIRD, 'THIRD'),
-                   (FOURTH, 'FOURTH'),
-                   (FIFTH, 'FIFTH'),
-                   (SIXTH, 'SIXTH'),
-                   (SEVENTH, 'SEVENTH'),
-                   (EIGHTH, 'EIGHTH'),
-                   (NINTH, 'NINTH'),
-                   (TENTH, 'TENTH'),)
+    year_choice = choice
     ID = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50)
     numberOfHoursPerWeek = models.PositiveIntegerField()
@@ -194,7 +175,7 @@ class Note(models.Model):
 class Content(models.Model):
     ID = models.AutoField(primary_key=True)
     courseID = models.ForeignKey(Course, on_delete=models.CASCADE)
-    contentString = models.CharField(max_length=100,null=True, blank=True, default=None,verbose_name='Topic Title')
+    contentString = models.CharField(max_length=100, null=True, blank=True, default=None, verbose_name='Topic Title')
     materialTitle = models.CharField(max_length=100, null=True, blank=True, default=None)
     material = models.FileField(verbose_name='File', upload_to='../media', blank=True, null=True)
     additionDate = models.DateField(default=datetime.date.today, verbose_name='Addition Date')

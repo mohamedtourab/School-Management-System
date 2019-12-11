@@ -3,14 +3,13 @@ import datetime
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
-from django.core.files.storage import FileSystemStorage
 from django.db.models import Sum
 from django.core.mail import send_mail
-from django.forms import inlineformset_factory, formset_factory, modelformset_factory
+from django.forms import modelformset_factory
 from django.http import HttpResponse
-from django.shortcuts import render, redirect  # , render_to_response
+from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.db.models import Q
 
@@ -20,8 +19,6 @@ from django.views import generic
 from application.forms import StudentForm, ParentSignUpForm, ClassComposeForm, ContentForm, PerformanceGradeForm, \
     AbsenceForm, AssignmentForm, TimetableForm, AnnouncementForm
 
-
-# Create your views here.
 
 # -----------------------------------------------------------------------------------------------
 ####### ADMINISTRATIVE OFFICER AREA##########
@@ -149,6 +146,7 @@ def parent_signup(request):
     return render(request, 'administrativeOfficer/parentSignup.html', {'form': form})
 
 
+@login_required(login_url='application:login')
 def send_mail_to_parent(username, email, password):
     send_mail('School Account Credentials',
               'Dear Sir/Madam,\n We hope that this email finds you in a good health.\n' +
@@ -161,6 +159,7 @@ def send_mail_to_parent(username, email, password):
               fail_silently=False)
 
 
+@login_required(login_url='application:login')
 def communication_ao(request):
     if request.method == 'POST':
         form = AnnouncementForm(request.POST)
