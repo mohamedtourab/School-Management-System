@@ -35,9 +35,8 @@ urlpatterns = [
     # -------------------------------------------------------------------------------------------
     #               PARENT URLS
     # -------------------------------------------------------------------------------------------
-    path('parent/', login_required(views.ParentView.as_view(), login_url='application:login'), name='parent'),
-    url(r'^parent/(?P<studentID>[0-9]+)/$', login_required(views.ParentView.as_view(), login_url='application:login'),
-        name='parentWithID'),
+    path('parent/', views.parentView, name='parent'),
+    url(r'^parent/(?P<studentID>[0-9]+)/$', views.parentView, name='parentWithID'),
     url(r'^parent/grades/(?P<studentID>[0-9]+)/$',
         login_required(views.ParentGradeView.as_view(), login_url='application:login'), name='parentGradeWithID'),
     path('parent/grades/', login_required(views.ParentGradeView.as_view(), login_url='application:login'),

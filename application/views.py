@@ -1,5 +1,4 @@
 import datetime
-
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -12,7 +11,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.db.models import Q
-
+import csv
 from .models import StudentCourse, PerformanceGrade, Parent, Content, Course, Student, ClassInfo, TeacherCourse, \
     ParentStudent, Attendance, Assignment, Announcement, Teacher, Note
 from django.views import generic
@@ -38,7 +37,7 @@ def timetable_form(request, name):
         form = TimetableForm(request.POST, request.FILES, instance=instance)
         if form.is_valid():
             form.save()
-            return redirect('application:administrativeOfficer')
+            return redirect('application:ao')
     else:
         form = TimetableForm()
     return render(request, 'administrativeOfficer/chooseTimetable.html',
@@ -201,6 +200,69 @@ class CourseView(generic.ListView):
         return self.kwargs['studentID']
 
 
+@login_required(login_url='application:login')
+def parentView(request, studentID):
+    my_dict = {'allStudentCourses': Course.objects.filter(studentcourse__studentID=studentID)}  # GET STUDENT ID HERE
+    my_dict.update({'parentStudent': ParentStudent.objects.filter(studentID=studentID)})
+    if ClassInfo.objects.filter(student__ID=studentID).exists():
+        my_dict.update({'studentClass': ClassInfo.objects.get(student__ID=studentID)})
+    my_dict.update({'studentID': studentID})
+    first = 1
+    timetable = my_dict['studentClass'].timetable
+    try:
+        csvfile = open(timetable.path, 'r')
+        readCSV = csv.reader(csvfile, delimiter=',')
+        index = 0
+        for row in readCSV:
+            print(row)
+            if first == 1:
+                first = 0
+                my_dict.update({'header0': row[0]})
+                my_dict.update({'header1': row[1]})
+                my_dict.update({'header2': row[2]})
+                my_dict.update({'header3': row[3]})
+                my_dict.update({'header4': row[4]})
+                my_dict.update({'header5': row[5]})
+            else:
+                my_dict.update({'row' + str(index) + '0': row[0]})
+                my_dict.update({'row' + str(index) + '1': row[1]})
+                my_dict.update({'row' + str(index) + '2': row[2]})
+                my_dict.update({'row' + str(index) + '3': row[3]})
+                my_dict.update({'row' + str(index) + '4': row[4]})
+                my_dict.update({'row' + str(index) + '5': row[5]})
+                index += 1
+        my_dict.update({'timeTable': 'timetable'})
+    except:
+        pass
+    return render(request, 'parent/afterloginparent.html', my_dict)
+
+
+class ChooseChild(generic.ListView):
+    template_name = 'parent/chooseChild.html'
+    context_object_name = 'allChildren'
+
+    def get_queryset(self):
+        return ParentStudent.objects.filter(parentID=self.request.user.parent.ID)  # GET STUDENT ID HERE
+
+
+class ParentAttendanceView(generic.ListView):
+    template_name = 'parent/attendancep.html'
+    context_object_name = 'studentID'
+
+    def get_queryset(self):
+        return self.kwargs['studentID']
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ParentAttendanceView, self).get_context_data(**kwargs)
+        context['courseID'] = self.kwargs['courseID']
+        context['attendances'] = Attendance.objects.filter(Q(studentCourseID__studentID=self.kwargs['studentID']),
+                                                           Q(studentCourseID__courseID=self.kwargs[
+                                                               'courseID']), ).order_by('date')
+        # create new Vew for handling attendance divided into months, need to add new constraint to the query,
+        # and send Month_Name into next url
+        return context
+
+
 class CourseDetailView(generic.ListView):
     template_name = 'parent/course.html'
     context_object_name = 'topics'
@@ -285,48 +347,6 @@ class FinalGradeView(generic.ListView):
         return context
 
 
-class ParentView(generic.ListView):
-    template_name = 'parent/afterloginparent.html'
-    context_object_name = 'allStudentCourses'
-
-    def get_queryset(self):
-        return Course.objects.filter(studentcourse__studentID=self.kwargs['studentID'])  # GET STUDENT ID HERE
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(ParentView, self).get_context_data(**kwargs)
-        context['studentID'] = self.kwargs['studentID']
-        context['parentStudent'] = ParentStudent.objects.filter(studentID=self.kwargs['studentID'])
-        if ClassInfo.objects.filter(student__ID=self.kwargs['studentID']).exists():
-            context['studentClass'] = ClassInfo.objects.get(student__ID=self.kwargs['studentID'])
-        return context
-
-
-class ChooseChild(generic.ListView):
-    template_name = 'parent/chooseChild.html'
-    context_object_name = 'allChildren'
-
-    def get_queryset(self):
-        return ParentStudent.objects.filter(parentID=self.request.user.parent.ID)  # GET STUDENT ID HERE
-
-
-class ParentAttendanceView(generic.ListView):
-    template_name = 'parent/attendancep.html'
-    context_object_name = 'studentID'
-
-    def get_queryset(self):
-        return self.kwargs['studentID']
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(ParentAttendanceView, self).get_context_data(**kwargs)
-        context['courseID'] = self.kwargs['courseID']
-        context['attendances'] = Attendance.objects.filter(Q(studentCourseID__studentID=self.kwargs['studentID']),
-                                                           Q(studentCourseID__courseID=self.kwargs[
-                                                               'courseID']), ).order_by('date')
-        # create new Vew for handling attendance divided into months, need to add new constraint to the query,
-        # and send Month_Name into next url
-        return context
-
-
 class ParentGradeView(generic.ListView):
     template_name = 'parent/gradep.html'
     context_object_name = 'allGrades'
@@ -342,13 +362,13 @@ class ParentGradeView(generic.ListView):
             studentID=self.kwargs['studentID'])  # GET STUDENT ID HERE
 
         columns = 0
-        for student_course in context['studentCourse']:
-            grade_counter = 0
+        for studentcourse in context['studentCourse']:
+            gradeCounter = 0
             for grade in context['allGrades']:
-                if grade.studentCourseID.courseID.name == student_course.courseID.name:
-                    grade_counter += 1
-            if grade_counter > columns:
-                columns = grade_counter
+                if grade.studentCourseID.courseID.name == studentcourse.courseID.name:
+                    gradeCounter += 1
+            if gradeCounter > columns:
+                columns = gradeCounter
         context['columns'] = range(columns)
         return context
 
