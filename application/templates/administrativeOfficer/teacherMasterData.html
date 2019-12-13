@@ -45,7 +45,9 @@
                     <td>
                         {# edit #}
                         <a href="{% url 'application:teacher-edit' teacher.ID %}" class="btn btn-tertiary btn-lg"
-                           role="button">Edit</a>
+                           role="button">
+                            <span class="glyphicon glyphicon-edit"></span>
+                            Edit</a>
 
                         {# delete #}
                         <form action="{% url 'application:teacher-delete' teacher.ID %}" method="post"
@@ -53,7 +55,7 @@
                             {% csrf_token %}
                             <input type="hidden" name="teacher_id" value="{{ teacher.ID }}"/>
                             <button type="submit" class="btn btn-dark btn-lg">
-                                <span class="glyphicon glyphicon-trash"></span>
+                                <span class="glyphicon glyphicon-trash"></span> Delete
                             </button>
                         </form>
                     </td>
