@@ -17,7 +17,7 @@ from .models import StudentCourse, PerformanceGrade, Parent, Content, Course, St
     ParentStudent, Attendance, Assignment, Announcement, Teacher, Note
 from django.views import generic
 from application.forms import StudentForm, ParentSignUpForm, ClassComposeForm, ContentForm, PerformanceGradeForm, \
-    AbsenceForm, AssignmentForm, TimetableForm, AnnouncementForm
+    AbsenceForm, AssignmentForm, TimetableForm, AnnouncementForm, TeacherCreateForm
 
 
 # -----------------------------------------------------------------------------------------------
@@ -199,6 +199,32 @@ class DeleteTeacherMasterData(DeleteView):
 
     def get_success_url(self):
         return reverse('application:teacherMasterData')
+
+
+@login_required(login_url='application:login')
+def teacher_create(request):
+    if request.method == 'POST':
+        form = TeacherCreateForm(request.POST)
+        try:
+            user = User.objects.get(username=request.POST['username'], )
+            return render(request, 'administrativeOfficer/teacherCreate.html',
+                          {'error_message': 'Username Exist...Try Something Else !', 'form': TeacherCreateForm()})
+        except User.DoesNotExist:
+            if form.is_valid():
+                user = form.save()
+                user.refresh_from_db()  # load the profile instance created by the signal
+                teacher = Teacher.objects.create(user=user, first_name=user.first_name, last_name=user.last_name,
+                                                 email=user.email,)
+
+                messages.success(request, 'Teacher has been successfully added')
+
+                return render(request, 'administrativeOfficer/teacherCreate.html', {'form': TeacherCreateForm()})
+            else:
+                return render(request, 'administrativeOfficer/teacherCreate.html',
+                              {'error_message': 'Invalid Information', 'form': TeacherCreateForm()})
+    else:
+        form = TeacherCreateForm()
+        return render(request, 'administrativeOfficer/teacherCreate.html', {'form': form})
 
 
 # -----------------------------------------------------------------------------------------------

@@ -30,6 +30,21 @@ class ParentSignUpForm(UserCreationForm):
         fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', 'studentID',)
 
 
+class TeacherCreateForm(UserCreationForm):
+    coordinatedClass = forms.ModelMultipleChoiceField(queryset=ClassInfo.objects.all(), required=False)
+
+    class Meta:
+        model = User
+        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', 'coordinatedClass',)
+
+    def save(self, commit=True):
+        user = super(TeacherCreateForm, self).save(commit=False)
+        user.coordinatedClass = self.cleaned_data["coordinatedClass"]
+        if commit:
+            user.save()
+        return user
+
+
 class ClassComposeForm(ModelForm):
     class Meta:
         model = ClassInfo

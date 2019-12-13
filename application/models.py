@@ -111,7 +111,7 @@ class Teacher(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField(blank=True, null=True)
-    fiscalCode = models.CharField(max_length=16)
+    fiscalCode = models.CharField(max_length=16, blank=True, null=True)
     coordinatedClass = models.ForeignKey(ClassInfo, on_delete=models.CASCADE, blank=True, null=True)
 
     def get_absolute_url(self):
