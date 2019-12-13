@@ -2,6 +2,7 @@ import datetime
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 # Create your models here.
 FIRST = 'FIRST'
@@ -112,6 +113,9 @@ class Teacher(models.Model):
     email = models.EmailField(blank=True, null=True)
     fiscalCode = models.CharField(max_length=16)
     coordinatedClass = models.ForeignKey(ClassInfo, on_delete=models.CASCADE, blank=True, null=True)
+
+    def get_absolute_url(self):
+        return reverse('application:teacherMasterData', kwargs={'pk': self.pk})
 
     def __str__(self):
         return self.first_name + " " + self.last_name

@@ -9,6 +9,8 @@ from .models import Student, ClassInfo, Content, TeacherCourse, Course, Performa
 
 
 class AnnouncementForm(ModelForm):
+    announcementText = forms.CharField(widget=forms.Textarea)
+
     class Meta:
         model = Announcement
         fields = ['announcementTitle', 'announcementText', 'date']

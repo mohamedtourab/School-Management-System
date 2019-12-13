@@ -5,33 +5,62 @@
 {% block body %}
 
     <div class="container mt-3">
+        <div class="row">
+            <div class="col-sm-10">
                 <input class="form-control" id="myInput" type="text" placeholder="Search..">
-                <br>
+            </div>
 
-                <table class="table table-bordered">
-                    <thead>
-                    <tr>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Username</th>
-                        <th>Email</th>
-                        <th>Fiscal Code</th>
-                        <th>Coordinated Class</th>
-                    </tr>
-                    </thead>
-                    <tbody id="myTable">
-                    {% for teacher in allTeachers %}
-                        <tr>
-                                <td>{{ teacher.first_name }}</td>
-                                <td>{{ teacher.last_name }}</td>
-                                <td>{{ teacher.user }}</td>
-                                <td>{{ teacher.email }}</td>
-                                <td>{{ teacher.fiscalCode }}</td>
-                                <td>{{ teacher.coordinatedClass }}</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+            <div class="col-sm-2">
+                {# add #}
+                <a href="{% url 'application:teacher-add' %}">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;
+                    Add Teacher
+                </a>
+            </div>
+        </div>
+
+        <br>
+
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Fiscal Code</th>
+                <th>Coordinated Class</th>
+                <th>Operations</th>
+            </tr>
+            </thead>
+            <tbody id="myTable">
+            {% for teacher in allTeachers %}
+                <tr>
+                    <td>{{ teacher.first_name }}</td>
+                    <td>{{ teacher.last_name }}</td>
+                    <td>{{ teacher.user }}</td>
+                    <td>{{ teacher.email }}</td>
+                    <td>{{ teacher.fiscalCode }}</td>
+                    <td>{{ teacher.coordinatedClass }}</td>
+                    <td>
+                        {# edit #}
+                        <a href="{% url 'application:teacher-edit' teacher.ID %}" class="btn btn-tertiary btn-lg"
+                           role="button">Edit</a>
+
+                        {# delete #}
+                        <form action="{% url 'application:teacher-delete' teacher.ID %}" method="post"
+                              style="display: inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="teacher_id" value="{{ teacher.ID }}"/>
+                            <button type="submit" class="btn btn-dark btn-lg">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
 
     <script>

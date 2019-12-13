@@ -71,6 +71,10 @@ urlpatterns = [
     path('teacherMasterData/', views.GetTeacherMasterData.as_view(), name='teacherMasterData'),
     path('parentsignup/', views.parent_signup, name='parentSignup'),
     path('composeClass/', views.class_compose, name='classCompose'),
+    path('teacheredit/<pk>/', views.EditTeacherMasterData.as_view(), name='teacher-edit'),
+    path('teacherMasterData/<pk>', views.GetTeacherMasterData.as_view(), name='teacherMasterData'),
+    path('teacheradd/', views.AddTeacherMasterData.as_view(), name='teacher-add'),
+    url(r'teacher/(?P<pk>[0 -9]+)/delete/$', views.DeleteTeacherMasterData.as_view(), name='teacher-delete'),
 
 ]
 

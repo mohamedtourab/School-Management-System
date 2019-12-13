@@ -10,6 +10,7 @@ from django.forms import modelformset_factory
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.views.generic import CreateView, UpdateView, DeleteView
 from django.db.models import Q
 import csv
 from .models import StudentCourse, PerformanceGrade, Parent, Content, Course, Student, ClassInfo, TeacherCourse, \
@@ -179,6 +180,25 @@ class GetTeacherMasterData(generic.ListView):
 
     def get_queryset(self):
         return Teacher.objects.all()
+
+
+class EditTeacherMasterData(UpdateView):
+    template_name = 'administrativeOfficer/teacher-form.html'
+    model = Teacher
+    fields = ['first_name', 'last_name', 'email', 'fiscalCode', 'coordinatedClass']
+
+
+class AddTeacherMasterData(CreateView):
+    template_name = 'administrativeOfficer/teacher-form.html'
+    model = Teacher
+    fields = ['user', 'first_name', 'last_name', 'email', 'fiscalCode', 'coordinatedClass']
+
+
+class DeleteTeacherMasterData(DeleteView):
+    model = Teacher
+
+    def get_success_url(self):
+        return reverse('application:teacherMasterData')
 
 
 # -----------------------------------------------------------------------------------------------

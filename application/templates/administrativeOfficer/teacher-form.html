@@ -1,0 +1,27 @@
+{% extends 'teacher/base2.html' %}
+
+{% block body %}
+
+    <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {# form template starts #}
+        {% for field in form %}
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <span class="text-danger small">{{ field.errors }}</span>
+                </div>
+                <label class="control-label col-sm-2">{{ field.label_tag }}</label>
+                <div class="col-sm-10">{{ field }}</div>
+            </div>
+        {% endfor %}
+        {# form template ends #}
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-success">Submit</button>
+            </div>
+        </div>
+    </form>
+
+{% endblock %}
