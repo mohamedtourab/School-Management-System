@@ -188,12 +188,6 @@ class EditTeacherMasterData(UpdateView):
     fields = ['first_name', 'last_name', 'email', 'fiscalCode', 'coordinatedClass']
 
 
-class AddTeacherMasterData(CreateView):
-    template_name = 'administrativeOfficer/teacher-form.html'
-    model = Teacher
-    fields = ['user', 'first_name', 'last_name', 'email', 'fiscalCode', 'coordinatedClass']
-
-
 class DeleteTeacherMasterData(DeleteView):
     model = Teacher
 
