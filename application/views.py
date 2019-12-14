@@ -208,7 +208,7 @@ def teacher_create(request):
                 user = form.save()
                 user.refresh_from_db()  # load the profile instance created by the signal
                 teacher = Teacher.objects.create(user=user, first_name=user.first_name, last_name=user.last_name,
-                                                 email=user.email,)
+                                                 email=user.email, fiscalCode=request.POST['fiscalCode'],)
 
                 messages.success(request, 'Teacher has been successfully added')
 
