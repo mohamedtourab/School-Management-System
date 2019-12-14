@@ -208,7 +208,7 @@ def teacher_create(request):
                 user = form.save()
                 user.refresh_from_db()  # load the profile instance created by the signal
                 teacher = Teacher.objects.create(user=user, first_name=user.first_name, last_name=user.last_name,
-                                                 email=user.email, fiscalCode=request.POST['fiscalCode'],)
+                                                 email=user.email, fiscalCode=request.POST['fiscalCode'], )
 
                 messages.success(request, 'Teacher has been successfully added')
 
@@ -489,27 +489,28 @@ def absence_form(request, courseID):
     student_courses = StudentCourse.objects.filter(courseID=courseID)
     n = student_courses.count()
 
-    absence_formset = modelformset_factory(model=Attendance, form=AbsenceForm, extra=n, max_num=n)
-
     if request.method == 'POST':
+        absence_formset = modelformset_factory(model=Attendance, form=AbsenceForm, extra=n, max_num=n)
         student_course = StudentCourse.objects.filter(courseID=courseID)
         absence_formset = absence_formset(request.POST, queryset=student_course)
 
         i = 0
-        for f in absence_formset:
-            if i < student_courses.count():
+        for f in absence_formset.forms:
+            if i < n:
                 f.studentCourseID = student_courses[i].studentID
                 i += 1
 
+        print(absence_formset.errors)
+
         if absence_formset.is_valid():
             absence_formset.save()
-            return render(request, 'teacher/absence.html', {'formset': absence_formset, 'courseID': courseID,
-                                                            'date': str(datetime.date.today())})
+            return redirect('application:teacher')
 
     else:
-        absence_formset = modelformset_factory(model=Attendance, form=AbsenceForm, extra=n, max_num=2)
+        absence_formset = modelformset_factory(model=Attendance, form=AbsenceForm, extra=n, max_num=n)
 
     return render(request, 'teacher/absence.html', {'formset': absence_formset, 'courseID': courseID,
+                                                    'studentCoursesCount': n,
                                                     'date': str(datetime.date.today())})
 
 

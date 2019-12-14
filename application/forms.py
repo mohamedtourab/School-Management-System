@@ -102,16 +102,20 @@ class PerformanceGradeForm(ModelForm):
         fields = ['studentCourseID', 'date', 'grade', ]
 
 
+def to_integer(dt_time):
+    return 10000*dt_time.year + 100*dt_time.month + dt_time.day
+
+
 class AbsenceForm(ModelForm):
     def __init__(self, *args, **kwargs):
         self.courseID = kwargs.pop('courseID', None)
+        self.date = datetime.date.today
+        self.ID = to_integer(datetime.date.today())
         super(AbsenceForm, self).__init__(*args, **kwargs)
 
         self.studentCourseID = forms.ModelChoiceField(queryset=StudentCourse.objects.filter(),
                                                       initial=StudentCourse.objects.filter(courseID=self.courseID))
-        self.date = forms.DateField(initial=datetime.date.today)
         self.fields['studentCourseID'] = self.studentCourseID
-        self.fields['date'] = self.date
 
     class Meta:
         model = Attendance
