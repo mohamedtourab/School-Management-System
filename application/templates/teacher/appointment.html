@@ -3,7 +3,7 @@
 {% block body %}
 
 <div style="padding-left: 2%; padding-top: 1%;padding-bottom: 5%;width: 90%;">
-    <form method="post" style="padding-left: 2%">
+    <form method="post" style="padding-left: 2%" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form|crispy }}
         <button type="submit" class="btn btn-info btn-lg" style="font-size: 20px">Add Schedule</button>
