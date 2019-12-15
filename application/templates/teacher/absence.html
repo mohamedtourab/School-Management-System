@@ -5,10 +5,13 @@
 {% block body %}
     <div style="padding-left: 2%; padding-top: 1%;padding-bottom: 5%;width: 90%;">
         <ul>
-            CourseID : {{ courseID }}
+            CourseID : {{ course_id }}
         </ul>
         <ul>
             date : {{ date }}
+        </ul>
+            <ul>
+                student count : {{ studentCoursesCount }}
         </ul>
         <form action="" method="post">{% csrf_token %}
             {{ formset.management_form }}
@@ -24,9 +27,9 @@
                     <th> behaviour</th>
                 </tr>
                 {% for form in formset.forms %}
+                   {% if forloop.counter <= studentCoursesCount %}
 
                     <tr>
-
                         <th>{{ form.date }}</th>
                         <th>{{ form.studentCourseID }}</th>
                         <th>{{ form.presence }}</th>
@@ -34,10 +37,11 @@
                         <th>{{ form.leftEarly }}</th>
                         <th>{{ form.behaviour }}</th>
                     </tr>
+                     {% endif %}
                 {% endfor %}
             </table>
             <input type="submit" value="Save" style="font-size: 20px"/> <a
-                    href="{% url 'application:absenceForm' courseID %}"></a>
+                    href="{% url 'application:absenceForm' course_id %}"></a>
         </form>
     </div>
 {% endblock %}

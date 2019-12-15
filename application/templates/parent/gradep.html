@@ -11,9 +11,9 @@
             <tr>
                 {% for studentcourse in studentCourse %}
                     <tr>
-                        <th> {{ studentcourse.courseID.name }}</th>
+                        <th> {{ studentcourse.course_id.name }}</th>
                         {% for grade in allGrades %}
-                            {% if grade.studentCourseID.courseID.name == studentcourse.courseID.name %}
+                            {% if grade.studentCourseID.course_id.name == studentcourse.course_id.name %}
                                 <td> {{ grade.grade }}</td>
                             {% endif %}
                         {% endfor %}
