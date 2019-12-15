@@ -25,6 +25,8 @@ urlpatterns = [
         name='teacherCourseViewWithCourseId'),
     path('teacher/', login_required(views.TeacherView.as_view(), login_url='application:login'), name='teacher'),
     path('teacher/course/<int:courseID>/addtopic', views.content_form, name='contentForm'),
+    path('teacher/appointments/', views.AppointmentView.as_view(), name='appointment'),  # NOT USED! Don't Touch!
+    path('teacher/appointments/<int:teacherID>', views.appointmentForm, name='appointmentWithID'),
     url(r'^teacher/course/(?P<courseID>[0-9]+)/addPerformanceGrade/$', views.grade_form, name='gradeForm'),
     path('teacher/course/<int:courseID>/addAssignment', views.assignment_form, name='assignmentForm'),
     url(r'^teacher/course/(?P<courseID>[0-9]+)/absence/$', views.absence_form, name='absenceForm'),

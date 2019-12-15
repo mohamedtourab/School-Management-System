@@ -1,9 +1,225 @@
-{% extends 'teacher/base2.html' %}
+{% extends 'teacher/appointmentBase.html' %}
+{% load crispy_forms_tags %}
 {% block body %}
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
-          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-    <link rel="stylesheet" href="../../static/application/css/style3.css">
-    <html lang='en'>
 
+<div style="padding-left: 2%; padding-top: 1%;padding-bottom: 5%;width: 90%;">
+    <form method="post" style="padding-left: 2%">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-info btn-lg" style="font-size: 20px">Add Schedule</button>
+    </form>
+    </div>
 
+    <div style="padding-left: 2%">
+        <h2>Time Table</h2>
+        {% if my_dict.AS %}
+            <table>
+                <th>{{ my_dict.header0 }}</th>
+                <th>{{ my_dict.header1 }}</th>
+                <th>{{ my_dict.header2 }}</th>
+                <th>{{ my_dict.header3 }}</th>
+                <th>{{ my_dict.header4 }}</th>
+                <th>{{ my_dict.header5 }}</th>
+                <tr>
+                    <td>{{ my_dict.row00 }}</td>
+                    <td>{{ my_dict.row01 }}</td>
+                    <td>{{ my_dict.row02 }}</td>
+                    <td>{{ my_dict.row03 }}</td>
+                    <td>{{ my_dict.row04 }}</td>
+                    <td>{{ my_dict.row05 }}</td>
+                </tr>
+                <tr>
+                    <td>{{ my_dict.row10 }}</td>
+                    <td>{{ my_dict.row11 }}</td>
+                    <td>{{ my_dict.row12 }}</td>
+                    <td>{{ my_dict.row13 }}</td>
+                    <td>{{ my_dict.row14 }}</td>
+                    <td>{{ my_dict.row15 }}</td>
+                </tr>
+                <tr>
+                    <td>{{ my_dict.row20 }}</td>
+                    <td>{{ my_dict.row21 }}</td>
+                    <td>{{ my_dict.row22 }}</td>
+                    <td>{{ my_dict.row23 }}</td>
+                    <td>{{ my_dict.row24 }}</td>
+                    <td>{{ my_dict.row25 }}</td>
+                </tr>
+                <tr>
+                    <td>{{ my_dict.row30 }}</td>
+                    <td>{{ my_dict.row31 }}</td>
+                    <td>{{ my_dict.row32 }}</td>
+                    <td>{{ my_dict.row33 }}</td>
+                    <td>{{ my_dict.row34 }}</td>
+                    <td>{{ my_dict.row35 }}</td>
+                </tr>
+                <tr>
+                    <td>{{ my_dict.row40 }}</td>
+                    <td>{{ my_dict.row41 }}</td>
+                    <td>{{ my_dict.row42 }}</td>
+                    <td>{{ my_dict.row43 }}</td>
+                    <td>{{ my_dict.row44 }}</td>
+                    <td>{{ my_dict.row45 }}</td>
+                </tr>
+                <tr>
+                    <td>{{ my_dict.row50 }}</td>
+                    <td>{{ my_dict.row51 }}</td>
+                    <td>{{ my_dict.row52 }}</td>
+                    <td>{{ my_dict.row53 }}</td>
+                    <td>{{ my_dict.row54 }}</td>
+                    <td>{{ my_dict.row55 }}</td>
+                </tr><tr>
+                    <td>{{ my_dict.row60 }}</td>
+                    <td>{{ my_dict.row61 }}</td>
+                    <td>{{ my_dict.row62 }}</td>
+                    <td>{{ my_dict.row63 }}</td>
+                    <td>{{ my_dict.row64 }}</td>
+                    <td>{{ my_dict.row65 }}</td>
+                </tr>
+                <tr>
+                    <td>{{ my_dict.row70 }}</td>
+                    <td>{{ my_dict.row71 }}</td>
+                    <td>{{ my_dict.row72 }}</td>
+                    <td>{{ my_dict.row73 }}</td>
+                    <td>{{ my_dict.row74 }}</td>
+                    <td>{{ my_dict.row75 }}</td>
+                </tr>
+                <tr>
+                    <td>{{ my_dict.row80 }}</td>
+                    <td>{{ my_dict.row81 }}</td>
+                    <td>{{ my_dict.row82 }}</td>
+                    <td>{{ my_dict.row83 }}</td>
+                    <td>{{ my_dict.row84 }}</td>
+                    <td>{{ my_dict.row85 }}</td>
+                </tr>
+                <tr>
+                    <td>{{ my_dict.row90 }}</td>
+                    <td>{{ my_dict.row91 }}</td>
+                    <td>{{ my_dict.row92 }}</td>
+                    <td>{{ my_dict.row93 }}</td>
+                    <td>{{ my_dict.row94 }}</td>
+                    <td>{{ my_dict.row95 }}</td>
+                </tr>
+                <tr>
+                    <td>{{ my_dict.row100 }}</td>
+                    <td>{{ my_dict.row101 }}</td>
+                    <td>{{ my_dict.row102 }}</td>
+                    <td>{{ my_dict.row103 }}</td>
+                    <td>{{ my_dict.row104 }}</td>
+                    <td>{{ my_dict.row105 }}</td>
+                </tr>
+                <tr>
+                    <td>{{ my_dict.row110 }}</td>
+                    <td>{{ my_dict.row111 }}</td>
+                    <td>{{ my_dict.row112 }}</td>
+                    <td>{{ my_dict.row113 }}</td>
+                    <td>{{ my_dict.row114 }}</td>
+                    <td>{{ my_dict.row115 }}</td>
+                </tr>
+                <tr>
+                    <td>{{ my_dict.row120 }}</td>
+                    <td>{{ my_dict.row121 }}</td>
+                    <td>{{ my_dict.row122 }}</td>
+                    <td>{{ my_dict.row123 }}</td>
+                    <td>{{ my_dict.row124 }}</td>
+                    <td>{{ my_dict.row125 }}</td>
+                </tr>
+                <tr>
+                    <td>{{ my_dict.row130 }}</td>
+                    <td>{{ my_dict.row131 }}</td>
+                    <td>{{ my_dict.row132 }}</td>
+                    <td>{{ my_dict.row133 }}</td>
+                    <td>{{ my_dict.row134 }}</td>
+                    <td>{{ my_dict.row135 }}</td>
+                </tr>
+                <tr>
+                    <td>{{ my_dict.row140 }}</td>
+                    <td>{{ my_dict.row141 }}</td>
+                    <td>{{ my_dict.row142 }}</td>
+                    <td>{{ my_dict.row143 }}</td>
+                    <td>{{ my_dict.row144 }}</td>
+                    <td>{{ my_dict.row145 }}</td>
+                </tr>
+                <tr>
+                    <td>{{ my_dict.row150 }}</td>
+                    <td>{{ my_dict.row151 }}</td>
+                    <td>{{ my_dict.row152 }}</td>
+                    <td>{{ my_dict.row153 }}</td>
+                    <td>{{ my_dict.row154 }}</td>
+                    <td>{{ my_dict.row155 }}</td>
+                </tr>
+                <tr>
+                    <td>{{ my_dict.row160 }}</td>
+                    <td>{{ my_dict.row161 }}</td>
+                    <td>{{ my_dict.row162 }}</td>
+                    <td>{{ my_dict.row163 }}</td>
+                    <td>{{ my_dict.row164 }}</td>
+                    <td>{{ my_dict.row165 }}</td>
+                </tr>
+                <tr>
+                    <td>{{ my_dict.row170 }}</td>
+                    <td>{{ my_dict.row171 }}</td>
+                    <td>{{ my_dict.row172 }}</td>
+                    <td>{{ my_dict.row173 }}</td>
+                    <td>{{ my_dict.row174 }}</td>
+                    <td>{{ my_dict.row175 }}</td>
+                </tr><tr>
+                    <td>{{ my_dict.row180 }}</td>
+                    <td>{{ my_dict.row181 }}</td>
+                    <td>{{ my_dict.row182 }}</td>
+                    <td>{{ my_dict.row183 }}</td>
+                    <td>{{ my_dict.row184 }}</td>
+                    <td>{{ my_dict.row185 }}</td>
+                </tr>
+                <tr>
+                    <td>{{ my_dict.row190 }}</td>
+                    <td>{{ my_dict.row191 }}</td>
+                    <td>{{ my_dict.row192 }}</td>
+                    <td>{{ my_dict.row193 }}</td>
+                    <td>{{ my_dict.row194 }}</td>
+                    <td>{{ my_dict.row195 }}</td>
+                </tr>
+                <tr>
+                    <td>{{ my_dict.row200 }}</td>
+                    <td>{{ my_dict.row201 }}</td>
+                    <td>{{ my_dict.row202 }}</td>
+                    <td>{{ my_dict.row203 }}</td>
+                    <td>{{ my_dict.row204 }}</td>
+                    <td>{{ my_dict.row205 }}</td>
+                </tr>
+                <tr>
+                    <td>{{ my_dict.row210 }}</td>
+                    <td>{{ my_dict.row211 }}</td>
+                    <td>{{ my_dict.row212 }}</td>
+                    <td>{{ my_dict.row213 }}</td>
+                    <td>{{ my_dict.row214 }}</td>
+                    <td>{{ my_dict.row215 }}</td>
+                </tr>
+                <tr>
+                    <td>{{ my_dict.row220 }}</td>
+                    <td>{{ my_dict.row221 }}</td>
+                    <td>{{ my_dict.row222 }}</td>
+                    <td>{{ my_dict.row223 }}</td>
+                    <td>{{ my_dict.row224 }}</td>
+                    <td>{{ my_dict.row225 }}</td>
+                </tr>
+                <tr>
+                    <td>{{ my_dict.row230 }}</td>
+                    <td>{{ my_dict.row231 }}</td>
+                    <td>{{ my_dict.row232 }}</td>
+                    <td>{{ my_dict.row233 }}</td>
+                    <td>{{ my_dict.row234 }}</td>
+                    <td>{{ my_dict.row235 }}</td>
+                </tr>
+            </table>
+        {% else %}
+            <ul>
+                <li>
+                    Time table is not uploaded yet
+                </li>
+            </ul>
+        {% endif %}
+    </div>
+
+    </div>
 {% endblock %}
+

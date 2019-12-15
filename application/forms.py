@@ -5,7 +5,7 @@ from django.forms import ModelForm, inlineformset_factory, formset_factory
 import datetime
 
 from .models import Student, ClassInfo, Content, TeacherCourse, Course, PerformanceGrade, StudentCourse, Attendance, \
-    Assignment, Announcement
+    Assignment, Announcement, Teacher
 
 
 class AnnouncementForm(ModelForm):
@@ -127,3 +127,15 @@ class TimetableForm(ModelForm):
     class Meta:
         model = ClassInfo
         fields = ['timetable']
+
+class AppointmentsForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        self.teacherID = kwargs.pop('teacherID', None)
+        super(AppointmentsForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = Teacher
+        exclude = ['first_name','fiscalCode', 'last_name', 'coordinatedClass', 'email', 'user']
+        fields = ['appointmentSchedule']
+
+

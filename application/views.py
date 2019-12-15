@@ -17,7 +17,7 @@ from .models import StudentCourse, PerformanceGrade, Parent, Content, Course, St
     ParentStudent, Attendance, Assignment, Announcement, Teacher, Note
 from django.views import generic
 from application.forms import StudentForm, ParentSignUpForm, ClassComposeForm, ContentForm, PerformanceGradeForm, \
-    AbsenceForm, AssignmentForm, TimetableForm, AnnouncementForm, TeacherCreateForm
+    AbsenceForm, AssignmentForm, TimetableForm, AnnouncementForm, TeacherCreateForm, AppointmentsForm
 
 
 # -----------------------------------------------------------------------------------------------
@@ -208,7 +208,7 @@ def teacher_create(request):
                 user = form.save()
                 user.refresh_from_db()  # load the profile instance created by the signal
                 teacher = Teacher.objects.create(user=user, first_name=user.first_name, last_name=user.last_name,
-                                                 email=user.email,)
+                                                 email=user.email, )
 
                 messages.success(request, 'Teacher has been successfully added')
 
@@ -453,6 +453,62 @@ class TeacherView(generic.ListView):
 
     def get_queryset(self):
         return TeacherCourse.objects.filter(teacherID=self.request.user.teacher.ID)
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(TeacherView, self).get_context_data(**kwargs)
+        context['teacherID'] = self.request.user.teacher.ID
+        return context
+
+
+class AppointmentView(generic.ListView):
+    template_name = 'teacher/appointment.html'
+    context_object_name = 'teacherID'
+
+    def get_queryset(self):
+        return self.request.user.teacher.ID
+
+
+def appointmentForm(request,teacherID):
+    my_dict = {
+        'teacher': Teacher.objects.get(ID=teacherID)}  # GET STUDENT ID HERE
+    first = 1
+    appointmentSchedule = my_dict['teacher'].appointmentSchedule
+    try:
+        csvfile = open(appointmentSchedule.path, 'r')
+        readCSV = csv.reader(csvfile, delimiter=';')
+        index = 0
+        for row in readCSV:
+            if first == 1:
+                first = 0
+                my_dict.update({'header0': row[0]})
+                my_dict.update({'header1': row[1]})
+                my_dict.update({'header2': row[2]})
+                my_dict.update({'header3': row[3]})
+                my_dict.update({'header4': row[4]})
+                my_dict.update({'header5': row[5]})
+            else:
+                my_dict.update({'row' + str(index) + '0': row[0]})
+                my_dict.update({'row' + str(index) + '1': row[1]})
+                my_dict.update({'row' + str(index) + '2': row[2]})
+                my_dict.update({'row' + str(index) + '3': row[3]})
+                my_dict.update({'row' + str(index) + '4': row[4]})
+                my_dict.update({'row' + str(index) + '5': row[5]})
+                index += 1
+        my_dict.update({'AS': 'appointmentSchedule'})
+    except:
+        pass
+
+    if request.method == 'POST':
+        instance = Teacher.objects.get(ID=teacherID)
+        form = AppointmentsForm(request.POST, instance=instance)
+        if form.is_valid():
+            form.save()
+            print(form.save())
+            return redirect('application:teacher')
+    else:
+        form = AppointmentsForm()
+
+    return render(request, 'teacher/appointment.html', {'form': form, 'teacherID': teacherID,  'my_dict': my_dict})
 
 
 class TeacherCourseDetailView(generic.ListView):
