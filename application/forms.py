@@ -103,7 +103,7 @@ class PerformanceGradeForm(ModelForm):
 
 
 def to_integer(dt_time):
-    return 10000*dt_time.year + 100*dt_time.month + dt_time.day
+    return 10000 * dt_time.year + 100 * dt_time.month + dt_time.day
 
 
 class AbsenceForm(ModelForm):
@@ -134,6 +134,7 @@ class TimetableForm(ModelForm):
         model = ClassInfo
         fields = ['timetable']
 
+
 class AppointmentsForm(ModelForm):
     def __init__(self, *args, **kwargs):
         self.teacherID = kwargs.pop('teacherID', None)
@@ -141,7 +142,5 @@ class AppointmentsForm(ModelForm):
 
     class Meta:
         model = Teacher
-        exclude = ['first_name','fiscalCode', 'last_name', 'coordinatedClass', 'email', 'user']
+        exclude = ['first_name', 'fiscalCode', 'last_name', 'coordinatedClass', 'email', 'user']
         fields = ['appointmentSchedule']
-
-

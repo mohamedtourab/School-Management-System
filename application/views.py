@@ -81,7 +81,7 @@ def class_compose(request):
                     student.classID = class_info
                     student.save()
                     for course in first_year_courses:
-                        StudentCourse.objects.create(studentID=student,course_id=course)
+                        StudentCourse.objects.create(studentID=student, course_id=course)
             else:
                 i = 0
                 for student in Student.objects.filter(classID=None, studentYear='FIRST'):
@@ -91,7 +91,6 @@ def class_compose(request):
                         student.save()
                         for course in first_year_courses:
                             StudentCourse.objects.create(studentID=student, course_id=course)
-
 
             messages.success(request, 'Class has been successfully added')
 
@@ -472,7 +471,7 @@ class AppointmentView(generic.ListView):
         return self.request.user.teacher.ID
 
 
-def appointmentForm(request,teacherID):
+def appointment_form(request, teacherID):
     my_dict = {
         'teacher': Teacher.objects.get(ID=teacherID)}  # GET STUDENT ID HERE
     first = 1
@@ -504,15 +503,14 @@ def appointmentForm(request,teacherID):
 
     if request.method == 'POST':
         instance = Teacher.objects.get(ID=teacherID)
-        form = AppointmentsForm(request.POST, instance=instance)
+        form = AppointmentsForm(request.POST, request.FILES, instance=instance)
         if form.is_valid():
             form.save()
-            print(form.save())
             return redirect('application:teacher')
     else:
         form = AppointmentsForm()
 
-    return render(request, 'teacher/appointment.html', {'form': form, 'teacherID': teacherID,  'my_dict': my_dict})
+    return render(request, 'teacher/appointment.html', {'form': form, 'teacherID': teacherID, 'my_dict': my_dict})
 
 
 class TeacherCourseDetailView(generic.ListView):
