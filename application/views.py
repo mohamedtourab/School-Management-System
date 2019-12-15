@@ -80,6 +80,8 @@ def class_compose(request):
                 for student in Student.objects.filter(classID=None, studentYear='FIRST'):
                     student.classID = class_info
                     student.save()
+                    for course in first_year_courses:
+                        StudentCourse.objects.create(studentID=student,course_id=course)
             else:
                 i = 0
                 for student in Student.objects.filter(classID=None, studentYear='FIRST'):
@@ -87,6 +89,9 @@ def class_compose(request):
                         i += 1
                         student.classID = class_info
                         student.save()
+                        for course in first_year_courses:
+                            StudentCourse.objects.create(studentID=student, course_id=course)
+
 
             messages.success(request, 'Class has been successfully added')
 
