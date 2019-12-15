@@ -73,8 +73,8 @@ def timetable_form(request, name):
         my_dict.update({'class': 'timetable'})
     except:
         pass
-    return render(request, 'administrativeOfficer/chooseTimetable.html', my_dict,
-                  {'form': form, 'name': name, 'class': ClassInfo.objects.get(name=name)})
+    return render(request, 'administrativeOfficer/chooseTimetable.html',
+                  {'form': form, 'name': name, 'my_dict':my_dict,'class': ClassInfo.objects.get(name=name)})
 
 
 @login_required(login_url='application:login')

@@ -3,64 +3,63 @@
 {% block body %}
     <br><br>
     <div style="padding-left: 2%">
-        <h2>Time Table</h2>
         {% if class %}
             <h2 style="padding-left: 1%" href="class/{{ class.name }}">Time Table of class {{ class.name }}</h2>
             <br>
             <table>
-                <th>{{ header0 }}</th>
-                <th>{{ header1 }}</th>
-                <th>{{ header2 }}</th>
-                <th>{{ header3 }}</th>
-                <th>{{ header4 }}</th>
-                <th>{{ header5 }}</th>
+                <th>{{ my_dict.header0 }}</th>
+                <th>{{ my_dict.header1 }}</th>
+                <th>{{ my_dict.header2 }}</th>
+                <th>{{ my_dict.header3 }}</th>
+                <th>{{ my_dict.header4 }}</th>
+                <th>{{ my_dict.header5 }}</th>
                 <tr>
-                    <td>{{ row00 }}</td>
-                    <td>{{ row01 }}</td>
-                    <td>{{ row02 }}</td>
-                    <td>{{ row03 }}</td>
-                    <td>{{ row04 }}</td>
-                    <td>{{ row05 }}</td>
+                    <td>{{ my_dict.row00 }}</td>
+                    <td>{{ my_dict.row01 }}</td>
+                    <td>{{ my_dict.row02 }}</td>
+                    <td>{{ my_dict.row03 }}</td>
+                    <td>{{ my_dict.row04 }}</td>
+                    <td>{{ my_dict.row05 }}</td>
                 </tr>
                 <tr>
-                    <td>{{ row10 }}</td>
-                    <td>{{ row11 }}</td>
-                    <td>{{ row12 }}</td>
-                    <td>{{ row13 }}</td>
-                    <td>{{ row14 }}</td>
-                    <td>{{ row15 }}</td>
+                    <td>{{ my_dict.row10 }}</td>
+                    <td>{{ my_dict.row11 }}</td>
+                    <td>{{ my_dict.row12 }}</td>
+                    <td>{{ my_dict.row13 }}</td>
+                    <td>{{ my_dict.row14 }}</td>
+                    <td>{{ my_dict.row15 }}</td>
                 </tr>
                 <tr>
-                    <td>{{ row20 }}</td>
-                    <td>{{ row21 }}</td>
-                    <td>{{ row22 }}</td>
-                    <td>{{ row23 }}</td>
-                    <td>{{ row24 }}</td>
-                    <td>{{ row25 }}</td>
+                    <td>{{ my_dict.row20 }}</td>
+                    <td>{{ my_dict.row21 }}</td>
+                    <td>{{ my_dict.row22 }}</td>
+                    <td>{{ my_dict.row23 }}</td>
+                    <td>{{ my_dict.row24 }}</td>
+                    <td>{{ my_dict.row25 }}</td>
                 </tr>
                 <tr>
-                    <td>{{ row30 }}</td>
-                    <td>{{ row31 }}</td>
-                    <td>{{ row32 }}</td>
-                    <td>{{ row33 }}</td>
-                    <td>{{ row34 }}</td>
-                    <td>{{ row35 }}</td>
+                    <td>{{ my_dict.row30 }}</td>
+                    <td>{{ my_dict.row31 }}</td>
+                    <td>{{ my_dict.row32 }}</td>
+                    <td>{{ my_dict.row33 }}</td>
+                    <td>{{ my_dict.row34 }}</td>
+                    <td>{{ my_dict.row35 }}</td>
                 </tr>
                 <tr>
-                    <td>{{ row40 }}</td>
-                    <td>{{ row41 }}</td>
-                    <td>{{ row42 }}</td>
-                    <td>{{ row43 }}</td>
-                    <td>{{ row44 }}</td>
-                    <td>{{ row45 }}</td>
+                    <td>{{ my_dict.row40 }}</td>
+                    <td>{{ my_dict.row41 }}</td>
+                    <td>{{ my_dict.row42 }}</td>
+                    <td>{{ my_dict.row43 }}</td>
+                    <td>{{ my_dict.row44 }}</td>
+                    <td>{{ my_dict.row45 }}</td>
                 </tr>
                 <tr>
-                    <td>{{ row50 }}</td>
-                    <td>{{ row51 }}</td>
-                    <td>{{ row52 }}</td>
-                    <td>{{ row53 }}</td>
-                    <td>{{ row54 }}</td>
-                    <td>{{ row55 }}</td>
+                    <td>{{ my_dict.row50 }}</td>
+                    <td>{{ my_dict.row51 }}</td>
+                    <td>{{ my_dict.row52 }}</td>
+                    <td>{{ my_dict.row53 }}</td>
+                    <td>{{ my_dict.row54 }}</td>
+                    <td>{{ my_dict.row55 }}</td>
                 </tr>
             </table>
         {% else %}
