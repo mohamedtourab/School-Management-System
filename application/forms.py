@@ -59,10 +59,10 @@ class ContentForm(ModelForm):
         self.user = kwargs.pop('user', None)
         self.request = kwargs.pop('request', None)
         super(ContentForm, self).__init__(*args, **kwargs)
-        # listOfCoursesID = (TeacherCourse.objects.filter(teacherID=self.user.teacher.ID)).values('courseID')
+        # listOfCoursesID = (TeacherCourse.objects.filter(teacherID=self.user.teacher.ID)).values('course_id')
         # listOfCourses = Course.objects.filter(ID__in=listOfCoursesID)
-        # self.courseID = forms.ModelChoiceField(queryset=listOfCourses)
-        # self.fields['courseID'] = self.courseID
+        # self.course_id = forms.ModelChoiceField(queryset=listOfCourses)
+        # self.fields['course_id'] = self.course_id
 
     def clean(self):
         cleaned_data = super().clean()
@@ -86,15 +86,15 @@ class ContentForm(ModelForm):
 
     class Meta:
         model = Content
-        exclude = ('courseID',)
+        exclude = ('course_id',)
         fields = ['contentString', 'materialTitle', 'material', ]
 
 
 class PerformanceGradeForm(ModelForm):
     def __init__(self, *args, **kwargs):
-        self.courseID = kwargs.pop('courseID', None)
+        self.course_id = kwargs.pop('course_id', None)
         super(PerformanceGradeForm, self).__init__(*args, **kwargs)
-        self.studentCourseID = forms.ModelChoiceField(queryset=StudentCourse.objects.filter(courseID=self.courseID))
+        self.studentCourseID = forms.ModelChoiceField(queryset=StudentCourse.objects.filter(course_id=self.course_id))
         self.fields['studentCourseID'] = self.studentCourseID
 
     class Meta:
@@ -108,13 +108,13 @@ def to_integer(dt_time):
 
 class AbsenceForm(ModelForm):
     def __init__(self, *args, **kwargs):
-        self.courseID = kwargs.pop('courseID', None)
+        self.course_id = kwargs.pop('course_id', None)
         self.date = datetime.date.today
         self.ID = to_integer(datetime.date.today())
         super(AbsenceForm, self).__init__(*args, **kwargs)
 
         self.studentCourseID = forms.ModelChoiceField(queryset=StudentCourse.objects.filter(),
-                                                      initial=StudentCourse.objects.filter(courseID=self.courseID))
+                                                      initial=StudentCourse.objects.filter(course_id=self.course_id))
         self.fields['studentCourseID'] = self.studentCourseID
 
     class Meta:
@@ -125,7 +125,7 @@ class AbsenceForm(ModelForm):
 class AssignmentForm(ModelForm):
     class Meta:
         model = Assignment
-        exclude = ('courseID', 'additionDate', 'fileName',)
+        exclude = ('course_id', 'additionDate', 'fileName',)
         fields = ['assignmentTitle', 'assignmentFile', 'deadlineDate']
 
 

@@ -51,13 +51,13 @@
                 <li class="nav-item active"><a href="{% url 'application:parentWithID' studentID %}"
                                                class="nav-link pl-0">Home</a></li>
 
-                <li class="nav-item"><a href="{% url 'application:parentAttendance' studentID courseID %}"
+                <li class="nav-item"><a href="{% url 'application:parentAttendance' studentID course_id %}"
                                         class="nav-link pl-0">Attendance</a></li>
-                <li class="nav-item"><a href="{% url 'application:materials' studentID courseID %}"
+                <li class="nav-item"><a href="{% url 'application:materials' studentID course_id %}"
                                         class="nav-link pl-0">Materials</a></li>
-                <li class="nav-item"><a href="{% url 'application:assignments' studentID courseID %}"
+                <li class="nav-item"><a href="{% url 'application:assignments' studentID course_id %}"
                                         class="nav-link pl-0">Assignments</a></li>
-                <li class="nav-item"><a href="{% url 'application:CourseNote' studentID courseID %}"
+                <li class="nav-item"><a href="{% url 'application:CourseNote' studentID course_id %}"
                                         class="nav-link pl-0">Notes</a></li>
             </ul>
         </div>

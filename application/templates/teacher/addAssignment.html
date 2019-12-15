@@ -4,7 +4,7 @@
 
 {% block body %}
     <div style="padding-left: 2%; padding-top: 1%;padding-bottom: 5%;width: 90%;">
-    <form enctype="multipart/form-data" method="post" action="{% url 'application:assignmentForm' courseID %}"
+    <form enctype="multipart/form-data" method="post" action="{% url 'application:assignmentForm' course_id %}"
           style="padding-left: 2%">
         {% csrf_token %}
         {{ form|crispy }}

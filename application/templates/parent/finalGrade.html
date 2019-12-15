@@ -9,7 +9,7 @@
             <th> Grade</th>
             {% for finalGrade in finalGrades %}
                 <tr>
-                    <th> {{ finalGrade.courseID.name }}
+                    <th> {{ finalGrade.course_id.name }}
                         {% if finalGrade.publishFinalGrade%}
                             <td> {{ finalGrade.finalGrade }}</td>
                         {% else %}

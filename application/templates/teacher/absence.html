@@ -5,7 +5,7 @@
 {% block body %}
     <div style="padding-left: 2%; padding-top: 1%;padding-bottom: 5%;width: 90%;">
         <ul>
-            CourseID : {{ courseID }}
+            CourseID : {{ course_id }}
         </ul>
         <ul>
             date : {{ date }}
@@ -41,7 +41,7 @@
                 {% endfor %}
             </table>
             <input type="submit" value="Save" style="font-size: 20px"/> <a
-                    href="{% url 'application:absenceForm' courseID %}"></a>
+                    href="{% url 'application:absenceForm' course_id %}"></a>
         </form>
     </div>
 {% endblock %}

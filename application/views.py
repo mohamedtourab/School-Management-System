@@ -75,7 +75,7 @@ def class_compose(request):
         if form.is_valid():
             class_info = form.save()
             class_info.refresh_from_db()
-
+            first_year_courses = Course.objects.filter(year='FIRST')
             if Student.objects.filter(classID=None, studentYear='FIRST').count() < class_info.totalStudentsNumber:
                 for student in Student.objects.filter(classID=None, studentYear='FIRST'):
                     student.classID = class_info
@@ -146,7 +146,6 @@ def parent_signup(request):
     return render(request, 'administrativeOfficer/parentSignup.html', {'form': form})
 
 
-@login_required(login_url='application:login')
 def send_mail_to_parent(username, email, password):
     send_mail('School Account Credentials',
               'Dear Sir/Madam,\n We hope that this email finds you in a good health.\n' +
@@ -244,36 +243,36 @@ class CourseView(generic.ListView):
 def parentView(request, studentID):
     my_dict = {'allStudentCourses': Course.objects.filter(studentcourse__studentID=studentID)}  # GET STUDENT ID HERE
     my_dict.update({'parentStudent': ParentStudent.objects.filter(studentID=studentID)})
+    my_dict.update({'studentID': studentID})
     if ClassInfo.objects.filter(student__ID=studentID).exists():
         my_dict.update({'studentClass': ClassInfo.objects.get(student__ID=studentID)})
-    my_dict.update({'studentID': studentID})
-    first = 1
-    timetable = my_dict['studentClass'].timetable
-    try:
-        csvfile = open(timetable.path, 'r')
-        readCSV = csv.reader(csvfile, delimiter=',')
-        index = 0
-        for row in readCSV:
-            print(row)
-            if first == 1:
-                first = 0
-                my_dict.update({'header0': row[0]})
-                my_dict.update({'header1': row[1]})
-                my_dict.update({'header2': row[2]})
-                my_dict.update({'header3': row[3]})
-                my_dict.update({'header4': row[4]})
-                my_dict.update({'header5': row[5]})
-            else:
-                my_dict.update({'row' + str(index) + '0': row[0]})
-                my_dict.update({'row' + str(index) + '1': row[1]})
-                my_dict.update({'row' + str(index) + '2': row[2]})
-                my_dict.update({'row' + str(index) + '3': row[3]})
-                my_dict.update({'row' + str(index) + '4': row[4]})
-                my_dict.update({'row' + str(index) + '5': row[5]})
-                index += 1
-        my_dict.update({'timeTable': 'timetable'})
-    except:
-        pass
+        first = 1
+        timetable = my_dict['studentClass'].timetable
+        try:
+            csvfile = open(timetable.path, 'r')
+            readCSV = csv.reader(csvfile, delimiter=',')
+            index = 0
+            for row in readCSV:
+                print(row)
+                if first == 1:
+                    first = 0
+                    my_dict.update({'header0': row[0]})
+                    my_dict.update({'header1': row[1]})
+                    my_dict.update({'header2': row[2]})
+                    my_dict.update({'header3': row[3]})
+                    my_dict.update({'header4': row[4]})
+                    my_dict.update({'header5': row[5]})
+                else:
+                    my_dict.update({'row' + str(index) + '0': row[0]})
+                    my_dict.update({'row' + str(index) + '1': row[1]})
+                    my_dict.update({'row' + str(index) + '2': row[2]})
+                    my_dict.update({'row' + str(index) + '3': row[3]})
+                    my_dict.update({'row' + str(index) + '4': row[4]})
+                    my_dict.update({'row' + str(index) + '5': row[5]})
+                    index += 1
+            my_dict.update({'timeTable': 'timetable'})
+        except:
+            pass
     return render(request, 'parent/afterloginparent.html', my_dict)
 
 
@@ -294,10 +293,10 @@ class ParentAttendanceView(generic.ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ParentAttendanceView, self).get_context_data(**kwargs)
-        context['courseID'] = self.kwargs['courseID']
+        context['course_id'] = self.kwargs['course_id']
         context['attendances'] = Attendance.objects.filter(Q(studentCourseID__studentID=self.kwargs['studentID']),
-                                                           Q(studentCourseID__courseID=self.kwargs[
-                                                               'courseID']), ).order_by('date')
+                                                           Q(studentCourseID__course_id=self.kwargs[
+                                                               'course_id']), ).order_by('date')
         # create new Vew for handling attendance divided into months, need to add new constraint to the query,
         # and send Month_Name into next url
         return context
@@ -308,42 +307,42 @@ class CourseDetailView(generic.ListView):
     context_object_name = 'topics'
 
     def get_queryset(self):
-        return Content.objects.filter(courseID=self.kwargs['courseID'])
+        return Content.objects.filter(course_id=self.kwargs['course_id'])
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(CourseDetailView, self).get_context_data(**kwargs)
         context['studentID'] = self.kwargs['studentID']
-        context['courseDetails'] = Course.objects.get(ID=self.kwargs['courseID'])
-        context['courseID'] = self.kwargs['courseID']
+        context['courseDetails'] = Course.objects.get(ID=self.kwargs['course_id'])
+        context['course_id'] = self.kwargs['course_id']
         return context
 
 
 class AssignmentView(generic.ListView):
     template_name = 'parent/assignment.html'
-    context_object_name = 'courseID'
+    context_object_name = 'course_id'
 
     def get_queryset(self):
-        return self.kwargs['courseID']
+        return self.kwargs['course_id']
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(AssignmentView, self).get_context_data(**kwargs)
         context['studentID'] = self.kwargs['studentID']
-        if Assignment.objects.filter(courseID=self.kwargs['courseID']):
-            context['assignments'] = Assignment.objects.filter(courseID=self.kwargs['courseID'])
+        if Assignment.objects.filter(course_id=self.kwargs['course_id']):
+            context['assignments'] = Assignment.objects.filter(course_id=self.kwargs['course_id'])
         return context
 
 
 class MaterialView(generic.ListView):
     template_name = 'parent/material.html'
-    context_object_name = 'courseID'
+    context_object_name = 'course_id'
 
     def get_queryset(self):
-        return self.kwargs['courseID']
+        return self.kwargs['course_id']
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(MaterialView, self).get_context_data(**kwargs)
         context['studentID'] = self.kwargs['studentID']
-        allContent = Content.objects.filter(courseID=self.kwargs['courseID'])
+        allContent = Content.objects.filter(course_id=self.kwargs['course_id'])
         # check if there is any file uploaded yet in order to create material context
         if allContent:
             flag = 0
@@ -352,7 +351,7 @@ class MaterialView(generic.ListView):
                     flag = 1
                     break
             if flag == 1:
-                context['materials'] = Content.objects.filter(courseID=self.kwargs['courseID'])
+                context['materials'] = Content.objects.filter(course_id=self.kwargs['course_id'])
         return context
 
 
@@ -362,14 +361,14 @@ class NotesView(generic.ListView):
 
     def get_queryset(self):
         studentCourseID = StudentCourse.objects.get(studentID=self.kwargs['studentID'],
-                                                    courseID=self.kwargs['courseID'])
+                                                    course_id=self.kwargs['course_id'])
         return Note.objects.filter(studentCourseID=studentCourseID)
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(NotesView, self).get_context_data(**kwargs)
         context['studentID'] = self.kwargs['studentID']
-        context['courseDetails'] = Course.objects.get(ID=self.kwargs['courseID'])
-        context['courseID'] = self.kwargs['courseID']
+        context['courseDetails'] = Course.objects.get(ID=self.kwargs['course_id'])
+        context['course_id'] = self.kwargs['course_id']
         return context
 
 
@@ -393,7 +392,7 @@ class ParentGradeView(generic.ListView):
 
     def get_queryset(self):
         return PerformanceGrade.objects.filter(studentCourseID__studentID=self.kwargs[
-            'studentID'])  # GET STUDENTCOURSEID HERE ; should I send studentID to the url here?
+            'studentID'])  # GET STUDENTcourse_id HERE ; should I send studentID to the url here?
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ParentGradeView, self).get_context_data(**kwargs)
@@ -405,7 +404,7 @@ class ParentGradeView(generic.ListView):
         for studentcourse in context['studentCourse']:
             gradeCounter = 0
             for grade in context['allGrades']:
-                if grade.studentCourseID.courseID.name == studentcourse.courseID.name:
+                if grade.studentCourseID.course_id.name == studentcourse.course_id.name:
                     gradeCounter += 1
             if gradeCounter > columns:
                 columns = gradeCounter
@@ -516,13 +515,13 @@ class TeacherCourseDetailView(generic.ListView):
     context_object_name = 'contents'
 
     def get_queryset(self):
-        return Content.objects.filter(courseID=self.kwargs['courseID'])
+        return Content.objects.filter(course_id=self.kwargs['course_id'])
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(TeacherCourseDetailView, self).get_context_data(**kwargs)
-        context['courseID'] = self.kwargs['courseID']
-        context['courseDetails'] = Course.objects.get(ID=self.kwargs['courseID'])
-        context['assignments'] = Assignment.objects.filter(courseID=self.kwargs['courseID'])
+        context['course_id'] = self.kwargs['course_id']
+        context['courseDetails'] = Course.objects.get(ID=self.kwargs['course_id'])
+        context['assignments'] = Assignment.objects.filter(course_id=self.kwargs['course_id'])
         return context
 
 
@@ -531,23 +530,23 @@ class AbsenceView(generic.ListView):
     context_object_name = 'behaviour'
 
     def get_queryset(self):
-        return Content.objects.filter(courseID=self.kwargs['courseID'])
+        return Content.objects.filter(course_id=self.kwargs['course_id'])
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(AbsenceView, self).get_context_data(**kwargs)
-        context['courseID'] = self.kwargs['courseID']
-        context['courseDetails'] = Course.objects.get(ID=self.kwargs['courseID'])
+        context['course_id'] = self.kwargs['course_id']
+        context['courseDetails'] = Course.objects.get(ID=self.kwargs['course_id'])
         return context
 
 
 @login_required(login_url='application:login')
-def absence_form(request, courseID):
-    student_courses = StudentCourse.objects.filter(courseID=courseID)
+def absence_form(request, course_id):
+    student_courses = StudentCourse.objects.filter(course_id=course_id)
     n = student_courses.count()
 
     if request.method == 'POST':
         absence_formset = modelformset_factory(model=Attendance, form=AbsenceForm, extra=n, max_num=n)
-        student_course = StudentCourse.objects.filter(courseID=courseID)
+        student_course = StudentCourse.objects.filter(course_id=course_id)
         absence_formset = absence_formset(request.POST, queryset=student_course)
 
         i = 0
@@ -565,7 +564,7 @@ def absence_form(request, courseID):
     else:
         absence_formset = modelformset_factory(model=Attendance, form=AbsenceForm, extra=n, max_num=n)
 
-    return render(request, 'teacher/absence.html', {'formset': absence_formset, 'courseID': courseID,
+    return render(request, 'teacher/absence.html', {'formset': absence_formset, 'course_id': course_id,
                                                     'studentCoursesCount': n,
                                                     'date': str(datetime.date.today())})
 
@@ -576,24 +575,24 @@ def content_form(request, course_id):
         form = ContentForm(request.POST, user=request.user, request=request)
         if form.is_valid():
             unsaved_form = form.save(commit=False)
-            unsaved_form.courseID = Course.objects.get(ID=course_id)
+            unsaved_form.course_id = Course.objects.get(ID=course_id)
             unsaved_form.save()
             return redirect('application:teacher')
     else:
         form = ContentForm(user=request.user)
-    return render(request, 'teacher/addTopicORMaterial.html', {'form': form, 'courseID': course_id, })
+    return render(request, 'teacher/addTopicORMaterial.html', {'form': form, 'course_id': course_id, })
 
 
 @login_required(login_url='application:login')
 def grade_form(request, course_id):
     if request.method == 'POST':
-        form = PerformanceGradeForm(request.POST, courseID=course_id)
+        form = PerformanceGradeForm(request.POST, course_id=course_id)
         if form.is_valid():
             form.save()
             return redirect('application:teacher')
     else:
-        form = PerformanceGradeForm(courseID=course_id)
-    return render(request, 'teacher/grade.html', {'form': form, 'courseID': course_id, })
+        form = PerformanceGradeForm(course_id=course_id)
+    return render(request, 'teacher/grade.html', {'form': form, 'course_id': course_id, })
 
 
 @login_required(login_url='application:login')
@@ -602,12 +601,12 @@ def assignment_form(request, course_id):
         form = AssignmentForm(request.POST, request.FILES)
         if form.is_valid():
             unsaved_form = form.save(commit=False)
-            unsaved_form.courseID = Course.objects.get(ID=course_id)
+            unsaved_form.course_id = Course.objects.get(ID=course_id)
             unsaved_form.save()
             return redirect('application:teacher')
     else:
         form = AssignmentForm()
-    return render(request, 'teacher/addAssignment.html', {'form': form, 'courseID': course_id, })
+    return render(request, 'teacher/addAssignment.html', {'form': form, 'course_id': course_id, })
 
 
 class TeacherClassCoordinated(generic.ListView):

@@ -87,16 +87,16 @@ class Course(models.Model):
 class ClassCourse(models.Model):
     ID = models.AutoField(primary_key=True)
     classID = models.ForeignKey(ClassInfo, on_delete=models.CASCADE)
-    courseID = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course_id = models.ForeignKey(Course, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.classID.name + ':' + self.courseID.name
+        return self.classID.name + ':' + self.course_id.name
 
 
 class Assignment(models.Model):
     ID = models.AutoField(primary_key=True)
     assignmentTitle = models.CharField(max_length=50, verbose_name='Assignment Title')
-    courseID = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='Course')
+    course_id = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='Course')
     assignmentFile = models.FileField(verbose_name='File', upload_to='../media')
     additionDate = models.DateField(default=datetime.date.today, verbose_name='Addition Date')
     deadlineDate = models.DateField(default=None, verbose_name='Deadline Date')
@@ -125,10 +125,10 @@ class Teacher(models.Model):
 class TeacherCourse(models.Model):
     ID = models.AutoField(primary_key=True)
     teacherID = models.ForeignKey(Teacher, on_delete=models.CASCADE)
-    courseID = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course_id = models.ForeignKey(Course, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.teacherID.first_name + '_' + self.teacherID.last_name + ':' + self.courseID.name
+        return self.teacherID.first_name + '_' + self.teacherID.last_name + ':' + self.course_id.name
 
 
 class Parent(models.Model):
@@ -152,12 +152,12 @@ class ParentStudent(models.Model):
 class StudentCourse(models.Model):
     ID = models.AutoField(primary_key=True)
     studentID = models.ForeignKey(Student, on_delete=models.CASCADE)
-    courseID = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course_id = models.ForeignKey(Course, on_delete=models.CASCADE)
     finalGrade = models.PositiveIntegerField(blank=True, null=True)
     publishFinalGrade = models.BooleanField(blank=True, default=False)
 
     def __str__(self):
-        return self.studentID.first_name + '_' + self.studentID.last_name + ':' + self.courseID.name
+        return self.studentID.first_name + '_' + self.studentID.last_name + ':' + self.course_id.name
 
 
 class PerformanceGrade(models.Model):
@@ -167,7 +167,7 @@ class PerformanceGrade(models.Model):
     grade = models.PositiveIntegerField()
 
     def __str__(self):
-        return self.studentCourseID.studentID.first_name + '_' + self.studentCourseID.studentID.last_name + ':' + self.studentCourseID.courseID.name
+        return self.studentCourseID.studentID.first_name + '_' + self.studentCourseID.studentID.last_name + ':' + self.studentCourseID.course_id.name
 
 
 class Note(models.Model):
@@ -179,14 +179,14 @@ class Note(models.Model):
 
 class Content(models.Model):
     ID = models.AutoField(primary_key=True)
-    courseID = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course_id = models.ForeignKey(Course, on_delete=models.CASCADE)
     contentString = models.CharField(max_length=100, null=True, blank=True, default=None, verbose_name='Topic Title')
     materialTitle = models.CharField(max_length=100, null=True, blank=True, default=None)
     material = models.FileField(verbose_name='File', upload_to='../media', blank=True, null=True)
     additionDate = models.DateField(default=datetime.date.today, verbose_name='Addition Date')
 
     def __str__(self):
-        return self.courseID.name + '_Content' + self.ID.__str__()
+        return self.course_id.name + '_Content' + self.ID.__str__()
 
 
 class Announcement(models.Model):
@@ -209,7 +209,7 @@ class Attendance(models.Model):
     behaviour = models.CharField(max_length=200, default=" ")
 
     def __str__(self):
-        return self.studentCourseID.studentID.first_name + ' ' + self.studentCourseID.studentID.last_name + ':' + self.studentCourseID.courseID.name
+        return self.studentCourseID.studentID.first_name + ' ' + self.studentCourseID.studentID.last_name + ':' + self.studentCourseID.course_id.name
 
 
 class FreeSlots(models.Model):
