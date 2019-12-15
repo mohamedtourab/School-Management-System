@@ -41,7 +41,39 @@ def timetable_form(request, name):
             return redirect('application:ao')
     else:
         form = TimetableForm()
-    return render(request, 'administrativeOfficer/chooseTimetable.html',
+
+    my_dict = {'class': ClassInfo.objects.filter(name=name)}  # GET CLASS NAME
+    if ClassInfo.objects.filter(name=name).exists():
+        my_dict.update({'class': ClassInfo.objects.get(name=name)})
+    my_dict.update({'name': name})
+    first = 1
+    timetable = my_dict['class'].timetable
+    try:
+        csvfile = open(timetable.path, 'r')
+        readCSV = csv.reader(csvfile, delimiter=',')
+        index = 0
+        for row in readCSV:
+            print(row)
+            if first == 1:
+                first = 0
+                my_dict.update({'header0': row[0]})
+                my_dict.update({'header1': row[1]})
+                my_dict.update({'header2': row[2]})
+                my_dict.update({'header3': row[3]})
+                my_dict.update({'header4': row[4]})
+                my_dict.update({'header5': row[5]})
+            else:
+                my_dict.update({'row' + str(index) + '0': row[0]})
+                my_dict.update({'row' + str(index) + '1': row[1]})
+                my_dict.update({'row' + str(index) + '2': row[2]})
+                my_dict.update({'row' + str(index) + '3': row[3]})
+                my_dict.update({'row' + str(index) + '4': row[4]})
+                my_dict.update({'row' + str(index) + '5': row[5]})
+                index += 1
+        my_dict.update({'class': 'timetable'})
+    except:
+        pass
+    return render(request, 'administrativeOfficer/chooseTimetable.html', my_dict,
                   {'form': form, 'name': name, 'class': ClassInfo.objects.get(name=name)})
 
 
@@ -249,6 +281,7 @@ def parentView(request, studentID):
     my_dict.update({'studentID': studentID})
     first = 1
     timetable = my_dict['studentClass'].timetable
+
     try:
         csvfile = open(timetable.path, 'r')
         readCSV = csv.reader(csvfile, delimiter=',')

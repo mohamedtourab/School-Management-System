@@ -1,12 +1,73 @@
 {% extends 'administrativeOfficer/timetableBase.html' %}
 {% load crispy_forms_tags %}
 {% block body %}
-    <div style="padding-left: 2%; padding-top: 1%;padding-bottom: 5%;width: 90%;">
+    <br><br>
+    <div style="padding-left: 2%">
+        <h2>Time Table</h2>
         {% if class %}
             <h2 style="padding-left: 1%" href="class/{{ class.name }}">Time Table of class {{ class.name }}</h2>
-            <br>
-            <img style="padding-left: 1%" width="480" height="360" src="http://localhost:8000/{{ class.timetable.url }}"
-                 alt="img">
+            <table>
+                <th>{{ header0 }}</th>
+                <th>{{ header1 }}</th>
+                <th>{{ header2 }}</th>
+                <th>{{ header3 }}</th>
+                <th>{{ header4 }}</th>
+                <th>{{ header5 }}</th>
+                <tr>
+                    <td>{{ row00 }}</td>
+                    <td>{{ row01 }}</td>
+                    <td>{{ row02 }}</td>
+                    <td>{{ row03 }}</td>
+                    <td>{{ row04 }}</td>
+                    <td>{{ row05 }}</td>
+                </tr>
+                <tr>
+                    <td>{{ row10 }}</td>
+                    <td>{{ row11 }}</td>
+                    <td>{{ row12 }}</td>
+                    <td>{{ row13 }}</td>
+                    <td>{{ row14 }}</td>
+                    <td>{{ row15 }}</td>
+                </tr>
+                <tr>
+                    <td>{{ row20 }}</td>
+                    <td>{{ row21 }}</td>
+                    <td>{{ row22 }}</td>
+                    <td>{{ row23 }}</td>
+                    <td>{{ row24 }}</td>
+                    <td>{{ row25 }}</td>
+                </tr>
+                <tr>
+                    <td>{{ row30 }}</td>
+                    <td>{{ row31 }}</td>
+                    <td>{{ row32 }}</td>
+                    <td>{{ row33 }}</td>
+                    <td>{{ row34 }}</td>
+                    <td>{{ row35 }}</td>
+                </tr>
+                <tr>
+                    <td>{{ row40 }}</td>
+                    <td>{{ row41 }}</td>
+                    <td>{{ row42 }}</td>
+                    <td>{{ row43 }}</td>
+                    <td>{{ row44 }}</td>
+                    <td>{{ row45 }}</td>
+                </tr>
+                <tr>
+                    <td>{{ row50 }}</td>
+                    <td>{{ row51 }}</td>
+                    <td>{{ row52 }}</td>
+                    <td>{{ row53 }}</td>
+                    <td>{{ row54 }}</td>
+                    <td>{{ row55 }}</td>
+                </tr>
+            </table>
+        {% else %}
+            <ul>
+                <li>
+                    Time table is not uploaded yet.
+                </li>
+            </ul>
         {% endif %}
     </div>
     <div style="padding-left: 2%; padding-top: 1%;padding-bottom: 5%;width: 90%;">
@@ -17,5 +78,7 @@
             <input type="submit" class="btn btn-lg btn-primary" style="font-size: 20px" value="Update"/>
         </form>
     </div>
+    </div>
+
 
 {% endblock %}
