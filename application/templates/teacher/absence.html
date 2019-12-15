@@ -10,6 +10,9 @@
         <ul>
             date : {{ date }}
         </ul>
+            <ul>
+                student count : {{ studentCoursesCount }}
+        </ul>
         <form action="" method="post">{% csrf_token %}
             {{ formset.management_form }}
             {{ form.as_p }}
@@ -24,9 +27,9 @@
                     <th> behaviour</th>
                 </tr>
                 {% for form in formset.forms %}
+                   {% if forloop.counter <= studentCoursesCount %}
 
                     <tr>
-
                         <th>{{ form.date }}</th>
                         <th>{{ form.studentCourseID }}</th>
                         <th>{{ form.presence }}</th>
@@ -34,6 +37,7 @@
                         <th>{{ form.leftEarly }}</th>
                         <th>{{ form.behaviour }}</th>
                     </tr>
+                     {% endif %}
                 {% endfor %}
             </table>
             <input type="submit" value="Save" style="font-size: 20px"/> <a
