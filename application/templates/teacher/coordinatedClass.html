@@ -7,35 +7,31 @@
         {% if user.teacher.coordinatedClass %}
             <h1>Your Coordinated CLass is {{ user.teacher.coordinatedClass }}</h1>
             <h2>List Of Students: </h2>
-            <div class="container">
-                <div class="col-sm-4">
-                    <table class="table table-bordered table-striped">
+                    <table >
                         <thead>
                         <tr>
-                            <th>Firstname</th>
-                            <th>Lastname</th>
-                            <th>Final Grades</th>
+                            <th style="text-align: center">Firstname</th>
+                            <th style="text-align: center">Lastname</th>
+                            <th style="text-align: center">Final Grades</th>
                         </tr>
                         </thead>
                         <tbody>
                         {% for stdCourse in studentCourse %}
                             <tr>
-                                <td>{{ stdCourse.studentID.first_name }}</td>
-                                <td>{{ stdCourse.studentID.last_name }}</td>
+                                <td style="text-align: center">{{ stdCourse.studentID.first_name }}</td>
+                                <td style="text-align: center">{{ stdCourse.studentID.last_name }}</td>
                                 {% if stdCourse.finalGrade %}
-                                    <td>{{ stdCourse.finalGrade }}</td>
+                                    <td style="text-align: center">{{ stdCourse.finalGrade }}</td>
                                 {% else %}
-                                    <td>
+                                    <td style="text-align: center">
                                         <a href="coordinatedClass/studentCourses/{{ stdCourse.studentID.ID}}"
-                                           class="btn btn-primary btn-sm" style="font-size: 13px; margin-left: 13%"> ASSIGN </a>
+                                           class="btn btn-primary btn-sm" style="font-size: 20px;"> ASSIGN </a>
                                     </td>
                                 {% endif %}
                             </tr>
                         {% endfor %}
                         </tbody>
                     </table>
-                </div>
-            </div>
         {% else %}
             <ul>
                 <li>
