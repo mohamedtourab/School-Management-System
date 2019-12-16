@@ -18,25 +18,30 @@
                         </tr>
                         </thead>
                         <tbody>
-                        {% for student in students %}
+                        {% for stdCourse in studentCourse %}
                             <tr>
-                                <td>{{ student.first_name }}</td>
-                                <td>{{ student.last_name }}</td>
-                                <td><a href="coordinatedClass/studentCourses/{{ student.ID }}"
-                                       class="btn btn-primary btn-sm" style="font-size: 13px; margin-left: 13%"> ASSIGN </a>
-                                </td>
+                                <td>{{ stdCourse.studentID.first_name }}</td>
+                                <td>{{ stdCourse.studentID.last_name }}</td>
+                                {% if stdCourse.finalGrade %}
+                                    <td>{{ stdCourse.finalGrade }}</td>
+                                {% else %}
+                                    <td>
+                                        <a href="coordinatedClass/studentCourses/{{ student.ID }}"
+                                           class="btn btn-primary btn-sm" style="font-size: 13px; margin-left: 13%"> ASSIGN </a>
+                                    </td>
+                                {% endif %}
                             </tr>
                         {% endfor %}
                         </tbody>
                     </table>
                 </div>
             </div>
-    {% else %}
-        <ul>
-            <li>
-                <h2>You are not a class coordinator</h2>
-            </li>
-        </ul>
-    {% endif %}
-</div>
+        {% else %}
+            <ul>
+                <li>
+                    <h2>You are not a class coordinator</h2>
+                </li>
+            </ul>
+        {% endif %}
+    </div>
 {% endblock %}

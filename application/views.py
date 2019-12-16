@@ -685,6 +685,10 @@ class TeacherClassCoordinated(generic.ListView):
     def get_queryset(self):
         return Student.objects.filter(classID=self.request.user.teacher.coordinatedClass)
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(TeacherClassCoordinated, self).get_context_data(**kwargs)
+        context['studentCourse'] = StudentCourse.objects.filter(studentID__classID=self.request.user.teacher.coordinatedClass)
+        return context
 
 @login_required(login_url='application:login')
 def final_grade_form(request, studentID):
