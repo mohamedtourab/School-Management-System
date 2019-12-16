@@ -690,6 +690,7 @@ class TeacherClassCoordinated(generic.ListView):
         context['studentCourse'] = StudentCourse.objects.filter(studentID__classID=self.request.user.teacher.coordinatedClass)
         return context
 
+
 @login_required(login_url='application:login')
 def final_grade_form(request, studentID):
     if request.method == 'POST':
@@ -701,7 +702,7 @@ def final_grade_form(request, studentID):
             for sc_obj in sc:
                 if sc_obj.publishFinalGrade:
                     return render(request, 'teacher/final_grade.html',
-                                  {'error_message': 'Final grade for the student of this course has been already assigned',
+                                  {'error_message': 'Final grade for the student of this course has been already assigned!',
                                    'form': form, 'studentID': studentID, })
                 else:
                     sc.update(finalGrade=request.POST['final_grade'])
