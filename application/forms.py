@@ -5,7 +5,7 @@ from django.forms import ModelForm, inlineformset_factory, formset_factory
 import datetime
 
 from .models import Student, ClassInfo, Content, TeacherCourse, Course, PerformanceGrade, StudentCourse, Attendance, \
-    Assignment, Announcement, Teacher, AssignFinalGrade
+    Assignment, Announcement, Teacher, AssignFinalGrade, Behavior
 
 
 class AnnouncementForm(ModelForm):
@@ -130,7 +130,7 @@ class BehaviorForm(ModelForm):
         self.date = datetime.date.today
 
     class Meta:
-        model = Attendance
+        model = Behavior
         fields = ['studentCourseID', 'date', 'behavior']
 
 

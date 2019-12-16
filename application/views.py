@@ -10,11 +10,11 @@ from django.forms import modelformset_factory
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from django.views.generic import CreateView, UpdateView, DeleteView
+from django.views.generic import UpdateView, DeleteView
 from django.db.models import Q
 import csv
 from .models import StudentCourse, PerformanceGrade, Parent, Content, Course, Student, ClassInfo, TeacherCourse, \
-    ParentStudent, Attendance, Assignment, Announcement, Teacher, Note
+    ParentStudent, Attendance, Assignment, Announcement, Teacher, Note, Behavior
 from django.views import generic
 from application.forms import StudentForm, ParentSignUpForm, ClassComposeForm, ContentForm, PerformanceGradeForm, \
     AbsenceForm, AssignmentForm, TimetableForm, AnnouncementForm, TeacherCreateForm, AppointmentsForm, PutFinalGradeForm, BehaviorForm
@@ -349,7 +349,7 @@ class ParentBehaviorView(generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ParentBehaviorView, self).get_context_data(**kwargs)
         context['course_id'] = self.kwargs['course_id']
-        context['behavior'] = Attendance.objects.filter(Q(studentCourseID__studentID=self.kwargs['studentID']),
+        context['behavior'] = Behavior.objects.filter(Q(studentCourseID__studentID=self.kwargs['studentID']),
                                                            Q(studentCourseID__course_id=self.kwargs[
                                                                'course_id']), ).order_by('date')
         # create new Vew for handling attendance divided into months, need to add new constraint to the query,

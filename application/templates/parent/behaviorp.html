@@ -1,19 +1,31 @@
 {% extends 'parent/behaviorBase.html' %}
+{% load crispy_forms_tags %}
 {% block body %}
     <div style="padding-bottom: 5%; padding-top: 1%;padding-left: 1%">
-        <table>
-            <tr>
-                <th style="text-align: center">Date</th>
-                <th style="text-align: center">Behavior</th>
-            </tr>
-            {% for b in behavior %}
+        <h3 style="padding-bottom: 1%"> Behavior</h3>
+        {% if  behavior %}
+            <table>
                 <tr>
-                    <th style="text-align: center">{{ b.date }}</th>
-                    {% if b.behavior %}
-                        <th style="text-align: center"> {{ b.behavior }}</th>
-                    {% endif %}
+                    <th style="text-align: center">Date</th>
+                    <th style="text-align: center">Behavior</th>
                 </tr>
-            {% endfor %}
-        </table>
+
+                {% for b in behavior %}
+                    <tr>
+                        <th style="text-align: center">{{ b.date }}</th>
+                        {% if b.behavior %}
+                            <th style="text-align: center"> {{ b.behavior }}</th>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+        <ul>
+            <li>
+                No behavior problem yet.
+            </li>
+        </ul>
+    {% endif %}
+
     </div>
 {% endblock %}
