@@ -129,6 +129,8 @@ class BehaviorForm(ModelForm):
 
         self.date = datetime.date.today
 
+    behavior = forms.CharField(widget=forms.Textarea)
+
     class Meta:
         model = Behavior
         fields = ['studentCourseID', 'date', 'behavior']

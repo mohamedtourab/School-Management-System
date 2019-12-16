@@ -17,8 +17,8 @@ from .models import StudentCourse, PerformanceGrade, Parent, Content, Course, St
     ParentStudent, Attendance, Assignment, Announcement, Teacher, Note, Behavior
 from django.views import generic
 from application.forms import StudentForm, ParentSignUpForm, ClassComposeForm, ContentForm, PerformanceGradeForm, \
-    AbsenceForm, AssignmentForm, TimetableForm, AnnouncementForm, TeacherCreateForm, AppointmentsForm, PutFinalGradeForm, BehaviorForm
-
+    AbsenceForm, AssignmentForm, TimetableForm, AnnouncementForm, TeacherCreateForm, AppointmentsForm, \
+    PutFinalGradeForm, BehaviorForm
 
 
 # -----------------------------------------------------------------------------------------------
@@ -350,11 +350,24 @@ class ParentBehaviorView(generic.ListView):
         context = super(ParentBehaviorView, self).get_context_data(**kwargs)
         context['course_id'] = self.kwargs['course_id']
         context['behavior'] = Behavior.objects.filter(Q(studentCourseID__studentID=self.kwargs['studentID']),
-                                                           Q(studentCourseID__course_id=self.kwargs[
-                                                               'course_id']), ).order_by('date')
+                                                      Q(studentCourseID__course_id=self.kwargs[
+                                                          'course_id']), ).order_by('-ID')
         # create new Vew for handling attendance divided into months, need to add new constraint to the query,
         # and send Month_Name into next url
         return context
+
+
+# class AnnouncementView(generic.ListView):
+#     template_name = 'parent/announcement.html'
+#     context_object_name = 'allAnnouncements'
+#
+#     def get_queryset(self):
+#         return Announcement.objects.all().order_by('-ID')
+#
+#     def get_context_data(self, *, object_list=None, **kwargs):
+#         context = super(AnnouncementView, self).get_context_data(**kwargs)
+#         context['studentID'] = self.kwargs['studentID']
+#         return context
 
 
 class CourseDetailView(generic.ListView):
@@ -630,12 +643,10 @@ def behavior_form(request, course_id):
         if form.is_valid():
             unsaved_form = form.save()
             unsaved_form.save()
-            return render(request, 'teacher/behavior.html', {'form': form, 'course_id': course_id,
-                                                            'date': str(datetime.date.today())})
+            return render(request, 'teacher/behavior.html', {'form': form, 'course_id': course_id})
     else:
         form = BehaviorForm(course_id=course_id)
-    return render(request, 'teacher/behavior.html', {'form': form, 'course_id': course_id,
-                                                    'date': str(datetime.date.today())})
+    return render(request, 'teacher/behavior.html', {'form': form, 'course_id': course_id})
 
 
 @login_required(login_url='application:login')
@@ -687,7 +698,8 @@ class TeacherClassCoordinated(generic.ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(TeacherClassCoordinated, self).get_context_data(**kwargs)
-        context['studentCourse'] = StudentCourse.objects.filter(studentID__classID=self.request.user.teacher.coordinatedClass)
+        context['studentCourse'] = StudentCourse.objects.filter(
+            studentID__classID=self.request.user.teacher.coordinatedClass)
         return context
 
 
@@ -702,8 +714,9 @@ def final_grade_form(request, studentID):
             for sc_obj in sc:
                 if sc_obj.publishFinalGrade:
                     return render(request, 'teacher/final_grade.html',
-                                  {'error_message': 'Final grade for the student of this course has been already assigned!',
-                                   'form': form, 'studentID': studentID, })
+                                  {
+                                      'error_message': 'Final grade for the student of this course has been already assigned!',
+                                      'form': form, 'studentID': studentID, })
                 else:
                     sc.update(finalGrade=request.POST['final_grade'])
                     sc.update(publishFinalGrade=True)

@@ -224,7 +224,7 @@ class Attendance(models.Model):
 class Behavior(models.Model):
     ID = models.AutoField(primary_key=True)
     studentCourseID = models.ForeignKey(StudentCourse, on_delete=models.CASCADE)
-    date = models.DateField(default=datetime.date.today)
+    date = models.DateTimeField(default=datetime.datetime.now, blank=True)
     behavior = models.CharField(max_length=200)
 
     def __str__(self):

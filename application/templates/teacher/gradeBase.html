@@ -53,17 +53,17 @@
         </button>
         <div class="collapse navbar-collapse" id="ftco-nav" style="font-size: 14px">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item active"><a href="{% url 'application:teacher' %}" class="nav-link pl-0">Home</a>
+                <li class="nav-item {% block home_active %}{% endblock %}"><a href="{% url 'application:teacher' %}" class="nav-link pl-0">Home</a>
                 </li>
-                <li class="nav-item "><a href="{% url 'application:contentForm' course_id %}" class="nav-link pl-0">Add
+                <li class="nav-item {% block topicMaterial_active %}{% endblock %}"><a href="{% url 'application:contentForm' course_id %}" class="nav-link pl-0">Add
                     topic/Material</a></li>
-                <li class="nav-item"><a href="{% url 'application:assignmentForm' course_id %}" class="nav-link pl-0">Assignment</a>
+                <li class="nav-item {% block assignment_active %}{% endblock %}"><a href="{% url 'application:assignmentForm' course_id %}" class="nav-link pl-0">Assignment</a>
                 </li>
-                <li class="nav-item"><a href="{% url 'application:absenceForm' course_id %}"
+                <li class="nav-item {% block absence_active %}{% endblock %}"><a href="{% url 'application:absenceForm' course_id %}"
                                         class="nav-link pl-0">Absence</a></li>
-                <li class="nav-item"><a href="{% url 'application:behaviorForm' course_id %}"
+                <li class="nav-item {% block behavior_active %}{% endblock %}"><a href="{% url 'application:behaviorForm' course_id %}"
                                         class="nav-link pl-0">Behavior</a></li>
-                <li class="nav-item"><a href="{% url 'application:gradeForm' course_id %}"
+                <li class="nav-item {% block grades_active %}{% endblock %}"><a href="{% url 'application:gradeForm' course_id %}"
                                         class="nav-link pl-0">Grades</a></li>
             </ul>
         </div>
