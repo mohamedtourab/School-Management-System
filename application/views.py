@@ -74,7 +74,7 @@ def timetable_form(request, name):
     except:
         pass
     return render(request, 'administrativeOfficer/chooseTimetable.html',
-                  {'form': form, 'name': name, 'my_dict':my_dict,'class': ClassInfo.objects.get(name=name)})
+                  {'form': form, 'name': name, 'my_dict': my_dict, 'class': ClassInfo.objects.get(name=name)})
 
 
 @login_required(login_url='application:login')
@@ -576,31 +576,16 @@ class AbsenceView(generic.ListView):
 
 @login_required(login_url='application:login')
 def absence_form(request, course_id):
-    student_courses = StudentCourse.objects.filter(course_id=course_id)
-    n = student_courses.count()
-
     if request.method == 'POST':
-        absence_formset = modelformset_factory(model=Attendance, form=AbsenceForm, extra=n, max_num=n)
-        student_course = StudentCourse.objects.filter(course_id=course_id)
-        absence_formset = absence_formset(request.POST, queryset=student_course)
-
-        i = 0
-        for f in absence_formset.forms:
-            if i < n:
-                f.studentCourseID = student_courses[i].studentID
-                i += 1
-
-        print(absence_formset.errors)
-
-        if absence_formset.is_valid():
-            absence_formset.save()
-            return redirect('application:teacher')
-
+        form = AbsenceForm(request.POST, course_id=course_id)
+        if form.is_valid():
+            unsaved_form = form.save()
+            unsaved_form.save()
+            return render(request, 'teacher/absence.html', {'form': form, 'course_id': course_id,
+                                                            'date': str(datetime.date.today())})
     else:
-        absence_formset = modelformset_factory(model=Attendance, form=AbsenceForm, extra=n, max_num=n)
-
-    return render(request, 'teacher/absence.html', {'formset': absence_formset, 'course_id': course_id,
-                                                    'studentCoursesCount': n,
+        form = AbsenceForm(course_id=course_id)
+    return render(request, 'teacher/absence.html', {'form': form, 'course_id': course_id,
                                                     'date': str(datetime.date.today())})
 
 

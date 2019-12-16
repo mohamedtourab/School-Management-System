@@ -109,17 +109,16 @@ def to_integer(dt_time):
 class AbsenceForm(ModelForm):
     def __init__(self, *args, **kwargs):
         self.course_id = kwargs.pop('course_id', None)
-        self.date = datetime.date.today
-        self.ID = to_integer(datetime.date.today())
         super(AbsenceForm, self).__init__(*args, **kwargs)
-
-        self.studentCourseID = forms.ModelChoiceField(queryset=StudentCourse.objects.filter(),
-                                                      initial=StudentCourse.objects.filter(course_id=self.course_id))
+        self.studentCourseID = forms.ModelChoiceField(queryset=StudentCourse.objects.filter(course_id=self.course_id))
         self.fields['studentCourseID'] = self.studentCourseID
+
+        self.date = datetime.date.today
+
 
     class Meta:
         model = Attendance
-        fields = ['ID', 'studentCourseID', 'date', 'presence', 'cameLate', 'leftEarly', 'behaviour']
+        fields = ['studentCourseID', 'date', 'presence', 'cameLate', 'leftEarly']
 
 
 class AssignmentForm(ModelForm):
