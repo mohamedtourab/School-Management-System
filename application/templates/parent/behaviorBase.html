@@ -63,12 +63,12 @@
                 <li class="nav-item {% block assignments_active %}{% endblock %}"><a
                         href="{% url 'application:assignments' studentID course_id %}"
                         class="nav-link pl-0">Assignments</a></li>
-                <li class="nav-item {% block behavior_active %}{% endblock %}"><a
-                        href="{% url 'application:parentBehavior' studentID course_id %}"
-                        class="nav-link pl-0">Behavior</a></li>
                 <li class="nav-item {% block notes_active %}{% endblock %}"><a
                         href="{% url 'application:CourseNote' studentID course_id %}"
                         class="nav-link pl-0">Notes</a></li>
+                <li class="nav-item {% block behavior_active %}{% endblock %}"><a
+                        href="{% url 'application:parentBehavior' studentID course_id %}"
+                        class="nav-link pl-0">Behavior</a></li>
             </ul>
         </div>
     </div>

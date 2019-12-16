@@ -4,36 +4,32 @@
 
 {% block body %}
 
-    <div class="container-fluid">
+    <div style="padding-left: 2%; padding-top: 1%;padding-bottom: 5%;width: 90%;">
 
-        {% if  behavior %}
-            <div class="col-sm-8">
-                <button class="btn btn-primary btn-lg" style="font-size: 20px;">Behavior</button>
-                <br><br>
-                <table class="table-bordered">
+        <table>
+            {% if  behavior %}
+                <tr>
+                    <th  style="text-align: center">Date</th>
+                    <th  style="text-align: center">Behavior</th>
+                </tr>
+
+                {% for b in behavior %}
                     <tr>
-                        <th class="table-active" style="text-align: center">Date</th>
-                        <th class="table-active" style="text-align: center">Behavior</th>
+                        <td style="text-align: center">{{ b.date }}</td>
+                        {% if b.behavior %}
+                            <td style="text-align: center"> {{ b.behavior }}</td>
+                        {% endif %}
                     </tr>
-
-                    {% for b in behavior %}
-                        <tr>
-                            <th style="text-align: center">{{ b.date }}</th>
-                            {% if b.behavior %}
-                                <th style="text-align: center"> {{ b.behavior }}</th>
-                            {% endif %}
-                        </tr>
-                    {% endfor %}
+                {% endfor %}
                 </table>
-            </div>
-        {% else %}
-            <ul>
-                <li>
-                    No behavior problem yet.
-                </li>
-            </ul>
-        {% endif %}
 
-    </div>
+            {% else %}
+                <ul>
+                    <li>
+                        No behavior problem yet.
+                    </li>
+                </ul>
+            {% endif %}
 
+    </div>>
 {% endblock %}
