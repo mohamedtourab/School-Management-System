@@ -4,7 +4,7 @@
 {% load crispy_forms_tags %}
 
 {% block body %}
-    <div style="padding-left: 10%; padding-top: 1%;padding-bottom: 5%;width: 80%;">
+<div style="padding-left: 2%; padding-top: 1%;padding-bottom: 5%;width: 90%;">
         <form enctype="multipart/form-data" method="post" action="{% url 'application:behaviorForm' course_id %}"
               style="padding-left: 2%">
             {% csrf_token %}
