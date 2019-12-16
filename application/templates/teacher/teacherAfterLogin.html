@@ -1,25 +1,22 @@
 {% extends 'teacher/base2.html' %}
 {% block home_active %} active {% endblock %}
 {% block body %}
+    <div style="padding-left: 2%; padding-top: 1%;padding-bottom: 5%;width: 90%;">
 
-    <h1 style="padding-left: 2%"> Welcome {{ user.teacher.first_name }} {{ user.teacher.name }} </h1>
-    <hr><br>
-    <div class="container-fluid">
-        <div class="row content">
-
-            <div class="col-sm-3 sidenav">
-                <div class="nav nav-pills">
-                    <li class="active"><a href="{% url 'application:teacher' %}">My courses</a></li>
+        <h1 style="padding-left: 2%"> Welcome {{ user.teacher.first_name }} {{ user.teacher.name }} </h1><br>
+        {% if coordinatedClass %}
+            <h1 style="padding-left: 2%">Your coordinated class : {{ coordinatedClass }} </h1><br>
+        {% endif %}
+        <div class="container-fluid">
+            <div class="row content">
+                <div class="col-sm-9">
+                    <h2> List of your courses </h2><br>
+                    {% for teachercourse in allTeacherCourses %}
+                        <a href="course/{{ teachercourse.course_id.ID }}"
+                           class="btn btn-primary btn-lg" style="font-size: 20px"> {{ teachercourse.course_id.name }} </a>
+                        <br><br>
+                    {% endfor %}
                 </div>
-                <br>
-            </div>
-            <div class="col-sm-9">
-                <h2> List of your courses </h2><br>
-                {% for teachercourse in allTeacherCourses %}
-                    <a href="course/{{ teachercourse.course_id.ID }}"
-                       class="btn btn-primary btn-lg" style="font-size: 20px"> {{ teachercourse.course_id.name }} </a>
-                    <br><br>
-                {% endfor %}
             </div>
         </div>
     </div>

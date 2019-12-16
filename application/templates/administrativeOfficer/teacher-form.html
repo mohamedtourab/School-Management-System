@@ -1,6 +1,7 @@
 {% extends 'administrativeOfficer/teacherFormBase.html' %}
 
 {% block body %}
+    <div style="padding-left: 2%; padding-top: 1%;padding-bottom: 5%;width: 90%;">
 
     <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
@@ -23,5 +24,5 @@
             </div>
         </div>
     </form>
-
+    </div>
 {% endblock %}
