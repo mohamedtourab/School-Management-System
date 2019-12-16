@@ -2,35 +2,41 @@
 {% block coordinatedClass_active %} active {% endblock %}
 
 {% block body %}
-    {% if user.teacher.coordinatedClass %}
-        <h1>Your Coordinated CLass is {{ user.teacher.coordinatedClass }}</h1>
-        <h2>List Of Students: </h2>
-        <div class="container">
-            <div class="col-sm-4">
-                <table class="table table-bordered table-striped">
-                    <thead>
-                    <tr>
-                        <th>Firstname</th>
-                        <th>Lastname</th>
-                        <th>Final Grades</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for student in students %}
-                        <tr>
-                            <td>{{ student.first_name }}</td>
-                            <td>{{ student.last_name }}</td>
-                            <td><a href="coordinatedClass/studentCourses/{{ student.ID }}"
-                                   class="btn btn-primary btn-sm" style="font-size: 13px; margin-left: 13%"> ASSIGN </a>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    {% else %}
-        <h2>You are not a class coordinator</h2>
-    {% endif %}
+    <div style="padding-left: 2%; padding-top: 1%;padding-bottom: 5%;width: 90%;">
 
+        {% if user.teacher.coordinatedClass %}
+            <h1>Your Coordinated CLass is {{ user.teacher.coordinatedClass }}</h1>
+            <h2>List Of Students: </h2>
+            <div class="container">
+                <div class="col-sm-4">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>Firstname</th>
+                            <th>Lastname</th>
+                            <th>Final Grades</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for student in students %}
+                            <tr>
+                                <td>{{ student.first_name }}</td>
+                                <td>{{ student.last_name }}</td>
+                                <td><a href="coordinatedClass/studentCourses/{{ student.ID }}"
+                                       class="btn btn-primary btn-sm" style="font-size: 13px; margin-left: 13%"> ASSIGN </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+    {% else %}
+        <ul>
+            <li>
+                <h2>You are not a class coordinator</h2>
+            </li>
+        </ul>
+    {% endif %}
+</div>
 {% endblock %}

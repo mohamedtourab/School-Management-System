@@ -32,7 +32,7 @@ urlpatterns = [
     url(r'^teacher/course/(?P<course_id>[0-9]+)/absence/$', views.absence_form, name='absenceForm'),
     path('teacher/coordinatedClass', views.TeacherClassCoordinated.as_view(), name='TeacherCoordinator'),
     url(r'^teacher/coordinatedClass/studentCourses/(?P<studentID>[0-9]+)/$',
-        login_required(views.PutFinalGrade.as_view(), login_url='application:login'),
+        login_required(views.final_grade_form, login_url='application:login'),
         name='putFinalGrade'),
     # -------------------------------------------------------------------------------------------
     #               PARENT URLS
@@ -51,7 +51,8 @@ urlpatterns = [
         login_required(views.CourseView.as_view(), login_url='application:login'), name='courseView'),
     # NOT HANDLED URL PLEASE DONT USE
     url(r'^parent/(?P<studentID>[0-9]+)/course/(?P<course_id>[0-9]+)/$',
-        login_required(views.CourseDetailView.as_view(), login_url='application:login'), name='courseViewWithcourse_id'),
+        login_required(views.CourseDetailView.as_view(), login_url='application:login'),
+        name='courseViewWithcourse_id'),
     path('change-password/', views.change_password, name='change_password'),
     url(r'^parent/(?P<studentID>[0-9]+)/course/(?P<course_id>[0-9]+)/assignments/$',
         login_required(views.AssignmentView.as_view(), login_url='application:login'), name='assignments'),
