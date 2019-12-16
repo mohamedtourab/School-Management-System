@@ -665,22 +665,6 @@ def grade_form(request, course_id):
 
 
 @login_required(login_url='application:login')
-def final_grade_form(request, studentID):
-    if request.method == 'POST':
-        form = PutFinalGradeForm(request.POST, studentID=studentID)
-        if form.is_valid():
-            form.save()
-            sc_fk = request.POST['student_course']
-            sc = StudentCourse.objects.filter(pk__in=sc_fk).all()
-            sc.update(finalGrade=request.POST['final_grade'])
-            sc.update(publishFinalGrade=True)
-            return redirect('application:TeacherCoordinator')
-    else:
-        form = PutFinalGradeForm(studentID=studentID)
-    return render(request, 'teacher/final_grade.html', {'form': form, 'studentID': studentID, })
-
-
-@login_required(login_url='application:login')
 def assignment_form(request, course_id):
     if request.method == 'POST':
         form = AssignmentForm(request.POST, request.FILES)
@@ -702,12 +686,26 @@ class TeacherClassCoordinated(generic.ListView):
         return Student.objects.filter(classID=self.request.user.teacher.coordinatedClass)
 
 
-class PutFinalGrade(generic.ListView):
-    template_name = 'teacher/putfinalGrade.html'
-    context_object_name = 'studentCourses'
-
-    def get_queryset(self):
-        return StudentCourse.objects.filter(studentID=self.kwargs['studentID'])
+@login_required(login_url='application:login')
+def final_grade_form(request, studentID):
+    if request.method == 'POST':
+        form = PutFinalGradeForm(request.POST, studentID=studentID)
+        if form.is_valid():
+            form.save()
+            sc_fk = request.POST['student_course']
+            sc = StudentCourse.objects.filter(pk__in=sc_fk).all()
+            for sc_obj in sc:
+                if sc_obj.publishFinalGrade:
+                    return render(request, 'teacher/final_grade.html',
+                                  {'error_message': 'Final grade for the student of this course has been already assigned',
+                                   'form': form, 'studentID': studentID, })
+                else:
+                    sc.update(finalGrade=request.POST['final_grade'])
+                    sc.update(publishFinalGrade=True)
+                    return redirect('application:TeacherCoordinator')
+    else:
+        form = PutFinalGradeForm(studentID=studentID)
+    return render(request, 'teacher/final_grade.html', {'form': form, 'studentID': studentID, })
 
 
 # -----------------------------------------------------------------------------------------------
