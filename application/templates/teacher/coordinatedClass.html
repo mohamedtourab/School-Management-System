@@ -31,8 +31,12 @@
                     </table>
                 </div>
             </div>
-        {% else %}
-            <h2>You are not a class coordinator</h2>
-        {% endif %}
-    </div>
+    {% else %}
+        <ul>
+            <li>
+                <h2>You are not a class coordinator</h2>
+            </li>
+        </ul>
+    {% endif %}
+</div>
 {% endblock %}
