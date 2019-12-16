@@ -170,6 +170,16 @@ class PerformanceGrade(models.Model):
         return self.studentCourseID.studentID.first_name + '_' + self.studentCourseID.studentID.last_name + ':' + self.studentCourseID.course_id.name
 
 
+class AssignFinalGrade(models.Model):
+    ID = models.AutoField(primary_key=True)
+    student_course = models.ForeignKey(StudentCourse, on_delete=models.CASCADE)
+    final_grade = models.PositiveIntegerField()
+
+    def __str__(self):
+        return self.student_course.studentID.first_name + '_' + self.student_course.studentID.last_name + \
+               ':' + self.student_course.course_id.name
+
+
 class Note(models.Model):
     ID = models.AutoField(primary_key=True)
     studentCourseID = models.ForeignKey(StudentCourse, on_delete=models.CASCADE)

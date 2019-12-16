@@ -17,7 +17,7 @@ from .models import StudentCourse, PerformanceGrade, Parent, Content, Course, St
     ParentStudent, Attendance, Assignment, Announcement, Teacher, Note
 from django.views import generic
 from application.forms import StudentForm, ParentSignUpForm, ClassComposeForm, ContentForm, PerformanceGradeForm, \
-    AbsenceForm, AssignmentForm, TimetableForm, AnnouncementForm, TeacherCreateForm, AppointmentsForm
+    AbsenceForm, AssignmentForm, TimetableForm, AnnouncementForm, TeacherCreateForm, AppointmentsForm, PutFinalGradeForm
 
 
 # -----------------------------------------------------------------------------------------------
@@ -628,6 +628,20 @@ def grade_form(request, course_id):
     else:
         form = PerformanceGradeForm(course_id=course_id)
     return render(request, 'teacher/grade.html', {'form': form, 'course_id': course_id, })
+
+
+@login_required(login_url='application:login')
+def final_grade_form(request, studentID):
+    if request.method == 'POST':
+        form = PutFinalGradeForm(request.POST, studentID=studentID)
+        if form.is_valid():
+            form.save()
+            s = StudentCourse.objects.filter(studentID=studentID)
+            s.update(finalGrade=request.POST['final_grade'])
+            return redirect('application:TeacherCoordinator')
+    else:
+        form = PutFinalGradeForm(studentID=studentID)
+    return render(request, 'teacher/final_grade.html', {'form': form, 'studentID': studentID, })
 
 
 @login_required(login_url='application:login')
