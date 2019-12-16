@@ -5,7 +5,7 @@ from django.forms import ModelForm, inlineformset_factory, formset_factory
 import datetime
 
 from .models import Student, ClassInfo, Content, TeacherCourse, Course, PerformanceGrade, StudentCourse, Attendance, \
-    Assignment, Announcement, Teacher
+    Assignment, Announcement, Teacher, AssignFinalGrade
 
 
 class AnnouncementForm(ModelForm):
@@ -109,17 +109,16 @@ def to_integer(dt_time):
 class AbsenceForm(ModelForm):
     def __init__(self, *args, **kwargs):
         self.course_id = kwargs.pop('course_id', None)
-        self.date = datetime.date.today
-        self.ID = to_integer(datetime.date.today())
         super(AbsenceForm, self).__init__(*args, **kwargs)
-
-        self.studentCourseID = forms.ModelChoiceField(queryset=StudentCourse.objects.filter(),
-                                                      initial=StudentCourse.objects.filter(course_id=self.course_id))
+        self.studentCourseID = forms.ModelChoiceField(queryset=StudentCourse.objects.filter(course_id=self.course_id))
         self.fields['studentCourseID'] = self.studentCourseID
+
+        self.date = datetime.date.today
+
 
     class Meta:
         model = Attendance
-        fields = ['ID', 'studentCourseID', 'date', 'presence', 'cameLate', 'leftEarly']
+        fields = ['studentCourseID', 'date', 'presence', 'cameLate', 'leftEarly']
 
 
 class BehaviorForm(ModelForm):
@@ -136,6 +135,7 @@ class BehaviorForm(ModelForm):
     class Meta:
         model = Attendance
         fields = ['ID', 'studentCourseID', 'date', 'behavior']
+
 
 
 class AssignmentForm(ModelForm):
@@ -160,3 +160,15 @@ class AppointmentsForm(ModelForm):
         model = Teacher
         exclude = ['first_name', 'fiscalCode', 'last_name', 'coordinatedClass', 'email', 'user']
         fields = ['appointmentSchedule']
+
+
+class PutFinalGradeForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        self.studentID = kwargs.pop('studentID', None)
+        super(PutFinalGradeForm, self).__init__(*args, **kwargs)
+        self.student_course = forms.ModelChoiceField(queryset=StudentCourse.objects.filter(studentID=self.studentID))
+        self.fields['student_course'] = self.student_course
+
+    class Meta:
+        model = AssignFinalGrade
+        fields = ['student_course', 'final_grade', ]
