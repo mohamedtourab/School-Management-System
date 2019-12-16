@@ -6,15 +6,12 @@
         <div class="row content">
 
             <div class="col-sm-3 sidenav">
-                <ul class="nav nav-pills nav-stacked">
-                    <li class="active"><a href="#">Announcements</a></li>
-                </ul>
+                <button class="btn btn-primary btn-lg" style="font-size: 20px;">Announcements
+                </button>
                 <br>
             </div>
             {% if allAnnouncements %}
                 <div class="col-sm-9">
-                    <h4><small>NEW ANNOUNCEMENT</small></h4>
-                    <hr>
                     <ul class="nolist list-unstyled position-relative mb-0 px-lg-5 pt-lg-5">
                         <div id="box">
                             {% for announcement in allAnnouncements %}
