@@ -1,0 +1,19 @@
+{% extends 'parent/behaviorBase.html' %}
+{% block body %}
+    <div style="padding-bottom: 5%; padding-top: 1%;padding-left: 1%">
+        <table>
+            <tr>
+                <th style="text-align: center">Date</th>
+                <th style="text-align: center">Behavior</th>
+            </tr>
+            {% for b in behavior %}
+                <tr>
+                    <th style="text-align: center">{{ b.date }}</th>
+                    {% if b.behavior %}
+                        <th style="text-align: center"> {{ b.behavior }}</th>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

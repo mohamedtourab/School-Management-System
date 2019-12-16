@@ -115,7 +115,6 @@ class AbsenceForm(ModelForm):
 
         self.date = datetime.date.today
 
-
     class Meta:
         model = Attendance
         fields = ['studentCourseID', 'date', 'presence', 'cameLate', 'leftEarly']
@@ -124,18 +123,15 @@ class AbsenceForm(ModelForm):
 class BehaviorForm(ModelForm):
     def __init__(self, *args, **kwargs):
         self.course_id = kwargs.pop('course_id', None)
-        self.date = datetime.date.today
-        self.ID = to_integer(datetime.date.today())
         super(BehaviorForm, self).__init__(*args, **kwargs)
-
-        self.studentCourseID = forms.ModelChoiceField(queryset=StudentCourse.objects.filter(),
-                                                      initial=StudentCourse.objects.filter(course_id=self.course_id))
+        self.studentCourseID = forms.ModelChoiceField(queryset=StudentCourse.objects.filter(course_id=self.course_id))
         self.fields['studentCourseID'] = self.studentCourseID
+
+        self.date = datetime.date.today
 
     class Meta:
         model = Attendance
-        fields = ['ID', 'studentCourseID', 'date', 'behavior']
-
+        fields = ['studentCourseID', 'date', 'behavior']
 
 
 class AssignmentForm(ModelForm):
@@ -171,4 +167,4 @@ class PutFinalGradeForm(ModelForm):
 
     class Meta:
         model = AssignFinalGrade
-        fields = ['student_course', 'final_grade', ]
+        fields = ['student_course', 'final_grade']

@@ -339,6 +339,24 @@ class ParentAttendanceView(generic.ListView):
         return context
 
 
+class ParentBehaviorView(generic.ListView):
+    template_name = 'parent/behaviorp.html'
+    context_object_name = 'studentID'
+
+    def get_queryset(self):
+        return self.kwargs['studentID']
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ParentBehaviorView, self).get_context_data(**kwargs)
+        context['course_id'] = self.kwargs['course_id']
+        context['behavior'] = Attendance.objects.filter(Q(studentCourseID__studentID=self.kwargs['studentID']),
+                                                           Q(studentCourseID__course_id=self.kwargs[
+                                                               'course_id']), ).order_by('date')
+        # create new Vew for handling attendance divided into months, need to add new constraint to the query,
+        # and send Month_Name into next url
+        return context
+
+
 class CourseDetailView(generic.ListView):
     template_name = 'parent/course.html'
     context_object_name = 'topics'
@@ -576,7 +594,7 @@ class AbsenceView(generic.ListView):
         return context
 
 
-class behaviorView(generic.ListView):
+class BehaviorView(generic.ListView):
     template_name = 'teacher/behavior.html'
     context_object_name = 'behavior'
 
@@ -584,7 +602,7 @@ class behaviorView(generic.ListView):
         return Content.objects.filter(course_id=self.kwargs['course_id'])
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(behaviorView, self).get_context_data(**kwargs)
+        context = super(BehaviorView, self).get_context_data(**kwargs)
         context['course_id'] = self.kwargs['course_id']
         context['courseDetails'] = Course.objects.get(ID=self.kwargs['course_id'])
         return context
@@ -607,32 +625,17 @@ def absence_form(request, course_id):
 
 @login_required(login_url='application:login')
 def behavior_form(request, course_id):
-    student_courses = StudentCourse.objects.filter(course_id=course_id)
-    n = student_courses.count()
-
     if request.method == 'POST':
-        behavior_formset = modelformset_factory(model=Attendance, form=BehaviorForm, extra=n, max_num=n)
-        student_course = StudentCourse.objects.filter(course_id=course_id)
-        behavior_formset = behavior_formset(request.POST, queryset=student_course)
-
-        i = 0
-        for f in behavior_formset.forms:
-            if i < n:
-                f.studentCourseID = student_courses[i].studentID
-                i += 1
-
-        print(behavior_formset.errors)
-
-        if behavior_formset.is_valid():
-            behavior_formset.save()
-            return redirect('application:teacher')
-
+        form = BehaviorForm(request.POST, course_id=course_id)
+        if form.is_valid():
+            unsaved_form = form.save()
+            unsaved_form.save()
+            return render(request, 'teacher/behavior.html', {'form': form, 'course_id': course_id,
+                                                            'date': str(datetime.date.today())})
     else:
-        behavior_formset = modelformset_factory(model=Attendance, form=BehaviorForm, extra=n, max_num=n)
-
-    return render(request, 'teacher/behavior.html', {'formset': behavior_formset, 'course_id': course_id,
-                                                     'studentCoursesCount': n,
-                                                     'date': str(datetime.date.today())})
+        form = BehaviorForm(course_id=course_id)
+    return render(request, 'teacher/behavior.html', {'form': form, 'course_id': course_id,
+                                                    'date': str(datetime.date.today())})
 
 
 @login_required(login_url='application:login')

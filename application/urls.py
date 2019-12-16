@@ -48,6 +48,8 @@ urlpatterns = [
          name='chooseChild'),
     path('parent/attendance', login_required(views.ParentAttendanceView.as_view(), login_url='application:login'),
          name='parentAttendance'),
+    path('parent/behavior', login_required(views.ParentBehaviorView.as_view(), login_url='application:login'),
+         name='parentBehavior'),
     url(r'^parent/(?P<studentID>[0-9]+)/course/$',
         login_required(views.CourseView.as_view(), login_url='application:login'), name='courseView'),
     # NOT HANDLED URL PLEASE DONT USE
@@ -61,6 +63,8 @@ urlpatterns = [
         login_required(views.MaterialView.as_view(), login_url='application:login'), name='materials'),
     url(r'^parent/(?P<studentID>[0-9]+)/course/(?P<course_id>[0-9]+)/attendance/$',
         login_required(views.ParentAttendanceView.as_view(), login_url='application:login'), name='parentAttendance'),
+    url(r'^parent/(?P<studentID>[0-9]+)/course/(?P<course_id>[0-9]+)/behavior/$',
+        login_required(views.ParentBehaviorView.as_view(), login_url='application:login'), name='parentBehavior'),
     path('parent/<int:studentID>/announcement/', views.AnnouncementView.as_view(), name='announcement'),
     path('parent/<int:studentID>/course/<int:course_id>/notes/', views.NotesView.as_view(), name='CourseNote'),
     path('parent/<int:studentID>/finalResult/', views.FinalGradeView.as_view(), name='finalResult'),
