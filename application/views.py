@@ -670,8 +670,10 @@ def final_grade_form(request, studentID):
         form = PutFinalGradeForm(request.POST, studentID=studentID)
         if form.is_valid():
             form.save()
-            s = StudentCourse.objects.filter(studentID=studentID)
-            s.update(finalGrade=request.POST['final_grade'])
+            sc_fk = request.POST['student_course']
+            sc = StudentCourse.objects.filter(pk__in=sc_fk).all()
+            sc.update(finalGrade=request.POST['final_grade'])
+            sc.update(publishFinalGrade=True)
             return redirect('application:TeacherCoordinator')
     else:
         form = PutFinalGradeForm(studentID=studentID)
