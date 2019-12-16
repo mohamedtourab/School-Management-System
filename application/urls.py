@@ -30,6 +30,7 @@ urlpatterns = [
     url(r'^teacher/course/(?P<course_id>[0-9]+)/addPerformanceGrade/$', views.grade_form, name='gradeForm'),
     path('teacher/course/<int:course_id>/addAssignment', views.assignment_form, name='assignmentForm'),
     url(r'^teacher/course/(?P<course_id>[0-9]+)/absence/$', views.absence_form, name='absenceForm'),
+    url(r'^teacher/course/(?P<course_id>[0-9]+)/behavior/$', views.behavior_form, name='behaviorForm'),
     path('teacher/coordinatedClass', views.TeacherClassCoordinated.as_view(), name='TeacherCoordinator'),
     url(r'^teacher/coordinatedClass/studentCourses/(?P<studentID>[0-9]+)/$',
         login_required(views.PutFinalGrade.as_view(), login_url='application:login'),

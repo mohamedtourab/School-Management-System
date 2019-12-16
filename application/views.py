@@ -17,8 +17,7 @@ from .models import StudentCourse, PerformanceGrade, Parent, Content, Course, St
     ParentStudent, Attendance, Assignment, Announcement, Teacher, Note
 from django.views import generic
 from application.forms import StudentForm, ParentSignUpForm, ClassComposeForm, ContentForm, PerformanceGradeForm, \
-    AbsenceForm, AssignmentForm, TimetableForm, AnnouncementForm, TeacherCreateForm, AppointmentsForm
-
+    AbsenceForm, AssignmentForm, TimetableForm, AnnouncementForm, TeacherCreateForm, AppointmentsForm, BehaviorForm
 
 # -----------------------------------------------------------------------------------------------
 ####### ADMINISTRATIVE OFFICER AREA##########
@@ -562,13 +561,27 @@ class TeacherCourseDetailView(generic.ListView):
 
 class AbsenceView(generic.ListView):
     template_name = 'teacher/absence.html'
-    context_object_name = 'behaviour'
+    context_object_name = 'absence'
 
     def get_queryset(self):
         return Content.objects.filter(course_id=self.kwargs['course_id'])
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(AbsenceView, self).get_context_data(**kwargs)
+        context['course_id'] = self.kwargs['course_id']
+        context['courseDetails'] = Course.objects.get(ID=self.kwargs['course_id'])
+        return context
+
+
+class behaviorView(generic.ListView):
+    template_name = 'teacher/behavior.html'
+    context_object_name = 'behavior'
+
+    def get_queryset(self):
+        return Content.objects.filter(course_id=self.kwargs['course_id'])
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(behaviorView, self).get_context_data(**kwargs)
         context['course_id'] = self.kwargs['course_id']
         context['courseDetails'] = Course.objects.get(ID=self.kwargs['course_id'])
         return context
@@ -602,6 +615,36 @@ def absence_form(request, course_id):
     return render(request, 'teacher/absence.html', {'formset': absence_formset, 'course_id': course_id,
                                                     'studentCoursesCount': n,
                                                     'date': str(datetime.date.today())})
+
+
+@login_required(login_url='application:login')
+def behavior_form(request, course_id):
+    student_courses = StudentCourse.objects.filter(course_id=course_id)
+    n = student_courses.count()
+
+    if request.method == 'POST':
+        behavior_formset = modelformset_factory(model=Attendance, form=BehaviorForm, extra=n, max_num=n)
+        student_course = StudentCourse.objects.filter(course_id=course_id)
+        behavior_formset = behavior_formset(request.POST, queryset=student_course)
+
+        i = 0
+        for f in behavior_formset.forms:
+            if i < n:
+                f.studentCourseID = student_courses[i].studentID
+                i += 1
+
+        print(behavior_formset.errors)
+
+        if behavior_formset.is_valid():
+            behavior_formset.save()
+            return redirect('application:teacher')
+
+    else:
+        behavior_formset = modelformset_factory(model=Attendance, form=BehaviorForm, extra=n, max_num=n)
+
+    return render(request, 'teacher/behavior.html', {'formset': behavior_formset, 'course_id': course_id,
+                                                     'studentCoursesCount': n,
+                                                     'date': str(datetime.date.today())})
 
 
 @login_required(login_url='application:login')

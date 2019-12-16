@@ -1,0 +1,41 @@
+{% extends 'teacher/gradeBase.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block body %}
+    <div style="padding-left: 2%; padding-top: 1%;padding-bottom: 5%;width: 90%;">
+        <ul>
+            CourseID : {{ course_id }}
+        </ul>
+        <ul>
+            date : {{ date }}
+        </ul>
+            <ul>
+                student count : {{ studentCoursesCount }}
+        </ul>
+        <form action="" method="post">{% csrf_token %}
+            {{ formset.management_form }}
+            {{ form.as_p }}
+
+            <table class="table">
+                <tr>
+                    <th> date</th>
+                    <th> Student</th>
+                    <th> Behavior</th>
+                </tr>
+                {% for form in formset.forms %}
+                   {% if forloop.counter <= studentCoursesCount %}
+
+                    <tr>
+                        <th>{{ form.date }}</th>
+                        <th>{{ form.studentCourseID }}</th>
+                        <th>{{ form.behavior }}</th>
+                    </tr>
+                     {% endif %}
+                {% endfor %}
+            </table>
+            <input type="submit" value="Save" style="font-size: 20px"/> <a
+                    href="{% url 'application:behaviorForm' course_id %}"></a>
+        </form>
+    </div>
+{% endblock %}

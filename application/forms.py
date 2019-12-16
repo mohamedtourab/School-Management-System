@@ -119,7 +119,23 @@ class AbsenceForm(ModelForm):
 
     class Meta:
         model = Attendance
-        fields = ['ID', 'studentCourseID', 'date', 'presence', 'cameLate', 'leftEarly', 'behaviour']
+        fields = ['ID', 'studentCourseID', 'date', 'presence', 'cameLate', 'leftEarly']
+
+
+class BehaviorForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        self.course_id = kwargs.pop('course_id', None)
+        self.date = datetime.date.today
+        self.ID = to_integer(datetime.date.today())
+        super(BehaviorForm, self).__init__(*args, **kwargs)
+
+        self.studentCourseID = forms.ModelChoiceField(queryset=StudentCourse.objects.filter(),
+                                                      initial=StudentCourse.objects.filter(course_id=self.course_id))
+        self.fields['studentCourseID'] = self.studentCourseID
+
+    class Meta:
+        model = Attendance
+        fields = ['ID', 'studentCourseID', 'date', 'behavior']
 
 
 class AssignmentForm(ModelForm):
