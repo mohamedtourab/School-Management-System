@@ -625,7 +625,7 @@ class BehaviorView(generic.ListView):
 @login_required(login_url='application:login')
 def absence_form(request, course_id):
     student_courses = StudentCourse.objects.filter(course_id=course_id)
-
+    print(student_courses.count())
     formset = formset_factory(AbsenceForm, extra=student_courses.count())
 
     if request.method == 'POST':
@@ -634,7 +634,6 @@ def absence_form(request, course_id):
         i = 0
         for f in formset:
             f.studentCourseID = student_courses[i]
-            f.fields['studentCourseID'] = student_courses[i]
             f.save()
             i += 1
 
