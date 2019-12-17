@@ -1,4 +1,3 @@
-import datetime
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -21,6 +20,42 @@ from django.views import generic
 from application.forms import StudentForm, ParentSignUpForm, ClassComposeForm, ContentForm, PerformanceGradeForm, \
     AbsenceForm, AssignmentForm, TimetableForm, AnnouncementForm, TeacherCreateForm, AppointmentsForm, \
     PutFinalGradeForm, BehaviorForm
+
+
+# -----------------------------------------------------------------------------------------------
+####### HELPER FUNCTIONS AREA##########
+# -----------------------------------------------------------------------------------------------
+def read_csv_file(file, dictionary):
+    csv_file = open(file.path, 'r')
+    read_csv = csv.reader(csv_file, delimiter=',')
+    first = 1
+    index = 0
+    for row in read_csv:
+        if first == 1:
+            first = 0
+            dictionary.update({'header0': row[0]})
+            dictionary.update({'header1': row[1]})
+            dictionary.update({'header2': row[2]})
+            dictionary.update({'header3': row[3]})
+            dictionary.update({'header4': row[4]})
+            dictionary.update({'header5': row[5]})
+        else:
+            dictionary.update({'row' + str(index) + '0': row[0]})
+            dictionary.update({'row' + str(index) + '1': row[1]})
+            dictionary.update({'row' + str(index) + '2': row[2]})
+            dictionary.update({'row' + str(index) + '3': row[3]})
+            dictionary.update({'row' + str(index) + '4': row[4]})
+            dictionary.update({'row' + str(index) + '5': row[5]})
+            index += 1
+
+def number_of_seats():
+    number = ClassInfo.objects.aggregate((Sum('totalStudentsNumber')))['totalStudentsNumber__sum']
+    return number
+
+
+def number_of_students():
+    number = Student.objects.filter(classID=None).count()
+    return number
 
 
 # -----------------------------------------------------------------------------------------------
@@ -49,29 +84,9 @@ def timetable_form(request, name):
     if ClassInfo.objects.filter(name=name).exists():
         my_dict.update({'class': ClassInfo.objects.get(name=name)})
     my_dict.update({'name': name})
-    first = 1
     timetable = my_dict['class'].timetable
     try:
-        csvfile = open(timetable.path, 'r')
-        readCSV = csv.reader(csvfile, delimiter=',')
-        index = 0
-        for row in readCSV:
-            if first == 1:
-                first = 0
-                my_dict.update({'header0': row[0]})
-                my_dict.update({'header1': row[1]})
-                my_dict.update({'header2': row[2]})
-                my_dict.update({'header3': row[3]})
-                my_dict.update({'header4': row[4]})
-                my_dict.update({'header5': row[5]})
-            else:
-                my_dict.update({'row' + str(index) + '0': row[0]})
-                my_dict.update({'row' + str(index) + '1': row[1]})
-                my_dict.update({'row' + str(index) + '2': row[2]})
-                my_dict.update({'row' + str(index) + '3': row[3]})
-                my_dict.update({'row' + str(index) + '4': row[4]})
-                my_dict.update({'row' + str(index) + '5': row[5]})
-                index += 1
+        read_csv_file(file=timetable, dictionary=my_dict)
         my_dict.update({'class': 'timetable'})
     except:
         pass
@@ -104,8 +119,6 @@ def enroll_student(request):
 def class_compose(request):
     if request.method == 'POST':
         form = ClassComposeForm(request.POST)
-        # form2 = ManualEnrollmentForm(request.POST)
-        # check whether it's valid:
         if form.is_valid():
             class_info = form.save()
             class_info.refresh_from_db()
@@ -127,29 +140,13 @@ def class_compose(request):
                             StudentCourse.objects.create(student_id=student, course_id=course)
 
             messages.success(request, 'Class has been successfully added')
-
-            # if form2.is_valid():
-            #    form2.save()
-            #   messages.success(request, 'Student has been assigned manually')
-
             return render(request, 'administrativeOfficer/classCompose.html',
                           {'form': form, 'numberOfSeats': number_of_seats(), 'numberOfStudents': number_of_students()})
     else:
         form = ClassComposeForm()
-    # form2 = ManualEnrollmentForm()
-
     return render(request, 'administrativeOfficer/classCompose.html',
                   {'form': form, 'numberOfSeats': number_of_seats(), 'numberOfStudents': number_of_students()})
 
-
-def number_of_seats():
-    number = ClassInfo.objects.aggregate((Sum('totalStudentsNumber')))['totalStudentsNumber__sum']
-    return number
-
-
-def number_of_students():
-    number = Student.objects.filter(classID=None).count()
-    return number
 
 
 @login_required(login_url='application:login')
@@ -284,29 +281,9 @@ def parentView(request, student_id):
     my_dict.update({'student_id': student_id})
     if ClassInfo.objects.filter(student__ID=student_id).exists():
         my_dict.update({'studentClass': ClassInfo.objects.get(student__ID=student_id)})
-        first = 1
         timetable = my_dict['studentClass'].timetable
         try:
-            csvfile = open(timetable.path, 'r')
-            readCSV = csv.reader(csvfile, delimiter=',')
-            index = 0
-            for row in readCSV:
-                if first == 1:
-                    first = 0
-                    my_dict.update({'header0': row[0]})
-                    my_dict.update({'header1': row[1]})
-                    my_dict.update({'header2': row[2]})
-                    my_dict.update({'header3': row[3]})
-                    my_dict.update({'header4': row[4]})
-                    my_dict.update({'header5': row[5]})
-                else:
-                    my_dict.update({'row' + str(index) + '0': row[0]})
-                    my_dict.update({'row' + str(index) + '1': row[1]})
-                    my_dict.update({'row' + str(index) + '2': row[2]})
-                    my_dict.update({'row' + str(index) + '3': row[3]})
-                    my_dict.update({'row' + str(index) + '4': row[4]})
-                    my_dict.update({'row' + str(index) + '5': row[5]})
-                    index += 1
+            read_csv_file(file=timetable, dictionary=my_dict)
             my_dict.update({'timeTable': 'timetable'})
         except:
             pass
@@ -356,18 +333,6 @@ class ParentBehaviorView(generic.ListView):
         # and send Month_Name into next url
         return context
 
-
-# class AnnouncementView(generic.ListView):
-#     template_name = 'parent/announcement.html'
-#     context_object_name = 'allAnnouncements'
-#
-#     def get_queryset(self):
-#         return Announcement.objects.all().order_by('-ID')
-#
-#     def get_context_data(self, *, object_list=None, **kwargs):
-#         context = super(AnnouncementView, self).get_context_data(**kwargs)
-#         context['student_id'] = self.kwargs['student_id']
-#         return context
 
 
 class CourseDetailView(generic.ListView):
@@ -539,29 +504,9 @@ class AppointmentView(generic.ListView):
 def appointment_form(request, teacherID):
     my_dict = {
         'teacher': Teacher.objects.get(ID=teacherID)}  # GET STUDENT ID HERE
-    first = 1
     appointmentSchedule = my_dict['teacher'].appointmentSchedule
     try:
-        csvfile = open(appointmentSchedule.path, 'r')
-        readCSV = csv.reader(csvfile, delimiter=';')
-        index = 0
-        for row in readCSV:
-            if first == 1:
-                first = 0
-                my_dict.update({'header0': row[0]})
-                my_dict.update({'header1': row[1]})
-                my_dict.update({'header2': row[2]})
-                my_dict.update({'header3': row[3]})
-                my_dict.update({'header4': row[4]})
-                my_dict.update({'header5': row[5]})
-            else:
-                my_dict.update({'row' + str(index) + '0': row[0]})
-                my_dict.update({'row' + str(index) + '1': row[1]})
-                my_dict.update({'row' + str(index) + '2': row[2]})
-                my_dict.update({'row' + str(index) + '3': row[3]})
-                my_dict.update({'row' + str(index) + '4': row[4]})
-                my_dict.update({'row' + str(index) + '5': row[5]})
-                index += 1
+        read_csv_file(file=appointmentSchedule,dictionary=my_dict)
         my_dict.update({'AS': 'appointmentSchedule'})
     except:
         pass
