@@ -1,10 +1,10 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from django.forms import ModelForm, inlineformset_factory, formset_factory
+from django.forms import ModelForm
 import datetime
 
-from .models import Student, ClassInfo, Content, TeacherCourse, Course, PerformanceGrade, StudentCourse, Attendance, \
+from .models import Student, ClassInfo, Content, PerformanceGrade, StudentCourse, Attendance, \
     Assignment, Announcement, Teacher, AssignFinalGrade, Behavior
 
 
