@@ -652,7 +652,7 @@ def behavior_form(request, course_id):
 @login_required(login_url='application:login')
 def content_form(request, course_id):
     if request.method == 'POST':
-        form = ContentForm(request.POST ,user=request.user, request=request)
+        form = ContentForm(request.POST , request.FILES ,user=request.user, request=request)
         if form.is_valid():
             unsaved_form = form.save(commit=False)
             unsaved_form.course_id = Course.objects.get(ID=course_id)
