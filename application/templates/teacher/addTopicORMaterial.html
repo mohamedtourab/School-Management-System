@@ -1,12 +1,14 @@
-{% extends 'teacher/addTopicBase.html' %}
+{% extends 'teacher/course.html' %}
 
 {% load crispy_forms_tags %}
 
 {% block body %}
-    <form method="post" action="{% url 'application:teacher' %}addtopic/" style="padding-left: 2%">
+    <div style="padding-left: 2%; padding-top: 1%;padding-bottom: 5%;width: 90%;">
+    <form enctype="multipart/form-data" method="post" action="{% url 'application:contentForm' course_id %}"
+          style="padding-left: 2%">
         {% csrf_token %}
         {{ form|crispy }}
-        <input type="submit" value="Submit"/>
+        <input type="submit" value="Submit" class="btn btn-primary btn-lg" style="font-size: 20px"/>
     </form>
-    <br><br>
+    </div>
 {% endblock %}

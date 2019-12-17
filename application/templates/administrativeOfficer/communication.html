@@ -1,0 +1,31 @@
+{% extends 'administrativeOfficer/base.html' %}
+{% block communication_active %} active {% endblock %}
+{% block home_active %} passive {% endblock %}
+{% load crispy_forms_tags %}
+
+
+{% block body %}
+
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li  {% if message.tags %} class="text-success" {% endif %}> {{ message }} </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {% if error_message %}
+        <p class="text-danger"><strong>{{ error_message }}</strong></p>
+        <br>
+    {% endif %}
+
+
+    <div style="padding-left: 2%; padding-top: 1%;padding-bottom: 5%;width: 90%;">
+        <form action="{% url 'application:communicationAO' %}" method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <input type="submit" class="btn btn-primary btn-lg" style="font-size: 20px" value="Submit">
+        </form>
+
+    </div>
+
+{% endblock %}

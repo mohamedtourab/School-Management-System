@@ -1,0 +1,47 @@
+{% extends 'parent/base.html' %}
+
+{% block body %}
+
+    <div style="padding-left: 2%; padding-top: 1%;padding-bottom: 1%;width: 90%;">
+
+        <h1>Announcements</h1>
+        <br>
+    </div>
+    {% if allAnnouncements %}
+        <div class="col-sm-9">
+        <ul class="nolist list-unstyled position-relative mb-0 px-lg-5 pt-lg-5">
+            <div id="box">
+                {% for announcement in allAnnouncements %}
+                    <li class="border-bottom pb-3 mt-3">
+                        <h2 style="color: #1eaaf1">{{ announcement.announcementTitle }}</h2>
+                        <time class="small">{{ announcement.date }}</time>
+                        <p class="m-0 post_intro">{{ announcement.announcementText }}</p>
+                    </li>
+                    <br>
+                {% endfor %}
+            </div>
+
+        </ul>
+
+    {% else %}
+        <ul>
+            <li>
+                No Announcements yet
+            </li>
+        </ul>
+    {% endif %}
+
+
+<style media="screen">
+    #box {
+        height: 20em;
+        padding: 1em;
+        margin: auto;
+        border: 0.062em solid #999;
+        overflow: auto;
+        direction: ltr;
+        text-align: left;
+    }
+</style>
+</div>
+{% endblock %}

@@ -1,31 +1,33 @@
-{% extends 'parent/base.html' %}
+{% extends 'parent/attendanceBase.html' %}
 {% block body %}
-    <div>
+    <div style="padding-bottom: 5%; padding-top: 1%;padding-left: 1%">
         <table>
             <tr>
-                <th> Date</th>
-                <th> Hour</th>
-                <th> Type</th>
-                <th> Notes</th>
-                <th> Justify</th>
+                <th style="text-align: center">Date</th>
+                <th style="text-align: center">Presence</th>
+                <th style="text-align: center">Came Late</th>
+                <th style="text-align: center">Left Early</th>
             </tr>
-            <tr>
-                <td> 11/11/21</td>
-                <td> 13h00-14h00</td>
-                <td> behaviour</td>
-                <td> blabla</td>
-                <td> blabla</td>
-            </tr>
-            <tr>
-                <td>11/11/1</td>
-                <td>15h00-16h00</td>
-                <td>abscence</td>
-                <td>late</td>
-                <td> traffic jam</td>
-            </tr>
+            {% for a in attendances %}
+                <tr>
+                    <th>{{ a.date }}</th>
+                    {% if a.presence == True %}
+                        <td style="text-align: center; color: #34ce57"> &#10004;</td>
+                    {% else %}
+                        <td style="text-align: center; color: #a71d2a"> &times;</td>
+                    {% endif %}
+                    {% if a.cameLate == True %}
+                        <td style="text-align: center; color: #34ce57"> &#10004;</td>
+                    {% else %}
+                        <td style="text-align: center; color: #a71d2a"> &times;</td>
+                    {% endif %}
+                    {% if a.leftEarly == True %}
+                        <td style="text-align: center; color: #34ce57"> &#10004;</td>
+                    {% else %}
+                        <td style="text-align: center; color: #a71d2a"> &times;</td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
         </table>
-    </div>
-    <div>
-        <button>Justify an abscence</button>
     </div>
 {% endblock %}

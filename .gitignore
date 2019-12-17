@@ -11,3 +11,4 @@ __pycache__/
 application/migrations/__init__.py
 application/migrations/
 db.sqlite3
+.scannerwork

@@ -1,11 +1,22 @@
 {% extends 'parent/courseBase.html' %}
 {% block body %}
-    {% if topics %}
-       <h2 style="padding-left: 1%">List of topics discussed in {{ courseDetails.name }}</h2>
-        <ul>
-            {% for topic in topics %}
-                <li >{{ topic.contentString }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+    <div style="padding-left: 2%;padding-top: 1%;padding-bottom: 5%">
+        <h3 style="padding-bottom: 1%">Topics</h3>
+        {% if topics %}
+            <h2 style="padding-left: 1%">List of topics discussed in {{ courseDetails.name }}</h2>
+            <ul>
+                {% for topic in topics %}
+                    {% if topic.contentString %}
+                    <li>{{ topic.contentString }}</li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        {% else %}
+            <ul>
+                <li>
+                    No topics added yet.
+                </li>
+            </ul>
+        {% endif %}
+    </div>
 {% endblock %}

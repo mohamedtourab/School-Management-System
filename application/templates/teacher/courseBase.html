@@ -54,10 +54,17 @@
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item active"><a href="{% url 'application:teacher' %}" class="nav-link pl-0">Home</a>
                 </li>
-                <li class="nav-item"><a href="#" class="nav-link pl-0">Assignment</a></li>
-                <li class="nav-item"><a href="#" class="nav-link pl-0">Absence/Behaviour</a></li>
-                <li class="nav-item"><a href="{% url 'application:gradeForm' courseID %}" class="nav-link pl-0">Grades</a></li>
-            </ul>
+                <li class="nav-item "><a href="{% url 'application:contentForm' course_id %}" class="nav-link pl-0">Add
+                    topic/Material</a></li>
+                <li class="nav-item"><a href="{% url 'application:assignmentForm' course_id %}" class="nav-link pl-0">Assignment</a>
+                </li>
+                <li class="nav-item"><a href="{% url 'application:absenceForm' course_id %}"
+                                        class="nav-link pl-0">Absence</a></li>
+                <li class="nav-item"><a href="{% url 'application:behaviorForm' course_id %}"
+                                        class="nav-link pl-0">Behavior</a></li>
+                <li class="nav-item"><a href="{% url 'application:gradeForm' course_id %}"
+                                        class="nav-link pl-0">Grades</a></li>
+                </ul>
         </div>
     </div>
 </nav>
@@ -68,7 +75,7 @@
 {% endblock %}
 
 
-
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 <footer class="ftco-footer ftco-bg-dark ftco-section">
     <div class="container">
         <div class="row mb-5">

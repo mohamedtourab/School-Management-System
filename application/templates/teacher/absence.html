@@ -1,0 +1,36 @@
+{% extends 'teacher/gradeBase.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block body %}
+    <div style="padding-left: 2%; padding-top: 1%;padding-bottom: 5%;width: 90%;">
+        <ul>
+            CourseID : {{ course_id }}
+        </ul>
+        <form action="" method="post">{% csrf_token %}
+            {{ formset.management_form }}
+            {{ form.as_p }}
+
+            <table class="table">
+                <tr>
+                    <th> Date</th>
+                    <th> Student</th>
+                    <th> presence</th>
+                    <th> Came late</th>
+                    <th> Left Early</th>
+                </tr>
+                {% for form in formset.forms %}
+                    <tr>
+                        <td>{{ form.date }}</td>
+                        <td>{{ form.studentCourseID }}</td>
+                        <td>{{ form.presence }}</td>
+                        <td>{{ form.cameLate }}</td>
+                        <td>{{ form.leftEarly }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <input type="submit" value="Save" style="font-size: 20px"/> <a
+                    href="{% url 'application:absenceForm' course_id %}"></a>
+        </form>
+    </div>
+{% endblock %}

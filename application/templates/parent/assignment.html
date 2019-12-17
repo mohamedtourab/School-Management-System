@@ -1,0 +1,23 @@
+{% extends 'parent/assignmentBase.html' %}
+{% block body %}
+    <div style="padding-left: 2%;padding-top: 1%;padding-bottom: 5%">
+        <h3 style="padding-bottom: 1%">Assignments</h3>
+        {% if assignments %}
+            {% for assignment in assignments %}
+                <ul>
+                    <li>
+                        <a href="{% url 'application:index' %}{{ assignment.assignmentFile.url }}"
+                           download>{{ assignment.assignmentTitle }}</a>{{ '       ' }}Deadline:{{ assignment.deadlineDate }}
+                    </li>
+                </ul>
+            {% endfor %}
+        {% else %}
+            <ul>
+                <li>
+                    No Assignments added yet.
+                </li>
+            </ul>
+        {% endif %}
+
+    </div>
+{% endblock %}

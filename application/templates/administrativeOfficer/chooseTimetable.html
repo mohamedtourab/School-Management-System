@@ -1,0 +1,84 @@
+{% extends 'administrativeOfficer/timetableBase.html' %}
+{% load crispy_forms_tags %}
+{% block body %}
+    <br><br>
+    <div style="padding-left: 2%">
+        {% if class %}
+            <h2 style="padding-left: 1%" href="class/{{ class.name }}">Time Table of class {{ class.name }}</h2>
+            <br>
+            <table>
+                <th>{{ my_dict.header0 }}</th>
+                <th>{{ my_dict.header1 }}</th>
+                <th>{{ my_dict.header2 }}</th>
+                <th>{{ my_dict.header3 }}</th>
+                <th>{{ my_dict.header4 }}</th>
+                <th>{{ my_dict.header5 }}</th>
+                <tr>
+                    <td>{{ my_dict.row00 }}</td>
+                    <td>{{ my_dict.row01 }}</td>
+                    <td>{{ my_dict.row02 }}</td>
+                    <td>{{ my_dict.row03 }}</td>
+                    <td>{{ my_dict.row04 }}</td>
+                    <td>{{ my_dict.row05 }}</td>
+                </tr>
+                <tr>
+                    <td>{{ my_dict.row10 }}</td>
+                    <td>{{ my_dict.row11 }}</td>
+                    <td>{{ my_dict.row12 }}</td>
+                    <td>{{ my_dict.row13 }}</td>
+                    <td>{{ my_dict.row14 }}</td>
+                    <td>{{ my_dict.row15 }}</td>
+                </tr>
+                <tr>
+                    <td>{{ my_dict.row20 }}</td>
+                    <td>{{ my_dict.row21 }}</td>
+                    <td>{{ my_dict.row22 }}</td>
+                    <td>{{ my_dict.row23 }}</td>
+                    <td>{{ my_dict.row24 }}</td>
+                    <td>{{ my_dict.row25 }}</td>
+                </tr>
+                <tr>
+                    <td>{{ my_dict.row30 }}</td>
+                    <td>{{ my_dict.row31 }}</td>
+                    <td>{{ my_dict.row32 }}</td>
+                    <td>{{ my_dict.row33 }}</td>
+                    <td>{{ my_dict.row34 }}</td>
+                    <td>{{ my_dict.row35 }}</td>
+                </tr>
+                <tr>
+                    <td>{{ my_dict.row40 }}</td>
+                    <td>{{ my_dict.row41 }}</td>
+                    <td>{{ my_dict.row42 }}</td>
+                    <td>{{ my_dict.row43 }}</td>
+                    <td>{{ my_dict.row44 }}</td>
+                    <td>{{ my_dict.row45 }}</td>
+                </tr>
+                <tr>
+                    <td>{{ my_dict.row50 }}</td>
+                    <td>{{ my_dict.row51 }}</td>
+                    <td>{{ my_dict.row52 }}</td>
+                    <td>{{ my_dict.row53 }}</td>
+                    <td>{{ my_dict.row54 }}</td>
+                    <td>{{ my_dict.row55 }}</td>
+                </tr>
+            </table>
+        {% else %}
+            <ul>
+                <li>
+                    Time table is not uploaded yet.
+                </li>
+            </ul>
+        {% endif %}
+    </div>
+    <div style="padding-left: 2%; padding-top: 1%;padding-bottom: 5%;width: 90%;">
+        <h2>Update Time Table</h2>
+        <form method="post" enctype="multipart/form-data" action="." style="padding-left: 1%">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <input type="submit" class="btn btn-lg btn-primary" style="font-size: 20px" value="Update"/>
+        </form>
+    </div>
+    </div>
+
+
+{% endblock %}

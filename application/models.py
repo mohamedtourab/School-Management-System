@@ -1,8 +1,31 @@
+import datetime
+
 from django.db import models
 from django.contrib.auth.models import User
-
+from django.urls import reverse
 
 # Create your models here.
+FIRST = 'FIRST'
+SECOND = 'SECOND'
+THIRD = 'THIRD'
+FOURTH = 'FOURTH'
+FIFTH = 'FIFTH'
+SIXTH = 'SIXTH'
+SEVENTH = 'SEVENTH'
+EIGHTH = 'EIGHTH'
+NINTH = 'NINTH'
+TENTH = 'TENTH'
+choice = ((FIRST, 'FIRST'),
+          (SECOND, 'SECOND'),
+          (THIRD, 'THIRD'),
+          (FOURTH, 'FOURTH'),
+          (FIFTH, 'FIFTH'),
+          (SIXTH, 'SIXTH'),
+          (SEVENTH, 'SEVENTH'),
+          (EIGHTH, 'EIGHTH'),
+          (NINTH, 'NINTH'),
+          (TENTH, 'TENTH'),)
+
 
 class Principle(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -27,41 +50,22 @@ class AdministrativeOfficer(models.Model):
 
 
 # There is a missing field which is the TimeTable field to be done later
-# TODO add TimeTable field for the class
 class ClassInfo(models.Model):
     ID = models.AutoField(primary_key=True)
     name = models.CharField(max_length=30, unique=True)
     totalStudentsNumber = models.PositiveIntegerField()
-    timetable = models.FileField(blank=True,null=True)
+    timetable = models.FileField(verbose_name='Timetable', blank=True, upload_to='../media')
+
     def __str__(self):
         return self.name
 
 
 class Student(models.Model):
-    FIRST = 'FIRST'
-    SECOND = 'SECOND'
-    THIRD = 'THIRD'
-    FOURTH = 'FOURTH'
-    FIFTH = 'FIFTH'
-    SIXTH = 'SIXTH'
-    SEVENTH = 'SEVENTH'
-    EIGHTH = 'EIGHTH'
-    NINTH = 'NINTH'
-    TENTH = 'TENTH'
-    grade_choice = ((FIRST, 'FIRST'),
-                    (SECOND, 'SECOND'),
-                    (THIRD, 'THIRD'),
-                    (FOURTH, 'FOURTH'),
-                    (FIFTH, 'FIFTH'),
-                    (SIXTH, 'SIXTH'),
-                    (SEVENTH, 'SEVENTH'),
-                    (EIGHTH, 'EIGHTH'),
-                    (NINTH, 'NINTH'),
-                    (TENTH, 'TENTH'),)
+    grade_choice = choice
     ID = models.AutoField(primary_key=True)
     first_name = models.CharField(max_length=50, verbose_name='First Name')
     last_name = models.CharField(max_length=50, verbose_name='Last Name')
-    classID = models.ForeignKey(ClassInfo, on_delete=models.CASCADE, verbose_name='Student Class Name', blank=True,
+    classID = models.ForeignKey(ClassInfo, on_delete=models.SET_NULL, verbose_name='Student Class', blank=True,
                                 null=True)
     studentYear = models.CharField(max_length=20, choices=grade_choice, default=FIRST, verbose_name='Year Grade')
 
@@ -70,14 +74,35 @@ class Student(models.Model):
 
 
 class Course(models.Model):
+    year_choice = choice
     ID = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50)
     numberOfHoursPerWeek = models.PositiveIntegerField()
-    year = models.CharField(max_length=10)
-    assignment = models.FileField(blank=True, null=True)
+    year = models.CharField(max_length=20, choices=year_choice, default=FIRST, verbose_name='Course Year')
 
     def __str__(self):
         return self.name
+
+
+class ClassCourse(models.Model):
+    ID = models.AutoField(primary_key=True)
+    classID = models.ForeignKey(ClassInfo, on_delete=models.CASCADE)
+    course_id = models.ForeignKey(Course, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.classID.name + ':' + self.course_id.name
+
+
+class Assignment(models.Model):
+    ID = models.AutoField(primary_key=True)
+    assignmentTitle = models.CharField(max_length=50, verbose_name='Assignment Title')
+    course_id = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='Course')
+    assignmentFile = models.FileField(verbose_name='File', upload_to='../media')
+    additionDate = models.DateField(default=datetime.date.today, verbose_name='Addition Date')
+    deadlineDate = models.DateField(default=None, verbose_name='Deadline Date')
+
+    def __str__(self):
+        return self.assignmentTitle
 
 
 class Teacher(models.Model):
@@ -88,6 +113,10 @@ class Teacher(models.Model):
     email = models.EmailField(blank=True, null=True)
     fiscalCode = models.CharField(max_length=16)
     coordinatedClass = models.ForeignKey(ClassInfo, on_delete=models.CASCADE, blank=True, null=True)
+    appointmentSchedule = models.FileField(null=True, blank=True, default='TeacherSchedule.csv')
+
+    def get_absolute_url(self):
+        return reverse('application:teacherMasterData', kwargs={'pk': self.pk})
 
     def __str__(self):
         return self.first_name + " " + self.last_name
@@ -96,10 +125,10 @@ class Teacher(models.Model):
 class TeacherCourse(models.Model):
     ID = models.AutoField(primary_key=True)
     teacherID = models.ForeignKey(Teacher, on_delete=models.CASCADE)
-    courseID = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course_id = models.ForeignKey(Course, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.teacherID.first_name + '_' + self.teacherID.last_name + ':' + self.courseID.name
+        return self.teacherID.first_name + '_' + self.teacherID.last_name + ':' + self.course_id.name
 
 
 class Parent(models.Model):
@@ -110,22 +139,25 @@ class Parent(models.Model):
     def __str__(self):
         return self.user.first_name + ' ' + self.user.last_name
 
+
 class ParentStudent(models.Model):
     ID = models.AutoField(primary_key=True)
     parentID = models.ForeignKey(Parent, on_delete=models.CASCADE)
     studentID = models.ForeignKey(Student, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.studentID.first_name+' '+self.studentID.last_name+':'+self.parentID.user.first_name+' '+self.parentID.user.last_name
+        return self.studentID.first_name + ' ' + self.studentID.last_name + ':' + self.parentID.user.first_name + ' ' + self.parentID.user.last_name
+
 
 class StudentCourse(models.Model):
     ID = models.AutoField(primary_key=True)
     studentID = models.ForeignKey(Student, on_delete=models.CASCADE)
-    courseID = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course_id = models.ForeignKey(Course, on_delete=models.CASCADE)
     finalGrade = models.PositiveIntegerField(blank=True, null=True)
+    publishFinalGrade = models.BooleanField(blank=True, default=False)
 
     def __str__(self):
-        return self.studentID.first_name + '_' + self.studentID.last_name + ':' + self.courseID.name
+        return self.studentID.first_name + '_' + self.studentID.last_name + ':' + self.course_id.name
 
 
 class PerformanceGrade(models.Model):
@@ -135,37 +167,68 @@ class PerformanceGrade(models.Model):
     grade = models.PositiveIntegerField()
 
     def __str__(self):
-        return self.studentCourseID.studentID.first_name + '_' + self.studentCourseID.studentID.last_name + ':' + self.studentCourseID.courseID.name
+        return self.studentCourseID.studentID.first_name + '_' + self.studentCourseID.studentID.last_name + ':' + self.studentCourseID.course_id.name
+
+
+class AssignFinalGrade(models.Model):
+    ID = models.AutoField(primary_key=True)
+    student_course = models.ForeignKey(StudentCourse, on_delete=models.CASCADE)
+    final_grade = models.PositiveIntegerField()
+
+    def __str__(self):
+        return self.student_course.studentID.first_name + '_' + self.student_course.studentID.last_name + \
+               ':' + self.student_course.course_id.name
 
 
 class Note(models.Model):
     ID = models.AutoField(primary_key=True)
     studentCourseID = models.ForeignKey(StudentCourse, on_delete=models.CASCADE)
     noteText = models.CharField(max_length=300)
+    noteDate = models.DateField(default=datetime.date.today)
 
 
 class Content(models.Model):
     ID = models.AutoField(primary_key=True)
-    courseID = models.ForeignKey(Course, on_delete=models.CASCADE)
-    contentString = models.CharField(max_length=100)
-    material = models.FileField(blank=True, null=True)
+    course_id = models.ForeignKey(Course, on_delete=models.CASCADE)
+    contentString = models.CharField(max_length=100, null=True, blank=True, default=None, verbose_name='Topic Title')
+    materialTitle = models.CharField(max_length=100, null=True, blank=True, default=None)
+    material = models.FileField(verbose_name='File', upload_to='../media', blank=True, null=True)
+    additionDate = models.DateField(default=datetime.date.today, verbose_name='Addition Date')
 
     def __str__(self):
-        return self.courseID.name + '_Content' + self.ID.__str__()
+        return self.course_id.name + '_Content' + self.ID.__str__()
 
 
-class Announcements(models.Model):
+class Announcement(models.Model):
     ID = models.AutoField(primary_key=True)
+    announcementTitle = models.CharField(max_length=100, default="")
     announcementText = models.CharField(max_length=500)
+    date = models.DateTimeField(default=datetime.datetime.now, blank=True)
+
+    def __str__(self):
+        return self.announcementTitle
 
 
 class Attendance(models.Model):
     ID = models.AutoField(primary_key=True)
     studentCourseID = models.ForeignKey(StudentCourse, on_delete=models.CASCADE)
     presence = models.BooleanField(default=True)
-    date = models.DateField()
+    date = models.DateField(default=datetime.date.today)
     cameLate = models.BooleanField(default=False)
     leftEarly = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.studentCourseID.studentID.first_name + ' ' + self.studentCourseID.studentID.last_name + ':' + self.studentCourseID.course_id.name
+
+
+class Behavior(models.Model):
+    ID = models.AutoField(primary_key=True)
+    studentCourseID = models.ForeignKey(StudentCourse, on_delete=models.CASCADE)
+    date = models.DateTimeField(default=datetime.datetime.now, blank=True)
+    behavior = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.studentCourseID.studentID.first_name + ' ' + self.studentCourseID.studentID.last_name + ':' + self.studentCourseID.course_id.name
 
 
 class FreeSlots(models.Model):

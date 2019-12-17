@@ -1,0 +1,30 @@
+{% extends 'parent/assignmentBase.html' %}
+{% block body %}
+    <div style="padding-left: 2%;padding-top: 1%;padding-bottom: 5%">
+        <h3 style="padding-bottom: 1%">Materials</h3>
+        {% if materials %}
+            {% for coursematerial in materials %}
+                {% if coursematerial.material %}
+                    <ul>
+                        <li>
+                            <a href="{% url 'application:index' %}{{ coursematerial.material.url }}"
+                               download>
+                                {% if not coursematerial.materialTitle %}
+                                    {{ coursematerial.material.name }}
+                                {% else %}
+                                    {{ coursematerial.materialTitle }}
+                                {% endif %}</a>
+                        </li>
+                    </ul>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <ul>
+                <li>
+                    No material added yet.
+                </li>
+            </ul>
+        {% endif %}
+
+    </div>
+{% endblock %}
