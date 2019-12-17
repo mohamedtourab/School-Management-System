@@ -12,7 +12,6 @@ from django.views.generic import UpdateView, DeleteView
 from django.db.models import Q
 import csv
 from functools import partial, wraps
-
 from django.forms import formset_factory
 from .models import StudentCourse, PerformanceGrade, Parent, Content, Course, Student, ClassInfo, TeacherCourse, \
     ParentStudent, Attendance, Assignment, Announcement, Teacher, Note, Behavior
@@ -25,9 +24,9 @@ from application.forms import StudentForm, ParentSignUpForm, ClassComposeForm, C
 # -----------------------------------------------------------------------------------------------
 ####### HELPER FUNCTIONS AREA##########
 # -----------------------------------------------------------------------------------------------
-def read_csv_file(file, dictionary):
+def read_csv_file(file, dictionary, used_delimiter):
     csv_file = open(file.path, 'r')
-    read_csv = csv.reader(csv_file, delimiter=',')
+    read_csv = csv.reader(csv_file, delimiter=used_delimiter)
     first = 1
     index = 0
     for row in read_csv:
@@ -47,6 +46,7 @@ def read_csv_file(file, dictionary):
             dictionary.update({'row' + str(index) + '4': row[4]})
             dictionary.update({'row' + str(index) + '5': row[5]})
             index += 1
+
 
 def number_of_seats():
     number = ClassInfo.objects.aggregate((Sum('totalStudentsNumber')))['totalStudentsNumber__sum']
@@ -86,7 +86,7 @@ def timetable_form(request, name):
     my_dict.update({'name': name})
     timetable = my_dict['class'].timetable
     try:
-        read_csv_file(file=timetable, dictionary=my_dict)
+        read_csv_file(file=timetable, dictionary=my_dict, used_delimiter=',')
         my_dict.update({'class': 'timetable'})
     except:
         pass
@@ -146,7 +146,6 @@ def class_compose(request):
         form = ClassComposeForm()
     return render(request, 'administrativeOfficer/classCompose.html',
                   {'form': form, 'numberOfSeats': number_of_seats(), 'numberOfStudents': number_of_students()})
-
 
 
 @login_required(login_url='application:login')
@@ -275,7 +274,7 @@ class CourseView(generic.ListView):
 
 
 @login_required(login_url='application:login')
-def parentView(request, student_id):
+def parent_view(request, student_id):
     my_dict = {'allStudentCourses': Course.objects.filter(studentcourse__student_id=student_id)}  # GET STUDENT ID HERE
     my_dict.update({'parentStudent': ParentStudent.objects.filter(student_id=student_id)})
     my_dict.update({'student_id': student_id})
@@ -283,7 +282,7 @@ def parentView(request, student_id):
         my_dict.update({'studentClass': ClassInfo.objects.get(student__ID=student_id)})
         timetable = my_dict['studentClass'].timetable
         try:
-            read_csv_file(file=timetable, dictionary=my_dict)
+            read_csv_file(file=timetable, dictionary=my_dict, used_delimiter=',')
             my_dict.update({'timeTable': 'timetable'})
         except:
             pass
@@ -334,7 +333,6 @@ class ParentBehaviorView(generic.ListView):
         return context
 
 
-
 class CourseDetailView(generic.ListView):
     template_name = 'parent/course.html'
     context_object_name = 'topics'
@@ -375,11 +373,11 @@ class MaterialView(generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(MaterialView, self).get_context_data(**kwargs)
         context['student_id'] = self.kwargs['student_id']
-        allContent = Content.objects.filter(course_id=self.kwargs['course_id'])
+        all_content = Content.objects.filter(course_id=self.kwargs['course_id'])
         # check if there is any file uploaded yet in order to create material context
-        if allContent:
+        if all_content:
             flag = 0
-            for content in allContent:
+            for content in all_content:
                 if content.material:
                     flag = 1
                     break
@@ -393,9 +391,9 @@ class NotesView(generic.ListView):
     context_object_name = 'notes'
 
     def get_queryset(self):
-        studentCourseID = StudentCourse.objects.get(student_id=self.kwargs['student_id'],
-                                                    course_id=self.kwargs['course_id'])
-        return Note.objects.filter(studentCourseID=studentCourseID)
+        student_course_id = StudentCourse.objects.get(student_id=self.kwargs['student_id'],
+                                                      course_id=self.kwargs['course_id'])
+        return Note.objects.filter(studentCourseID=student_course_id)
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(NotesView, self).get_context_data(**kwargs)
@@ -434,13 +432,13 @@ class ParentGradeView(generic.ListView):
             student_id=self.kwargs['student_id'])  # GET STUDENT ID HERE
 
         columns = 0
-        for studentcourse in context['studentCourse']:
-            gradeCounter = 0
+        for student_course in context['studentCourse']:
+            grade_counter = 0
             for grade in context['allGrades']:
-                if grade.studentCourseID.course_id.name == studentcourse.course_id.name:
-                    gradeCounter += 1
-            if gradeCounter > columns:
-                columns = gradeCounter
+                if grade.studentCourseID.course_id.name == student_course.course_id.name:
+                    grade_counter += 1
+            if grade_counter > columns:
+                columns = grade_counter
         context['columns'] = range(columns)
         return context
 
@@ -504,9 +502,9 @@ class AppointmentView(generic.ListView):
 def appointment_form(request, teacherID):
     my_dict = {
         'teacher': Teacher.objects.get(ID=teacherID)}  # GET STUDENT ID HERE
-    appointmentSchedule = my_dict['teacher'].appointmentSchedule
+    appointment_schedule = my_dict['teacher'].appointmentSchedule
     try:
-        read_csv_file(file=appointmentSchedule,dictionary=my_dict)
+        read_csv_file(file=appointment_schedule, dictionary=my_dict, used_delimiter=';')
         my_dict.update({'AS': 'appointmentSchedule'})
     except:
         pass
