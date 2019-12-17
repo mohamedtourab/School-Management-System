@@ -66,8 +66,8 @@ class ContentForm(ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        material_title = cleaned_data.get("material_title")
-        material_file = self.request.POST.get('material')
+        material_title = self.request.POST.get('materialTitle')
+        material_file = self.request.FILES.get("material")
         content_string = cleaned_data.get("contentString")
         if not content_string:
             if (not material_file) and (not material_title):
