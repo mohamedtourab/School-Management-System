@@ -23,11 +23,11 @@ class StudentForm(ModelForm):
 
 
 class ParentSignUpForm(UserCreationForm):
-    studentID = forms.ModelMultipleChoiceField(queryset=Student.objects.all())
+    student_id = forms.ModelMultipleChoiceField(queryset=Student.objects.all())
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', 'studentID',)
+        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', 'student_id',)
 
 
 class TeacherCreateForm(UserCreationForm):
@@ -160,9 +160,9 @@ class AppointmentsForm(ModelForm):
 
 class PutFinalGradeForm(ModelForm):
     def __init__(self, *args, **kwargs):
-        self.studentID = kwargs.pop('studentID', None)
+        self.student_id = kwargs.pop('student_id', None)
         super(PutFinalGradeForm, self).__init__(*args, **kwargs)
-        self.student_course = forms.ModelChoiceField(queryset=StudentCourse.objects.filter(studentID=self.studentID))
+        self.student_course = forms.ModelChoiceField(queryset=StudentCourse.objects.filter(student_id=self.student_id))
         self.fields['student_course'] = self.student_course
 
     class Meta:

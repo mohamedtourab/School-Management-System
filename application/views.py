@@ -115,7 +115,7 @@ def class_compose(request):
                     student.classID = class_info
                     student.save()
                     for course in first_year_courses:
-                        StudentCourse.objects.create(studentID=student, course_id=course)
+                        StudentCourse.objects.create(student_id=student, course_id=course)
             else:
                 i = 0
                 for student in Student.objects.filter(classID=None, studentYear='FIRST'):
@@ -124,7 +124,7 @@ def class_compose(request):
                         student.classID = class_info
                         student.save()
                         for course in first_year_courses:
-                            StudentCourse.objects.create(studentID=student, course_id=course)
+                            StudentCourse.objects.create(student_id=student, course_id=course)
 
             messages.success(request, 'Class has been successfully added')
 
@@ -165,8 +165,8 @@ def parent_signup(request):
                 user = form.save()
                 user.refresh_from_db()  # load the profile instance created by the signal
                 parent = Parent.objects.create(user=user, )
-                for student in form.cleaned_data.get('studentID'):
-                    ParentStudent.objects.create(studentID=student, parentID=parent)
+                for student in form.cleaned_data.get('student_id'):
+                    ParentStudent.objects.create(student_id=student, parentID=parent)
 
                 messages.success(request, 'Parent has been successfully added')
 
@@ -271,19 +271,19 @@ class TestView(generic.ListView):
 
 class CourseView(generic.ListView):
     template_name = 'parent/course.html'
-    context_object_name = 'studentID'
+    context_object_name = 'student_id'
 
     def get_queryset(self):
-        return self.kwargs['studentID']
+        return self.kwargs['student_id']
 
 
 @login_required(login_url='application:login')
-def parentView(request, studentID):
-    my_dict = {'allStudentCourses': Course.objects.filter(studentcourse__studentID=studentID)}  # GET STUDENT ID HERE
-    my_dict.update({'parentStudent': ParentStudent.objects.filter(studentID=studentID)})
-    my_dict.update({'studentID': studentID})
-    if ClassInfo.objects.filter(student__ID=studentID).exists():
-        my_dict.update({'studentClass': ClassInfo.objects.get(student__ID=studentID)})
+def parentView(request, student_id):
+    my_dict = {'allStudentCourses': Course.objects.filter(studentcourse__student_id=student_id)}  # GET STUDENT ID HERE
+    my_dict.update({'parentStudent': ParentStudent.objects.filter(student_id=student_id)})
+    my_dict.update({'student_id': student_id})
+    if ClassInfo.objects.filter(student__ID=student_id).exists():
+        my_dict.update({'studentClass': ClassInfo.objects.get(student__ID=student_id)})
         first = 1
         timetable = my_dict['studentClass'].timetable
         try:
@@ -323,15 +323,15 @@ class ChooseChild(generic.ListView):
 
 class ParentAttendanceView(generic.ListView):
     template_name = 'parent/attendancep.html'
-    context_object_name = 'studentID'
+    context_object_name = 'student_id'
 
     def get_queryset(self):
-        return self.kwargs['studentID']
+        return self.kwargs['student_id']
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ParentAttendanceView, self).get_context_data(**kwargs)
         context['course_id'] = self.kwargs['course_id']
-        context['attendances'] = Attendance.objects.filter(Q(studentCourseID__studentID=self.kwargs['studentID']),
+        context['attendances'] = Attendance.objects.filter(Q(studentCourseID__student_id=self.kwargs['student_id']),
                                                            Q(studentCourseID__course_id=self.kwargs[
                                                                'course_id']), ).order_by('date')
         # create new Vew for handling attendance divided into months, need to add new constraint to the query,
@@ -341,15 +341,15 @@ class ParentAttendanceView(generic.ListView):
 
 class ParentBehaviorView(generic.ListView):
     template_name = 'parent/behaviorp.html'
-    context_object_name = 'studentID'
+    context_object_name = 'student_id'
 
     def get_queryset(self):
-        return self.kwargs['studentID']
+        return self.kwargs['student_id']
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ParentBehaviorView, self).get_context_data(**kwargs)
         context['course_id'] = self.kwargs['course_id']
-        context['behavior'] = Behavior.objects.filter(Q(studentCourseID__studentID=self.kwargs['studentID']),
+        context['behavior'] = Behavior.objects.filter(Q(studentCourseID__student_id=self.kwargs['student_id']),
                                                       Q(studentCourseID__course_id=self.kwargs[
                                                           'course_id']), ).order_by('-ID')
         # create new Vew for handling attendance divided into months, need to add new constraint to the query,
@@ -366,7 +366,7 @@ class ParentBehaviorView(generic.ListView):
 #
 #     def get_context_data(self, *, object_list=None, **kwargs):
 #         context = super(AnnouncementView, self).get_context_data(**kwargs)
-#         context['studentID'] = self.kwargs['studentID']
+#         context['student_id'] = self.kwargs['student_id']
 #         return context
 
 
@@ -379,7 +379,7 @@ class CourseDetailView(generic.ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(CourseDetailView, self).get_context_data(**kwargs)
-        context['studentID'] = self.kwargs['studentID']
+        context['student_id'] = self.kwargs['student_id']
         context['courseDetails'] = Course.objects.get(ID=self.kwargs['course_id'])
         context['course_id'] = self.kwargs['course_id']
         return context
@@ -394,7 +394,7 @@ class AssignmentView(generic.ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(AssignmentView, self).get_context_data(**kwargs)
-        context['studentID'] = self.kwargs['studentID']
+        context['student_id'] = self.kwargs['student_id']
         if Assignment.objects.filter(course_id=self.kwargs['course_id']):
             context['assignments'] = Assignment.objects.filter(course_id=self.kwargs['course_id'])
         return context
@@ -409,7 +409,7 @@ class MaterialView(generic.ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(MaterialView, self).get_context_data(**kwargs)
-        context['studentID'] = self.kwargs['studentID']
+        context['student_id'] = self.kwargs['student_id']
         allContent = Content.objects.filter(course_id=self.kwargs['course_id'])
         # check if there is any file uploaded yet in order to create material context
         if allContent:
@@ -428,13 +428,13 @@ class NotesView(generic.ListView):
     context_object_name = 'notes'
 
     def get_queryset(self):
-        studentCourseID = StudentCourse.objects.get(studentID=self.kwargs['studentID'],
+        studentCourseID = StudentCourse.objects.get(student_id=self.kwargs['student_id'],
                                                     course_id=self.kwargs['course_id'])
         return Note.objects.filter(studentCourseID=studentCourseID)
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(NotesView, self).get_context_data(**kwargs)
-        context['studentID'] = self.kwargs['studentID']
+        context['student_id'] = self.kwargs['student_id']
         context['courseDetails'] = Course.objects.get(ID=self.kwargs['course_id'])
         context['course_id'] = self.kwargs['course_id']
         return context
@@ -445,12 +445,12 @@ class FinalGradeView(generic.ListView):
     context_object_name = 'finalGrades'
 
     def get_queryset(self):
-        return StudentCourse.objects.filter(studentID=self.kwargs['studentID'])
+        return StudentCourse.objects.filter(student_id=self.kwargs['student_id'])
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(FinalGradeView, self).get_context_data(**kwargs)
-        context['studentID'] = self.kwargs['studentID']
-        context['studentData'] = Student.objects.get(ID=self.kwargs['studentID'])
+        context['student_id'] = self.kwargs['student_id']
+        context['studentData'] = Student.objects.get(ID=self.kwargs['student_id'])
         return context
 
 
@@ -459,14 +459,14 @@ class ParentGradeView(generic.ListView):
     context_object_name = 'allGrades'
 
     def get_queryset(self):
-        return PerformanceGrade.objects.filter(studentCourseID__studentID=self.kwargs[
-            'studentID'])  # GET STUDENTcourse_id HERE ; should I send studentID to the url here?
+        return PerformanceGrade.objects.filter(studentCourseID__student_id=self.kwargs[
+            'student_id'])  # GET STUDENTcourse_id HERE ; should I send student_id to the url here?
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ParentGradeView, self).get_context_data(**kwargs)
-        context['studentID'] = self.kwargs['studentID']
+        context['student_id'] = self.kwargs['student_id']
         context['studentCourse'] = StudentCourse.objects.filter(
-            studentID=self.kwargs['studentID'])  # GET STUDENT ID HERE
+            student_id=self.kwargs['student_id'])  # GET STUDENT ID HERE
 
         columns = 0
         for studentcourse in context['studentCourse']:
@@ -506,7 +506,7 @@ class AnnouncementView(generic.ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(AnnouncementView, self).get_context_data(**kwargs)
-        context['studentID'] = self.kwargs['studentID']
+        context['student_id'] = self.kwargs['student_id']
         return context
 
 
@@ -709,14 +709,14 @@ class TeacherClassCoordinated(generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(TeacherClassCoordinated, self).get_context_data(**kwargs)
         context['studentCourse'] = StudentCourse.objects.filter(
-            studentID__classID=self.request.user.teacher.coordinatedClass)
+            student_id__classID=self.request.user.teacher.coordinatedClass)
         return context
 
 
 @login_required(login_url='application:login')
-def final_grade_form(request, studentID):
+def final_grade_form(request, student_id):
     if request.method == 'POST':
-        form = PutFinalGradeForm(request.POST, studentID=studentID)
+        form = PutFinalGradeForm(request.POST, student_id=student_id)
         if form.is_valid():
             form.save()
             sc_fk = request.POST['student_course']
@@ -726,14 +726,14 @@ def final_grade_form(request, studentID):
                     return render(request, 'teacher/final_grade.html',
                                   {
                                       'error_message': 'Final grade for the student of this course has been already assigned!',
-                                      'form': form, 'studentID': studentID, })
+                                      'form': form, 'student_id': student_id, })
                 else:
                     sc.update(finalGrade=request.POST['final_grade'])
                     sc.update(publishFinalGrade=True)
                     return redirect('application:TeacherCoordinator')
     else:
-        form = PutFinalGradeForm(studentID=studentID)
-    return render(request, 'teacher/final_grade.html', {'form': form, 'studentID': studentID, })
+        form = PutFinalGradeForm(student_id=student_id)
+    return render(request, 'teacher/final_grade.html', {'form': form, 'student_id': student_id, })
 
 
 # -----------------------------------------------------------------------------------------------
@@ -782,7 +782,7 @@ def login_user(request):
                             return redirect('application:change_password')
                         else:
                             if number_of_student == 1:
-                                student_id = ParentStudent.objects.get(parentID=parent.ID).studentID.ID
+                                student_id = ParentStudent.objects.get(parentID=parent.ID).student_id.ID
                                 return redirect('application:parentWithID', student_id)
                             else:
                                 return redirect('application:chooseChild')

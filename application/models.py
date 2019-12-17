@@ -143,21 +143,21 @@ class Parent(models.Model):
 class ParentStudent(models.Model):
     ID = models.AutoField(primary_key=True)
     parentID = models.ForeignKey(Parent, on_delete=models.CASCADE)
-    studentID = models.ForeignKey(Student, on_delete=models.CASCADE)
+    student_id = models.ForeignKey(Student, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.studentID.first_name + ' ' + self.studentID.last_name + ':' + self.parentID.user.first_name + ' ' + self.parentID.user.last_name
+        return self.student_id.first_name + ' ' + self.student_id.last_name + ':' + self.parentID.user.first_name + ' ' + self.parentID.user.last_name
 
 
 class StudentCourse(models.Model):
     ID = models.AutoField(primary_key=True)
-    studentID = models.ForeignKey(Student, on_delete=models.CASCADE)
+    student_id = models.ForeignKey(Student, on_delete=models.CASCADE)
     course_id = models.ForeignKey(Course, on_delete=models.CASCADE)
     finalGrade = models.PositiveIntegerField(blank=True, null=True)
     publishFinalGrade = models.BooleanField(blank=True, default=False)
 
     def __str__(self):
-        return self.studentID.first_name + '_' + self.studentID.last_name + ':' + self.course_id.name
+        return self.student_id.first_name + '_' + self.student_id.last_name + ':' + self.course_id.name
 
 
 class PerformanceGrade(models.Model):
@@ -167,7 +167,7 @@ class PerformanceGrade(models.Model):
     grade = models.PositiveIntegerField()
 
     def __str__(self):
-        return self.studentCourseID.studentID.first_name + '_' + self.studentCourseID.studentID.last_name + ':' + self.studentCourseID.course_id.name
+        return self.studentCourseID.student_id.first_name + '_' + self.studentCourseID.student_id.last_name + ':' + self.studentCourseID.course_id.name
 
 
 class AssignFinalGrade(models.Model):
@@ -176,7 +176,7 @@ class AssignFinalGrade(models.Model):
     final_grade = models.PositiveIntegerField()
 
     def __str__(self):
-        return self.student_course.studentID.first_name + '_' + self.student_course.studentID.last_name + \
+        return self.student_course.student_id.first_name + '_' + self.student_course.student_id.last_name + \
                ':' + self.student_course.course_id.name
 
 
@@ -218,7 +218,7 @@ class Attendance(models.Model):
     leftEarly = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.studentCourseID.studentID.first_name + ' ' + self.studentCourseID.studentID.last_name + ':' + self.studentCourseID.course_id.name
+        return self.studentCourseID.student_id.first_name + ' ' + self.studentCourseID.student_id.last_name + ':' + self.studentCourseID.course_id.name
 
 
 class Behavior(models.Model):
@@ -228,7 +228,7 @@ class Behavior(models.Model):
     behavior = models.CharField(max_length=200)
 
     def __str__(self):
-        return self.studentCourseID.studentID.first_name + ' ' + self.studentCourseID.studentID.last_name + ':' + self.studentCourseID.course_id.name
+        return self.studentCourseID.student_id.first_name + ' ' + self.studentCourseID.student_id.last_name + ':' + self.studentCourseID.course_id.name
 
 
 class FreeSlots(models.Model):
