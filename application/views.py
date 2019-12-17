@@ -12,6 +12,8 @@ from django.urls import reverse
 from django.views.generic import UpdateView, DeleteView
 from django.db.models import Q
 import csv
+from functools import partial, wraps
+
 from django.forms import formset_factory
 from .models import StudentCourse, PerformanceGrade, Parent, Content, Course, Student, ClassInfo, TeacherCourse, \
     ParentStudent, Attendance, Assignment, Announcement, Teacher, Note, Behavior
@@ -54,7 +56,6 @@ def timetable_form(request, name):
         readCSV = csv.reader(csvfile, delimiter=',')
         index = 0
         for row in readCSV:
-            print(row)
             if first == 1:
                 first = 0
                 my_dict.update({'header0': row[0]})
@@ -290,7 +291,6 @@ def parentView(request, studentID):
             readCSV = csv.reader(csvfile, delimiter=',')
             index = 0
             for row in readCSV:
-                print(row)
                 if first == 1:
                     first = 0
                     my_dict.update({'header0': row[0]})
@@ -624,7 +624,6 @@ class BehaviorView(generic.ListView):
 @login_required(login_url='application:login')
 def absence_form(request, course_id):
     student_courses = StudentCourse.objects.filter(course_id=course_id)
-    print(student_courses.count())
     formset = formset_factory(AbsenceForm, extra=student_courses.count())
 
     if request.method == 'POST':
@@ -640,7 +639,8 @@ def absence_form(request, course_id):
             return redirect('application:teacher')
 
     else:
-        formset = formset_factory(AbsenceForm, extra=student_courses.count())
+        formset = formset_factory(wraps(AbsenceForm)(partial(AbsenceForm, course_id=course_id)),
+                                  extra=student_courses.count())
 
     return render(request, 'teacher/absence.html', {'formset': formset, 'course_id': course_id,
                                                     'student_courses': student_courses})
@@ -662,7 +662,7 @@ def behavior_form(request, course_id):
 @login_required(login_url='application:login')
 def content_form(request, course_id):
     if request.method == 'POST':
-        form = ContentForm(request.POST , request.FILES ,user=request.user, request=request)
+        form = ContentForm(request.POST, request.FILES, user=request.user, request=request)
         if form.is_valid():
             unsaved_form = form.save(commit=False)
             unsaved_form.course_id = Course.objects.get(ID=course_id)
