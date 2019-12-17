@@ -505,7 +505,7 @@ def appointment_form(request, teacherID):
     appointment_schedule = my_dict['teacher'].appointmentSchedule
     try:
         read_csv_file(file=appointment_schedule, dictionary=my_dict, used_delimiter=';')
-        my_dict.update({'AS': 'appointmentSchedule'})
+        my_dict.update({'AS': 'appointment_schedule'})
     except:
         pass
 
