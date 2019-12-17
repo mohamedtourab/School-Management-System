@@ -18,7 +18,7 @@
     <form method="post" action="{% url 'application:putFinalGrade' studentID %}" style="padding-left: 2%">
         {% csrf_token %}
         {{ form|crispy }}
-        <button type="submit" class="btn btn-info btn-lg" style="font-size: 20px">Add</button>
+        <button type="submit" class="btn btn-primary btn-lg" style="font-size: 20px">Add</button>
     </form>
      </div>
 {% endblock %}
