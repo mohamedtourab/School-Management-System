@@ -13,6 +13,7 @@ from django.urls import reverse
 from django.views.generic import CreateView, UpdateView, DeleteView
 from django.db.models import Q
 import csv
+from django.forms import formset_factory
 from .models import StudentCourse, PerformanceGrade, Parent, Content, Course, Student, ClassInfo, TeacherCourse, \
     ParentStudent, Attendance, Assignment, Announcement, Teacher, Note
 from django.views import generic
@@ -563,7 +564,7 @@ class TeacherCourseDetailView(generic.ListView):
 
 class AbsenceView(generic.ListView):
     template_name = 'teacher/absence.html'
-    context_object_name = 'behaviour'
+    context_object_name = 'absence'
 
     def get_queryset(self):
         return Content.objects.filter(course_id=self.kwargs['course_id'])
@@ -577,17 +578,28 @@ class AbsenceView(generic.ListView):
 
 @login_required(login_url='application:login')
 def absence_form(request, course_id):
+    student_courses = StudentCourse.objects.filter(course_id=course_id)
+
+    formset = formset_factory(AbsenceForm, extra=student_courses.count())
+
     if request.method == 'POST':
-        form = AbsenceForm(request.POST, course_id=course_id)
-        if form.is_valid():
-            unsaved_form = form.save()
-            unsaved_form.save()
-            return render(request, 'teacher/absence.html', {'form': form, 'course_id': course_id,
-                                                            'date': str(datetime.date.today())})
+        formset = formset(request.POST)
+
+        i = 0
+        for f in formset:
+            f.studentCourseID = student_courses[i]
+            f.fields['studentCourseID'] = student_courses[i]
+            f.save()
+            i += 1
+
+        if formset.is_valid():
+            return redirect('application:teacher')
+
     else:
-        form = AbsenceForm(course_id=course_id)
-    return render(request, 'teacher/absence.html', {'form': form, 'course_id': course_id,
-                                                    'date': str(datetime.date.today())})
+        formset = formset_factory(AbsenceForm, extra=student_courses.count())
+
+    return render(request, 'teacher/absence.html', {'formset': formset, 'course_id': course_id,
+                                                    'student_courses': student_courses})
 
 
 @login_required(login_url='application:login')

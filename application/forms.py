@@ -110,11 +110,7 @@ class AbsenceForm(ModelForm):
     def __init__(self, *args, **kwargs):
         self.course_id = kwargs.pop('course_id', None)
         super(AbsenceForm, self).__init__(*args, **kwargs)
-        self.studentCourseID = forms.ModelChoiceField(queryset=StudentCourse.objects.filter(course_id=self.course_id))
-        self.fields['studentCourseID'] = self.studentCourseID
-
         self.date = datetime.date.today
-
 
     class Meta:
         model = Attendance
