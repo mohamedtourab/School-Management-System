@@ -628,15 +628,15 @@ def absence_form(request, course_id):
 
     if request.method == 'POST':
         formset = formset(request.POST)
-
-        i = 0
-        for f in formset:
-            f.studentCourseID = student_courses[i]
-            f.save()
-            i += 1
-
         if formset.is_valid():
-            return redirect('application:teacher')
+            i = 0
+            for f in formset:
+                if f.is_valid():
+                    f.studentCourseID = student_courses[i]
+                    print(f)
+                    f.save()
+                    i += 1
+        return redirect('application:absenceForm', course_id=course_id)
 
     else:
         formset = formset_factory(wraps(AbsenceForm)(partial(AbsenceForm, course_id=course_id)),

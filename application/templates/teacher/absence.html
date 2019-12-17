@@ -21,11 +21,11 @@
                 </tr>
                 {% for form in formset.forms %}
                     <tr>
-                        <th>{{ form.date }}</th>
-                        <th>{{ form.studentCourseID }}</th>
-                        <th>{{ form.presence }}</th>
-                        <th>{{ form.cameLate }}</th>
-                        <th>{{ form.leftEarly }}</th>
+                        <td>{{ form.date }}</td>
+                        <td>{{ form.studentCourseID }}</td>
+                        <td>{{ form.presence }}</td>
+                        <td>{{ form.cameLate }}</td>
+                        <td>{{ form.leftEarly }}</td>
                     </tr>
                 {% endfor %}
             </table>
