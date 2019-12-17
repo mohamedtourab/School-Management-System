@@ -216,7 +216,16 @@ class Attendance(models.Model):
     date = models.DateField(default=datetime.date.today)
     cameLate = models.BooleanField(default=False)
     leftEarly = models.BooleanField(default=False)
-    behaviour = models.CharField(max_length=200, default=" ")
+
+    def __str__(self):
+        return self.studentCourseID.studentID.first_name + ' ' + self.studentCourseID.studentID.last_name + ':' + self.studentCourseID.course_id.name
+
+
+class Behavior(models.Model):
+    ID = models.AutoField(primary_key=True)
+    studentCourseID = models.ForeignKey(StudentCourse, on_delete=models.CASCADE)
+    date = models.DateTimeField(default=datetime.datetime.now, blank=True)
+    behavior = models.CharField(max_length=200)
 
     def __str__(self):
         return self.studentCourseID.studentID.first_name + ' ' + self.studentCourseID.studentID.last_name + ':' + self.studentCourseID.course_id.name

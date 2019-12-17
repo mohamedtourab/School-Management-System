@@ -5,7 +5,7 @@ from django.forms import ModelForm, inlineformset_factory, formset_factory
 import datetime
 
 from .models import Student, ClassInfo, Content, TeacherCourse, Course, PerformanceGrade, StudentCourse, Attendance, \
-    Assignment, Announcement, Teacher, AssignFinalGrade
+    Assignment, Announcement, Teacher, AssignFinalGrade, Behavior
 
 
 class AnnouncementForm(ModelForm):
@@ -66,8 +66,8 @@ class ContentForm(ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        material_title = cleaned_data.get("material_title")
-        material_file = self.request.POST.get('material')
+        material_title = self.request.POST.get('materialTitle')
+        material_file = self.request.FILES.get("material")
         content_string = cleaned_data.get("contentString")
         if not content_string:
             if (not material_file) and (not material_title):
@@ -117,6 +117,22 @@ class AbsenceForm(ModelForm):
         fields = ['studentCourseID', 'date', 'presence', 'cameLate', 'leftEarly']
 
 
+class BehaviorForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        self.course_id = kwargs.pop('course_id', None)
+        super(BehaviorForm, self).__init__(*args, **kwargs)
+        self.studentCourseID = forms.ModelChoiceField(queryset=StudentCourse.objects.filter(course_id=self.course_id))
+        self.fields['studentCourseID'] = self.studentCourseID
+
+        self.date = datetime.date.today
+
+    behavior = forms.CharField(widget=forms.Textarea)
+
+    class Meta:
+        model = Behavior
+        fields = ['studentCourseID', 'date', 'behavior']
+
+
 class AssignmentForm(ModelForm):
     class Meta:
         model = Assignment
@@ -150,4 +166,4 @@ class PutFinalGradeForm(ModelForm):
 
     class Meta:
         model = AssignFinalGrade
-        fields = ['student_course', 'final_grade', ]
+        fields = ['student_course', 'final_grade']

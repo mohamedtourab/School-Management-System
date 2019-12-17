@@ -5,21 +5,24 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
     <link href="https://fonts.googleapis.com/css?family=Work+Sans:100,200,300,400,500,600,700,800,900" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Fredericka+the+Great" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="../../../../../static/application/css/open-iconic-bootstrap.min.css">
-    <link rel="stylesheet" href="../../../../../static/application/css/animate.css">
-    <link rel="stylesheet" href="../../../../../static/application/css/owl.carousel.min.css">
-    <link rel="stylesheet" href="../../../../../static/application/css/owl.theme.default.min.css">
-    <link rel="stylesheet" href="../../../../../static/application/css/magnific-popup.css">
-    <link rel="stylesheet" href="../../../../../static/application/css/aos.css">
-    <link rel="stylesheet" href="../../../../../static/application/css/ionicons.min.css">
-    <link rel="stylesheet" href="../../../../../static/application/css/flaticon.css">
-    <link rel="stylesheet" href="../../../../../static/application/css/icomoon.css">
-    <link rel="stylesheet" href="../../../../../static/application/css/style.css">
+    <link rel="stylesheet" href="../../../../../../static/application/css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="../../../../../../static/application/css/animate.css">
+    <link rel="stylesheet" href="../../../../../../static/application/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="../../../../../../static/application/css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="../../../../../../static/application/css/magnific-popup.css">
+    <link rel="stylesheet" href="../../../../../../static/application/css/aos.css">
+    <link rel="stylesheet" href="../../../../../../static/application/css/ionicons.min.css">
+    <link rel="stylesheet" href="../../../../../../static/application/css/flaticon.css">
+    <link rel="stylesheet" href="../../../../../../static/application/css/icomoon.css">
+    <link rel="stylesheet" href="../../../../../../static/application/css/style.css">
+    <link rel="stylesheet" href="../../../../../../static/application/css/style2.css">
 </head>
 <body>
 <div class="py-2 bg-primary">
@@ -48,18 +51,24 @@
         </button>
         <div class="collapse navbar-collapse" id="ftco-nav" style="font-size: 14px">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item active"><a href="{% url 'application:parentWithID' studentID %}"
-                                               class="nav-link pl-0">Home</a></li>
-                <li class="nav-item"><a href="{% url 'application:parentAttendance' studentID course_id %}"
-                                        class="nav-link pl-0">Attendance</a></li>
-                <li class="nav-item"><a href="{% url 'application:materials' studentID course_id %}"
-                                        class="nav-link pl-0">Materials</a></li>
-                <li class="nav-item"><a href="{% url 'application:assignments' studentID course_id %}"
-                                        class="nav-link pl-0">Assignments</a></li>
-                <li class="nav-item"><a href="{% url 'application:parentBehavior' studentID course_id %}"
-                                        class="nav-link pl-0">Behavior</a></li>
-                <li class="nav-item"><a href="{% url 'application:CourseNote' studentID course_id %}"
-                                        class="nav-link pl-0">Notes</a></li>
+                <li class="nav-item {% block home_active %}{% endblock %}"><a
+                        href="{% url 'application:parentWithID' studentID %}"
+                        class="nav-link pl-0">Home</a></li>
+                <li class="nav-item {% block attendance_active %}{% endblock %}"><a
+                        href="{% url 'application:parentAttendance' studentID course_id %}"
+                        class="nav-link pl-0">Attendance</a></li>
+                <li class="nav-item {% block materials_active %}{% endblock %}"><a
+                        href="{% url 'application:materials' studentID course_id %}"
+                        class="nav-link pl-0">Materials</a></li>
+                <li class="nav-item {% block assignments_active %}{% endblock %}"><a
+                        href="{% url 'application:assignments' studentID course_id %}"
+                        class="nav-link pl-0">Assignments</a></li>
+                <li class="nav-item {% block notes_active %}{% endblock %}"><a
+                        href="{% url 'application:CourseNote' studentID course_id %}"
+                        class="nav-link pl-0">Notes</a></li>
+                <li class="nav-item {% block behavior_active %}{% endblock %}"><a
+                        href="{% url 'application:parentBehavior' studentID course_id %}"
+                        class="nav-link pl-0">Behavior</a></li>
             </ul>
         </div>
     </div>
@@ -138,21 +147,21 @@
 </div>
 
 
-<script src="../../../../../static/application/js/jquery.min.js"></script>
-<script src="../../../../../static/application/js/jquery-migrate-3.0.1.min.js"></script>
-<script src="../../../../../static/application/js/popper.min.js"></script>
-<script src="../../../../../static/application/js/bootstrap.min.js"></script>
-<script src="../../../../../static/application/js/jquery.easing.1.3.js"></script>
-<script src="../../../../../static/application/js/jquery.waypoints.min.js"></script>
-<script src="../../../../../static/application/js/jquery.stellar.min.js"></script>
-<script src="../../../../../static/application/js/owl.carousel.min.js"></script>
-<script src="../../../../../static/application/js/jquery.magnific-popup.min.js"></script>
-<script src="../../../../../static/application/js/aos.js"></script>
-<script src="../../../../../static/application/js/jquery.animateNumber.min.js"></script>
-<script src="../../../../../static/application/js/scrollax.min.js"></script>
+<script src="../../../../../../static/application/js/jquery.min.js"></script>
+<script src="../../../../../../static/application/js/jquery-migrate-3.0.1.min.js"></script>
+<script src="../../../../../../static/application/js/popper.min.js"></script>
+<script src="../../../../../../static/application/js/bootstrap.min.js"></script>
+<script src="../../../../../../static/application/js/jquery.easing.1.3.js"></script>
+<script src="../../../../../../static/application/js/jquery.waypoints.min.js"></script>
+<script src="../../../../../../static/application/js/jquery.stellar.min.js"></script>
+<script src="../../../../../../static/application/js/owl.carousel.min.js"></script>
+<script src="../../../../../../static/application/js/jquery.magnific-popup.min.js"></script>
+<script src="../../../../../../static/application/js/aos.js"></script>
+<script src="../../../../../../static/application/js/jquery.animateNumber.min.js"></script>
+<script src="../../../../../../static/application/js/scrollax.min.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
-<script src="../../../../../static/application/js/google-map.js"></script>
-<script src="../../../../../static/application/js/main.js"></script>
+<script src="../../../../../../static/application/js/google-map.js"></script>
+<script src="../../../../../../static/application/js/main.js"></script>
 
 </body>
 </html>

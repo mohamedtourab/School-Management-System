@@ -10,15 +10,16 @@ from django.forms import modelformset_factory
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from django.views.generic import CreateView, UpdateView, DeleteView
+from django.views.generic import UpdateView, DeleteView
 from django.db.models import Q
 import csv
 from django.forms import formset_factory
 from .models import StudentCourse, PerformanceGrade, Parent, Content, Course, Student, ClassInfo, TeacherCourse, \
-    ParentStudent, Attendance, Assignment, Announcement, Teacher, Note
+    ParentStudent, Attendance, Assignment, Announcement, Teacher, Note, Behavior
 from django.views import generic
 from application.forms import StudentForm, ParentSignUpForm, ClassComposeForm, ContentForm, PerformanceGradeForm, \
-    AbsenceForm, AssignmentForm, TimetableForm, AnnouncementForm, TeacherCreateForm, AppointmentsForm, PutFinalGradeForm
+    AbsenceForm, AssignmentForm, TimetableForm, AnnouncementForm, TeacherCreateForm, AppointmentsForm, \
+    PutFinalGradeForm, BehaviorForm
 
 
 # -----------------------------------------------------------------------------------------------
@@ -339,6 +340,37 @@ class ParentAttendanceView(generic.ListView):
         return context
 
 
+class ParentBehaviorView(generic.ListView):
+    template_name = 'parent/behaviorp.html'
+    context_object_name = 'studentID'
+
+    def get_queryset(self):
+        return self.kwargs['studentID']
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ParentBehaviorView, self).get_context_data(**kwargs)
+        context['course_id'] = self.kwargs['course_id']
+        context['behavior'] = Behavior.objects.filter(Q(studentCourseID__studentID=self.kwargs['studentID']),
+                                                      Q(studentCourseID__course_id=self.kwargs[
+                                                          'course_id']), ).order_by('-ID')
+        # create new Vew for handling attendance divided into months, need to add new constraint to the query,
+        # and send Month_Name into next url
+        return context
+
+
+# class AnnouncementView(generic.ListView):
+#     template_name = 'parent/announcement.html'
+#     context_object_name = 'allAnnouncements'
+#
+#     def get_queryset(self):
+#         return Announcement.objects.all().order_by('-ID')
+#
+#     def get_context_data(self, *, object_list=None, **kwargs):
+#         context = super(AnnouncementView, self).get_context_data(**kwargs)
+#         context['studentID'] = self.kwargs['studentID']
+#         return context
+
+
 class CourseDetailView(generic.ListView):
     template_name = 'parent/course.html'
     context_object_name = 'topics'
@@ -576,6 +608,20 @@ class AbsenceView(generic.ListView):
         return context
 
 
+class BehaviorView(generic.ListView):
+    template_name = 'teacher/behavior.html'
+    context_object_name = 'behavior'
+
+    def get_queryset(self):
+        return Content.objects.filter(course_id=self.kwargs['course_id'])
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(BehaviorView, self).get_context_data(**kwargs)
+        context['course_id'] = self.kwargs['course_id']
+        context['courseDetails'] = Course.objects.get(ID=self.kwargs['course_id'])
+        return context
+
+
 @login_required(login_url='application:login')
 def absence_form(request, course_id):
     student_courses = StudentCourse.objects.filter(course_id=course_id)
@@ -603,9 +649,22 @@ def absence_form(request, course_id):
 
 
 @login_required(login_url='application:login')
+def behavior_form(request, course_id):
+    if request.method == 'POST':
+        form = BehaviorForm(request.POST, course_id=course_id)
+        if form.is_valid():
+            unsaved_form = form.save()
+            unsaved_form.save()
+            return render(request, 'teacher/behavior.html', {'form': form, 'course_id': course_id})
+    else:
+        form = BehaviorForm(course_id=course_id)
+    return render(request, 'teacher/behavior.html', {'form': form, 'course_id': course_id})
+
+
+@login_required(login_url='application:login')
 def content_form(request, course_id):
     if request.method == 'POST':
-        form = ContentForm(request.POST, user=request.user, request=request)
+        form = ContentForm(request.POST , request.FILES ,user=request.user, request=request)
         if form.is_valid():
             unsaved_form = form.save(commit=False)
             unsaved_form.course_id = Course.objects.get(ID=course_id)
@@ -629,20 +688,6 @@ def grade_form(request, course_id):
 
 
 @login_required(login_url='application:login')
-def final_grade_form(request, studentID):
-    if request.method == 'POST':
-        form = PutFinalGradeForm(request.POST, studentID=studentID)
-        if form.is_valid():
-            form.save()
-            s = StudentCourse.objects.filter(studentID=studentID)
-            s.update(finalGrade=request.POST['final_grade'])
-            return redirect('application:TeacherCoordinator')
-    else:
-        form = PutFinalGradeForm(studentID=studentID)
-    return render(request, 'teacher/final_grade.html', {'form': form, 'studentID': studentID, })
-
-
-@login_required(login_url='application:login')
 def assignment_form(request, course_id):
     if request.method == 'POST':
         form = AssignmentForm(request.POST, request.FILES)
@@ -663,13 +708,34 @@ class TeacherClassCoordinated(generic.ListView):
     def get_queryset(self):
         return Student.objects.filter(classID=self.request.user.teacher.coordinatedClass)
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(TeacherClassCoordinated, self).get_context_data(**kwargs)
+        context['studentCourse'] = StudentCourse.objects.filter(
+            studentID__classID=self.request.user.teacher.coordinatedClass)
+        return context
 
-class PutFinalGrade(generic.ListView):
-    template_name = 'teacher/putfinalGrade.html'
-    context_object_name = 'studentCourses'
 
-    def get_queryset(self):
-        return StudentCourse.objects.filter(studentID=self.kwargs['studentID'])
+@login_required(login_url='application:login')
+def final_grade_form(request, studentID):
+    if request.method == 'POST':
+        form = PutFinalGradeForm(request.POST, studentID=studentID)
+        if form.is_valid():
+            form.save()
+            sc_fk = request.POST['student_course']
+            sc = StudentCourse.objects.filter(pk__in=sc_fk).all()
+            for sc_obj in sc:
+                if sc_obj.publishFinalGrade:
+                    return render(request, 'teacher/final_grade.html',
+                                  {
+                                      'error_message': 'Final grade for the student of this course has been already assigned!',
+                                      'form': form, 'studentID': studentID, })
+                else:
+                    sc.update(finalGrade=request.POST['final_grade'])
+                    sc.update(publishFinalGrade=True)
+                    return redirect('application:TeacherCoordinator')
+    else:
+        form = PutFinalGradeForm(studentID=studentID)
+    return render(request, 'teacher/final_grade.html', {'form': form, 'studentID': studentID, })
 
 
 # -----------------------------------------------------------------------------------------------
