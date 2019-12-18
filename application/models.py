@@ -162,9 +162,9 @@ class StudentCourse(models.Model):
 
 class PerformanceGrade(models.Model):
     ID = models.AutoField(primary_key=True)
-    studentCourseID = models.ForeignKey(StudentCourse, on_delete=models.CASCADE)
-    date = models.DateField()
-    grade = models.PositiveIntegerField()
+    studentCourseID = models.ForeignKey(StudentCourse, on_delete=models.CASCADE, verbose_name='Student')
+    date = models.DateField(verbose_name='Date')
+    grade = models.PositiveIntegerField(verbose_name='Grade')
 
     def __str__(self):
         return self.studentCourseID.student_id.first_name + '_' + self.studentCourseID.student_id.last_name + ':' + self.studentCourseID.course_id.name
@@ -183,15 +183,15 @@ class AssignFinalGrade(models.Model):
 class Note(models.Model):
     ID = models.AutoField(primary_key=True)
     studentCourseID = models.ForeignKey(StudentCourse, on_delete=models.CASCADE)
-    noteText = models.CharField(max_length=300)
-    noteDate = models.DateField(default=datetime.date.today)
+    noteText = models.CharField(max_length=300, verbose_name='Note')
+    noteDate = models.DateField(default=datetime.date.today, verbose_name='Date')
 
 
 class Content(models.Model):
     ID = models.AutoField(primary_key=True)
     course_id = models.ForeignKey(Course, on_delete=models.CASCADE)
     contentString = models.CharField(max_length=100, null=True, blank=True, default=None, verbose_name='Topic Title')
-    materialTitle = models.CharField(max_length=100, null=True, blank=True, default=None)
+    materialTitle = models.CharField(max_length=100, null=True, blank=True, default=None, verbose_name='Material Title')
     material = models.FileField(verbose_name='File', upload_to='../media', blank=True, null=True)
     additionDate = models.DateField(default=datetime.date.today, verbose_name='Addition Date')
 
@@ -201,9 +201,9 @@ class Content(models.Model):
 
 class Announcement(models.Model):
     ID = models.AutoField(primary_key=True)
-    announcementTitle = models.CharField(max_length=100, default="")
-    announcementText = models.CharField(max_length=500)
-    date = models.DateTimeField(default=datetime.datetime.now, blank=True)
+    announcementTitle = models.CharField(max_length=100, default="", verbose_name='Announcement Title')
+    announcementText = models.CharField(max_length=500, verbose_name='Announcement Text')
+    date = models.DateTimeField(default=datetime.datetime.now, blank=True, verbose_name='Date')
 
     def __str__(self):
         return self.announcementTitle
