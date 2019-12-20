@@ -122,6 +122,12 @@ def class_compose(request):
         if form.is_valid():
             class_info = form.save()
             class_info.refresh_from_db()
+            Course.objects.create(name='Math 1', numberOfHoursPerWeek='10', year='FIRST')
+            Course.objects.create(name='Physics 1', numberOfHoursPerWeek='10', year='FIRST')
+            Course.objects.create(name='English', numberOfHoursPerWeek='10', year='FIRST')
+            Course.objects.create(name='Math 2', numberOfHoursPerWeek='10', year='SECOND')
+            Course.objects.create(name='Physics 2', numberOfHoursPerWeek='10', year='SECOND')
+            Course.objects.create(name='Italian', numberOfHoursPerWeek='10', year='SECOND')
             first_year_courses = Course.objects.filter(year='FIRST')
             if Student.objects.filter(classID=None, studentYear='FIRST').count() < class_info.totalStudentsNumber:
                 for student in Student.objects.filter(classID=None, studentYear='FIRST'):

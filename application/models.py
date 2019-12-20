@@ -112,7 +112,7 @@ class Teacher(models.Model):
     last_name = models.CharField(max_length=50)
     email = models.EmailField(blank=True, null=True)
     fiscalCode = models.CharField(max_length=16)
-    coordinatedClass = models.ForeignKey(ClassInfo, on_delete=models.CASCADE, blank=True, null=True)
+    coordinatedClass = models.ForeignKey(ClassInfo, on_delete=models.SET_NULL, blank=True, null=True)
     appointmentSchedule = models.FileField(null=True, blank=True, default='TeacherSchedule.csv')
 
     def get_absolute_url(self):
