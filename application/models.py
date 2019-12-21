@@ -84,15 +84,6 @@ class Course(models.Model):
         return self.name
 
 
-class ClassCourse(models.Model):
-    ID = models.AutoField(primary_key=True)
-    classID = models.ForeignKey(ClassInfo, on_delete=models.CASCADE)
-    course_id = models.ForeignKey(Course, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.classID.name + ':' + self.course_id.name
-
-
 class Assignment(models.Model):
     ID = models.AutoField(primary_key=True)
     assignmentTitle = models.CharField(max_length=50, verbose_name='Assignment Title')
@@ -120,6 +111,16 @@ class Teacher(models.Model):
 
     def __str__(self):
         return self.first_name + " " + self.last_name
+
+
+class ClassCourse(models.Model):
+    ID = models.AutoField(primary_key=True)
+    class_id = models.ForeignKey(ClassInfo, on_delete=models.CASCADE)
+    course_id = models.ForeignKey(Course, on_delete=models.SET_NULL)
+    teacher_id = models.ForeignKey(Teacher, on_delete=models.SET_NULL)
+
+    def __str__(self):
+        return self.class_id.name + ':' + self.course_id.name
 
 
 class TeacherCourse(models.Model):
