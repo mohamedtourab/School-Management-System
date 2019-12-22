@@ -116,8 +116,8 @@ class Teacher(models.Model):
 class ClassCourse(models.Model):
     ID = models.AutoField(primary_key=True)
     class_id = models.ForeignKey(ClassInfo, on_delete=models.CASCADE)
-    course_id = models.ForeignKey(Course, on_delete=models.SET_NULL)
-    teacher_id = models.ForeignKey(Teacher, on_delete=models.SET_NULL)
+    course_id = models.ForeignKey(Course, on_delete=models.SET_NULL, null=True)
+    teacher_id = models.ForeignKey(Teacher, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.class_id.name + ':' + self.course_id.name
