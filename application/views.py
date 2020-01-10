@@ -572,27 +572,15 @@ class BehaviorView(generic.ListView):
 
 @login_required(login_url='application:login')
 def absence_form(request, course_id):
-    student_courses = StudentCourse.objects.filter(course_id=course_id)
-    formset = formset_factory(AbsenceForm, extra=student_courses.count())
-
     if request.method == 'POST':
-        formset = formset(request.POST)
-        if formset.is_valid():
-            i = 0
-            for f in formset:
-                if f.is_valid():
-                    f.studentCourseID = student_courses[i]
-                    print(f)
-                    f.save()
-                    i += 1
-        return redirect('application:absenceForm', course_id=course_id)
-
+        form = AbsenceForm(request.POST, course_id=course_id)
+        if form.is_valid():
+            unsaved_form = form.save()
+            unsaved_form.save()
+            return render(request, 'teacher/absence.html', {'form': form, 'course_id': course_id})
     else:
-        formset = formset_factory(wraps(AbsenceForm)(partial(AbsenceForm, course_id=course_id)),
-                                  extra=student_courses.count())
-
-    return render(request, 'teacher/absence.html', {'formset': formset, 'course_id': course_id,
-                                                    'student_courses': student_courses})
+        form = AbsenceForm(course_id=course_id)
+    return render(request, 'teacher/absence.html', {'form': form, 'course_id': course_id})
 
 
 @login_required(login_url='application:login')
