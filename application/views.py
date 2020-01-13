@@ -14,7 +14,7 @@ import csv
 from functools import partial, wraps
 from django.forms import formset_factory
 from .models import StudentCourse, PerformanceGrade, Parent, Content, Course, Student, ClassInfo, TeacherCourse, \
-    ParentStudent, Attendance, Assignment, Announcement, Teacher, Note, Behavior
+    ParentStudent, Attendance, Assignment, Announcement, Teacher, Note, Behavior, ClassCourse
 from django.views import generic
 from application.forms import StudentForm, ParentSignUpForm, ClassComposeForm, ContentForm, PerformanceGradeForm, \
     AbsenceForm, AssignmentForm, TimetableForm, AnnouncementForm, TeacherCreateForm, AppointmentsForm, \
@@ -122,12 +122,27 @@ def class_compose(request):
         if form.is_valid():
             class_info = form.save()
             class_info.refresh_from_db()
-            Course.objects.create(name='Math 1', numberOfHoursPerWeek='10', year='FIRST')
-            Course.objects.create(name='Physics 1', numberOfHoursPerWeek='10', year='FIRST')
-            Course.objects.create(name='English', numberOfHoursPerWeek='10', year='FIRST')
-            Course.objects.create(name='Math 2', numberOfHoursPerWeek='10', year='SECOND')
-            Course.objects.create(name='Physics 2', numberOfHoursPerWeek='10', year='SECOND')
-            Course.objects.create(name='Italian', numberOfHoursPerWeek='10', year='SECOND')
+            if class_info.name[0] == '1':
+                course1 = Course.objects.get_or_create(name='Math 1', numberOfHoursPerWeek='10', year='FIRST')
+                course2 = Course.objects.get_or_create(name='Physics 1', numberOfHoursPerWeek='10', year='FIRST')
+                course3 = Course.objects.get_or_create(name='English', numberOfHoursPerWeek='10', year='FIRST')
+                ClassCourse.objects.get_or_create(class_id=class_info, course_id=course1[0],
+                                                  teacher_id=Teacher.objects.get(first_name='Marco'))
+                ClassCourse.objects.get_or_create(class_id=class_info, course_id=course2[0],
+                                                  teacher_id=Teacher.objects.get(first_name='Marco'))
+                ClassCourse.objects.get_or_create(class_id=class_info, course_id=course3[0],
+                                                  teacher_id=Teacher.objects.get(first_name='Marco'))
+
+            elif class_info.name[0] == '2':
+                course1,create1 = Course.objects.get_or_create(name='Math 2', numberOfHoursPerWeek='10', year='SECOND')
+                course2,create2 = Course.objects.get_or_create(name='Physics 2', numberOfHoursPerWeek='10', year='SECOND')
+                course3,create3 = Course.objects.get_or_create(name='Italian', numberOfHoursPerWeek='10', year='SECOND')
+                ClassCourse.objects.get_or_create(class_id=class_info, course_id=course1,
+                                                  teacher_id=Teacher.objects.get(first_name='Antonio'))
+                ClassCourse.objects.get_or_create(class_id=class_info, course_id=course2,
+                                                  teacher_id=Teacher.objects.get(first_name='Antonio'))
+                ClassCourse.objects.get_or_create(class_id=class_info, course_id=course3,
+                                                  teacher_id=Teacher.objects.get(first_name='Antonio'))
             first_year_courses = Course.objects.filter(year='FIRST')
             if Student.objects.filter(classID=None, studentYear='FIRST').count() < class_info.totalStudentsNumber:
                 for student in Student.objects.filter(classID=None, studentYear='FIRST'):
@@ -732,7 +747,11 @@ def login_user(request):
                                 principle = user.principle
                                 return HttpResponse("<h1>you are logged in as principle</h1>")
                             except:
-                                return HttpResponse("<h1>you are a hacker</h1>")
+                                try:
+                                    student = user.student
+                                    return HttpResponse("<h1>you are logged in as student</h1>")
+                                except:
+                                    return HttpResponse("<h1>you are a hacker</h1>")
         else:
             return render(request, 'application/login.html', {'error_message': 'Invalid login'})
     else:
