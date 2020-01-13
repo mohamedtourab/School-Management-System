@@ -115,7 +115,7 @@ class AbsenceForm(ModelForm):
         self.fields['studentCourseID'] = forms.ModelChoiceField(queryset=student_course_id)
     class Meta:
         model = Attendance
-        fields = ['date', 'presence', 'cameLate', 'leftEarly']
+        fields = ['date', 'studentCourseID', 'presence', 'cameLate', 'leftEarly']
 
 
 class BehaviorForm(ModelForm):
