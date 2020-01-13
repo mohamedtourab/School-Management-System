@@ -100,73 +100,21 @@ def enroll_student(request):
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
         form = StudentForm(request.POST)
-        # check whether it's valid:
-        if form.is_valid():
-            # process the data in form.cleaned_data as required
-            form.save()
-            # redirect to a new URL:
+        try:
+            user = User.objects.get(username=request.POST['username'], )
+            return render(request, 'administrativeOfficer/enrollStudent.html',
+                          {'error_message': 'Username already Exist.\nTry another Username.', 'form': StudentForm()})
+        except User.DoesNotExist:
+            if form.is_valid():
+                user = form.save()
+                user.refresh_from_db()  # load the profile instance created by the signal
+                student = Student.objects.create(user=user, studentYear=form['student_year'].value())
             messages.success(request, 'Student has been successfully added')
             return render(request, 'administrativeOfficer/enrollStudent.html', {'form': StudentForm()})
-
             # if a GET (or any other method) we'll create a blank form
     else:
         form = StudentForm()
-
     return render(request, 'administrativeOfficer/enrollStudent.html', {'form': form})
-
-
-@login_required(login_url='application:login')
-def class_compose(request):
-    if request.method == 'POST':
-        form = ClassComposeForm(request.POST)
-        if form.is_valid():
-            class_info = form.save()
-            class_info.refresh_from_db()
-            if class_info.name[0] == '1':
-                course1 = Course.objects.get_or_create(name='Math 1', numberOfHoursPerWeek='10', year='FIRST')
-                course2 = Course.objects.get_or_create(name='Physics 1', numberOfHoursPerWeek='10', year='FIRST')
-                course3 = Course.objects.get_or_create(name='English', numberOfHoursPerWeek='10', year='FIRST')
-                ClassCourse.objects.get_or_create(class_id=class_info, course_id=course1[0],
-                                                  teacher_id=Teacher.objects.get(first_name='Marco'))
-                ClassCourse.objects.get_or_create(class_id=class_info, course_id=course2[0],
-                                                  teacher_id=Teacher.objects.get(first_name='Marco'))
-                ClassCourse.objects.get_or_create(class_id=class_info, course_id=course3[0],
-                                                  teacher_id=Teacher.objects.get(first_name='Marco'))
-
-            elif class_info.name[0] == '2':
-                course1,create1 = Course.objects.get_or_create(name='Math 2', numberOfHoursPerWeek='10', year='SECOND')
-                course2,create2 = Course.objects.get_or_create(name='Physics 2', numberOfHoursPerWeek='10', year='SECOND')
-                course3,create3 = Course.objects.get_or_create(name='Italian', numberOfHoursPerWeek='10', year='SECOND')
-                ClassCourse.objects.get_or_create(class_id=class_info, course_id=course1,
-                                                  teacher_id=Teacher.objects.get(first_name='Antonio'))
-                ClassCourse.objects.get_or_create(class_id=class_info, course_id=course2,
-                                                  teacher_id=Teacher.objects.get(first_name='Antonio'))
-                ClassCourse.objects.get_or_create(class_id=class_info, course_id=course3,
-                                                  teacher_id=Teacher.objects.get(first_name='Antonio'))
-            first_year_courses = Course.objects.filter(year='FIRST')
-            if Student.objects.filter(classID=None, studentYear='FIRST').count() < class_info.totalStudentsNumber:
-                for student in Student.objects.filter(classID=None, studentYear='FIRST'):
-                    student.classID = class_info
-                    student.save()
-                    for course in first_year_courses:
-                        StudentCourse.objects.create(student_id=student, course_id=course)
-            else:
-                i = 0
-                for student in Student.objects.filter(classID=None, studentYear='FIRST'):
-                    if i < class_info.totalStudentsNumber:
-                        i += 1
-                        student.classID = class_info
-                        student.save()
-                        for course in first_year_courses:
-                            StudentCourse.objects.create(student_id=student, course_id=course)
-
-            messages.success(request, 'Class has been successfully added')
-            return render(request, 'administrativeOfficer/classCompose.html',
-                          {'form': form, 'numberOfSeats': number_of_seats(), 'numberOfStudents': number_of_students()})
-    else:
-        form = ClassComposeForm()
-    return render(request, 'administrativeOfficer/classCompose.html',
-                  {'form': form, 'numberOfSeats': number_of_seats(), 'numberOfStudents': number_of_students()})
 
 
 @login_required(login_url='application:login')
@@ -199,6 +147,62 @@ def parent_signup(request):
     else:
         form = ParentSignUpForm()
     return render(request, 'administrativeOfficer/parentSignup.html', {'form': form})
+
+
+@login_required(login_url='application:login')
+def class_compose(request):
+    if request.method == 'POST':
+        form = ClassComposeForm(request.POST)
+        if form.is_valid():
+            class_info = form.save()
+            class_info.refresh_from_db()
+            if class_info.name[0] == '1':
+                course1 = Course.objects.get_or_create(name='Math 1', numberOfHoursPerWeek='10', year='FIRST')
+                course2 = Course.objects.get_or_create(name='Physics 1', numberOfHoursPerWeek='10', year='FIRST')
+                course3 = Course.objects.get_or_create(name='English', numberOfHoursPerWeek='10', year='FIRST')
+                ClassCourse.objects.get_or_create(class_id=class_info, course_id=course1[0],
+                                                  teacher_id=Teacher.objects.get(first_name='Marco'))
+                ClassCourse.objects.get_or_create(class_id=class_info, course_id=course2[0],
+                                                  teacher_id=Teacher.objects.get(first_name='Marco'))
+                ClassCourse.objects.get_or_create(class_id=class_info, course_id=course3[0],
+                                                  teacher_id=Teacher.objects.get(first_name='Marco'))
+
+            elif class_info.name[0] == '2':
+                course1, create1 = Course.objects.get_or_create(name='Math 2', numberOfHoursPerWeek='10', year='SECOND')
+                course2, create2 = Course.objects.get_or_create(name='Physics 2', numberOfHoursPerWeek='10',
+                                                                year='SECOND')
+                course3, create3 = Course.objects.get_or_create(name='Italian', numberOfHoursPerWeek='10',
+                                                                year='SECOND')
+                ClassCourse.objects.get_or_create(class_id=class_info, course_id=course1,
+                                                  teacher_id=Teacher.objects.get(first_name='Antonio'))
+                ClassCourse.objects.get_or_create(class_id=class_info, course_id=course2,
+                                                  teacher_id=Teacher.objects.get(first_name='Antonio'))
+                ClassCourse.objects.get_or_create(class_id=class_info, course_id=course3,
+                                                  teacher_id=Teacher.objects.get(first_name='Antonio'))
+            first_year_courses = Course.objects.filter(year='FIRST')
+            if Student.objects.filter(classID=None, studentYear='FIRST').count() < class_info.totalStudentsNumber:
+                for student in Student.objects.filter(classID=None, studentYear='FIRST'):
+                    student.classID = class_info
+                    student.save()
+                    for course in first_year_courses:
+                        StudentCourse.objects.create(student_id=student, course_id=course)
+            else:
+                i = 0
+                for student in Student.objects.filter(classID=None, studentYear='FIRST'):
+                    if i < class_info.totalStudentsNumber:
+                        i += 1
+                        student.classID = class_info
+                        student.save()
+                        for course in first_year_courses:
+                            StudentCourse.objects.create(student_id=student, course_id=course)
+
+            messages.success(request, 'Class has been successfully added')
+            return render(request, 'administrativeOfficer/classCompose.html',
+                          {'form': form, 'numberOfSeats': number_of_seats(), 'numberOfStudents': number_of_students()})
+    else:
+        form = ClassComposeForm()
+    return render(request, 'administrativeOfficer/classCompose.html',
+                  {'form': form, 'numberOfSeats': number_of_seats(), 'numberOfStudents': number_of_students()})
 
 
 def send_mail_to_parent(username, email, password):
@@ -254,22 +258,28 @@ def teacher_create(request):
     if request.method == 'POST':
         form = TeacherCreateForm(request.POST)
         try:
-            user = User.objects.get(username=request.POST['username'], )
-            return render(request, 'administrativeOfficer/teacherCreate.html',
-                          {'error_message': 'Username Exist...Try Something Else !', 'form': TeacherCreateForm()})
-        except User.DoesNotExist:
-            if form.is_valid():
-                user = form.save()
-                user.refresh_from_db()  # load the profile instance created by the signal
-                teacher = Teacher.objects.create(user=user, first_name=user.first_name, last_name=user.last_name,
-                                                 email=user.email, fiscalCode=request.POST['fiscalCode'], )
-
-                messages.success(request, 'Teacher has been successfully added')
-
-                return render(request, 'administrativeOfficer/teacherCreate.html', {'form': TeacherCreateForm()})
-            else:
+            if Teacher.objects.get(fiscalCode=form['fiscalCode'].value()):
                 return render(request, 'administrativeOfficer/teacherCreate.html',
-                              {'error_message': 'Invalid Information', 'form': TeacherCreateForm()})
+                              {'error_message': 'Fiscal Code Exist...Try Something Else !',
+                               'form': TeacherCreateForm()})
+        except:
+            try:
+                user = User.objects.get(username=request.POST['username'], )
+                return render(request, 'administrativeOfficer/teacherCreate.html',
+                              {'error_message': 'Username Exist...Try Something Else !', 'form': TeacherCreateForm()})
+            except User.DoesNotExist:
+                if form.is_valid():
+                    user = form.save()
+                    user.refresh_from_db()  # load the profile instance created by the signal
+                    teacher = Teacher.objects.create(user=user, first_name=user.first_name, last_name=user.last_name,
+                                                     email=user.email, fiscalCode=request.POST['fiscalCode'], )
+
+                    messages.success(request, 'Teacher has been successfully added')
+
+                    return render(request, 'administrativeOfficer/teacherCreate.html', {'form': TeacherCreateForm()})
+                else:
+                    return render(request, 'administrativeOfficer/teacherCreate.html',
+                                  {'error_message': 'Invalid Information', 'form': TeacherCreateForm()})
     else:
         form = TeacherCreateForm()
         return render(request, 'administrativeOfficer/teacherCreate.html', {'form': form})
@@ -749,7 +759,7 @@ def login_user(request):
                             except:
                                 try:
                                     student = user.student
-                                    return HttpResponse("<h1>you are logged in as student</h1>")
+                                    return redirect('application:student_login_view', user.student.ID)
                                 except:
                                     return HttpResponse("<h1>you are a hacker</h1>")
         else:
@@ -757,4 +767,9 @@ def login_user(request):
     else:
         return render(request, 'application/login.html')
 
-####### PRINCIPLE AREA##########
+
+# -----------------------------------------------------------------------------------------------
+####### STUDENT AREA##########
+# -----------------------------------------------------------------------------------------------
+def student_login_view(request, student_id):
+    return HttpResponse("<h1>you are a student</h1>")

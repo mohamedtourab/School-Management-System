@@ -7,6 +7,27 @@ import datetime
 from .models import Student, ClassInfo, Content, PerformanceGrade, StudentCourse, Attendance, \
     Assignment, Announcement, Teacher, AssignFinalGrade, Behavior
 
+FIRST = 'FIRST'
+SECOND = 'SECOND'
+THIRD = 'THIRD'
+FOURTH = 'FOURTH'
+FIFTH = 'FIFTH'
+SIXTH = 'SIXTH'
+SEVENTH = 'SEVENTH'
+EIGHTH = 'EIGHTH'
+NINTH = 'NINTH'
+TENTH = 'TENTH'
+choice = ((FIRST, 'FIRST'),
+          (SECOND, 'SECOND'),
+          (THIRD, 'THIRD'),
+          (FOURTH, 'FOURTH'),
+          (FIFTH, 'FIFTH'),
+          (SIXTH, 'SIXTH'),
+          (SEVENTH, 'SEVENTH'),
+          (EIGHTH, 'EIGHTH'),
+          (NINTH, 'NINTH'),
+          (TENTH, 'TENTH'),)
+
 
 class AnnouncementForm(ModelForm):
     announcementText = forms.CharField(widget=forms.Textarea)
@@ -16,10 +37,12 @@ class AnnouncementForm(ModelForm):
         fields = ['announcementTitle', 'announcementText', 'date']
 
 
-class StudentForm(ModelForm):
+class StudentForm(UserCreationForm):
+    student_year = forms.ChoiceField(choices=choice)
+
     class Meta:
-        model = Student
-        fields = ['first_name', 'last_name', 'classID', 'studentYear']
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2', 'student_year']
 
 
 class ParentSignUpForm(UserCreationForm):
@@ -113,6 +136,7 @@ class AbsenceForm(ModelForm):
         self.date = datetime.date.today
         student_course_id = StudentCourse.objects.filter(course_id=self.course_id)
         self.fields['studentCourseID'] = forms.ModelChoiceField(queryset=student_course_id)
+
     class Meta:
         model = Attendance
         fields = ['date', 'studentCourseID', 'presence', 'cameLate', 'leftEarly']

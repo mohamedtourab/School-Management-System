@@ -61,16 +61,15 @@ class ClassInfo(models.Model):
 
 
 class Student(models.Model):
-    grade_choice = choice
     ID = models.AutoField(primary_key=True)
-    first_name = models.CharField(max_length=50, verbose_name='First Name')
-    last_name = models.CharField(max_length=50, verbose_name='Last Name')
+    user = models.OneToOneField(User, on_delete=models.CASCADE,)
+    grade_choice = choice
     classID = models.ForeignKey(ClassInfo, on_delete=models.SET_NULL, verbose_name='Student Class', blank=True,
                                 null=True)
     studentYear = models.CharField(max_length=20, choices=grade_choice, default=FIRST, verbose_name='Year Grade')
 
     def __str__(self):
-        return self.first_name + " " + self.last_name
+        return self.user.first_name + " " + self.user.last_name
 
 
 class Course(models.Model):
@@ -102,7 +101,7 @@ class Teacher(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField(blank=True, null=True)
-    fiscalCode = models.CharField(max_length=16)
+    fiscalCode = models.CharField(max_length=16,unique=True)
     coordinatedClass = models.ForeignKey(ClassInfo, on_delete=models.SET_NULL, blank=True, null=True)
     appointmentSchedule = models.FileField(null=True, blank=True, default='TeacherSchedule.csv')
 

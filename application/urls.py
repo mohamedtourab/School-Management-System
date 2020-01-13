@@ -84,6 +84,11 @@ urlpatterns = [
     path('teacheradd/', views.teacher_create, name='teacher-add'),
     url(r'teacher/(?P<pk>[0 -9]+)/delete/$', views.DeleteTeacherMasterData.as_view(), name='teacher-delete'),
 
+    # -------------------------------------------------------------------------------------------
+    #               STUDENT URLS
+    # -------------------------------------------------------------------------------------------
+    path('student/<int:student_id>',views.student_login_view,name='student_login_view'),
+
 ]
 
 if settings.DEBUG:
