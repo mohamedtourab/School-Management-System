@@ -103,9 +103,9 @@ class Assignment(models.Model):
 
 
 class Adminofficerconstraint(models.Model):
-    size = models.IntegerField(verbose_name="size of the file (bits) ")
+    size = models.IntegerField(verbose_name="Maximum file size(bits)", blank=True, null=True)
     ID = models.AutoField(primary_key=True)
-    extension = models.CharField(max_length=10, verbose_name="extension of the file")
+    extension = models.CharField(max_length=10, verbose_name="File Extension", blank=True, null=True)
 
     def __str__(self):
         return self.extension
