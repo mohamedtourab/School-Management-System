@@ -1,0 +1,36 @@
+{% extends 'student/base.html' %}
+{% block body %}
+
+    <div class="container">
+        <h2>Assignments</h2>
+        {% if assignment_dict %}
+            {% for key,values in assignment_dict.items %}
+                <div class="panel-group">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" href="#collapse1">{{ key }}</a>
+                            </h4>
+                        </div>
+                        <div id="collapse1" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <ul>
+                                    {% for value in values %}
+                                        <li><a href="{% url 'application:index' %}{{ value.assignmentFile.url }}"
+                                               download>{{ value.assignmentTitle }}</a>{{ '       ' }}Deadline:{{ value.deadlineDate }}
+                                        </li>
+                                        {#                        <div class="panel-footer">Panel Footer</div>#}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No assignments yet.</p>
+        {% endif %}
+
+    </div>
+
+{% endblock %}

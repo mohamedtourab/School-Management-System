@@ -14,11 +14,12 @@ import csv
 from functools import partial, wraps
 from django.forms import formset_factory
 from .models import StudentCourse, PerformanceGrade, Parent, Content, Course, Student, ClassInfo, TeacherCourse, \
-    ParentStudent, Attendance, Assignment, Announcement, Teacher, Note, Behavior, ClassCourse
+    ParentStudent, Attendance, Assignment, Announcement, Teacher, Note, Behavior, ClassCourse, Adminofficerconstraint
 from django.views import generic
 from application.forms import StudentForm, ParentSignUpForm, ClassComposeForm, ContentForm, PerformanceGradeForm, \
     AbsenceForm, AssignmentForm, TimetableForm, AnnouncementForm, TeacherCreateForm, AppointmentsForm, \
-    PutFinalGradeForm, BehaviorForm
+    PutFinalGradeForm, BehaviorForm, AdminofficerconstraintForm
+from django.core.exceptions import ValidationError
 
 
 # -----------------------------------------------------------------------------------------------
@@ -56,7 +57,6 @@ def number_of_seats():
 def number_of_students():
     number = Student.objects.filter(classID=None).count()
     return number
-
 
 # -----------------------------------------------------------------------------------------------
 ####### ADMINISTRATIVE OFFICER AREA##########
@@ -347,7 +347,7 @@ class ParentAttendanceView(generic.ListView):
 
 
 class ParentBehaviorView(generic.ListView):
-    template_name = 'parent/behaviorp.html'
+    template_name = 'parent/behavior.html'
     context_object_name = 'student_id'
 
     def get_queryset(self):
@@ -680,17 +680,36 @@ def grade_form(request, course_id):
 
 
 @login_required(login_url='application:login')
+def constraints_form(request):
+    if request.method == 'POST':
+        form = AdminofficerconstraintForm(request.POST)
+        if form.is_valid():
+            Adminofficerconstraint.objects.filter().delete()
+            form.save()
+            return redirect('application:ao')
+    else:
+        form = AdminofficerconstraintForm()
+    return render(request, 'administrativeOfficer/aoConstraint.html', {'form': form, })
+
+
+@login_required(login_url='application:login')
 def assignment_form(request, course_id):
     if request.method == 'POST':
         form = AssignmentForm(request.POST, request.FILES)
         if form.is_valid():
             unsaved_form = form.save(commit=False)
             unsaved_form.course_id = Course.objects.get(ID=course_id)
-            unsaved_form.save()
-            return redirect('application:teacher')
+
+            if Adminofficerconstraint.objects.filter()[0].__str__() in str(form.cleaned_data['assignmentFile']):
+                unsaved_form.save()
+            else:
+                jpg_response = "This file is not a jpg."
+                response = render(request, 'teacher/addAssignment.html', {'form': form, 'course_id': course_id,
+                                                                          'jpg_response': jpg_response})
+                return response
     else:
         form = AssignmentForm()
-    return render(request, 'teacher/addAssignment.html', {'form': form, 'course_id': course_id, })
+    return render(request, 'teacher/addAssignment.html', {'form': form, 'course_id': course_id})
 
 
 class TeacherClassCoordinated(generic.ListView):
@@ -804,4 +823,24 @@ def login_user(request):
 ####### STUDENT AREA##########
 # -----------------------------------------------------------------------------------------------
 def student_login_view(request, student_id):
-    return HttpResponse("<h1>you are a student</h1>")
+    my_dict = {'allStudentCourses': Course.objects.filter(studentcourse__student_id=student_id)}  # GET STUDENT ID HERE
+    my_dict.update({'parentStudent': ParentStudent.objects.filter(student_id=student_id)})
+    my_dict.update({'student_id': student_id})
+    if ClassInfo.objects.filter(student__ID=student_id).exists():
+        my_dict.update({'studentClass': ClassInfo.objects.get(student__ID=student_id)})
+        timetable = my_dict['studentClass'].timetable
+        try:
+            read_csv_file(file=timetable, dictionary=my_dict, used_delimiter=',')
+            my_dict.update({'timeTable': 'timetable'})
+        except:
+            pass
+    return render(request, 'student/after_login.html', my_dict)
+
+
+def student_assignment_view(request, student_id):
+    list_of_courses = StudentCourse.objects.filter(student_id=student_id)
+    assignment_dict = dict()
+    for course in list_of_courses:
+        list_of_assignments = Assignment.objects.filter(course_id=course.course_id)
+        assignment_dict.update({course.course_id.name: list_of_assignments})
+    return render(request, 'student/assignments.html', {'assignment_dict': assignment_dict, 'student_id': student_id, })
