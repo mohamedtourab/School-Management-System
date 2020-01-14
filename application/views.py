@@ -58,13 +58,6 @@ def number_of_students():
     number = Student.objects.filter(classID=None).count()
     return number
 
-
-def gender_ratio():
-    number_of_male = Student.objects.filter(classID="FIRST", gender="Male").count()
-    number_of_female = Student.objects.filter(classID="FIRST", gender="Female").count()
-    first_year_ratio = number_of_female / number_of_male
-    skill_value = Student.objects.filter(classID="FIRST").get()
-
 # -----------------------------------------------------------------------------------------------
 ####### ADMINISTRATIVE OFFICER AREA##########
 # -----------------------------------------------------------------------------------------------
