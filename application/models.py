@@ -1,5 +1,6 @@
 import datetime
 
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -55,12 +56,16 @@ class ClassInfo(models.Model):
     name = models.CharField(max_length=30, unique=True)
     totalStudentsNumber = models.PositiveIntegerField()
     timetable = models.FileField(verbose_name='Timetable', blank=True, upload_to='../media')
+    gender_ratio = models.FloatField(blank=True, verbose_name='Gender Ratio')
+    skill_average = models.FloatField(blank=True, verbose_name='Skill Average')
+
 
     def __str__(self):
         return self.name
 
 
 class Student(models.Model):
+    CATEGORY_CHOICES = (('M', 'Male'), ('F', 'Female'),)
     grade_choice = choice
     ID = models.AutoField(primary_key=True)
     first_name = models.CharField(max_length=50, verbose_name='First Name')
@@ -68,6 +73,8 @@ class Student(models.Model):
     classID = models.ForeignKey(ClassInfo, on_delete=models.SET_NULL, verbose_name='Student Class', blank=True,
                                 null=True)
     studentYear = models.CharField(max_length=20, choices=grade_choice, default=FIRST, verbose_name='Year Grade')
+    gender = models.CharField(max_length=200, choices=CATEGORY_CHOICES, verbose_name='Gender', default='Male')
+    skill = models.IntegerField(validators=[MaxValueValidator(10), MinValueValidator(0)], verbose_name="Skill", default=5)
 
     def __str__(self):
         return self.first_name + " " + self.last_name

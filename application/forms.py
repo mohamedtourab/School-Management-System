@@ -19,7 +19,7 @@ class AnnouncementForm(ModelForm):
 class StudentForm(ModelForm):
     class Meta:
         model = Student
-        fields = ['first_name', 'last_name', 'classID', 'studentYear']
+        fields = ['first_name', 'last_name', 'classID', 'studentYear', 'gender', 'skill']
 
 
 class ParentSignUpForm(UserCreationForm):
