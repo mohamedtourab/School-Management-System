@@ -56,28 +56,21 @@ class ClassInfo(models.Model):
     name = models.CharField(max_length=30, unique=True)
     totalStudentsNumber = models.PositiveIntegerField()
     timetable = models.FileField(verbose_name='Timetable', blank=True, upload_to='../media')
-    gender_ratio = models.FloatField(blank=True, verbose_name='Gender Ratio')
-    skill_average = models.FloatField(blank=True, verbose_name='Skill Average')
-
 
     def __str__(self):
         return self.name
 
 
 class Student(models.Model):
-    CATEGORY_CHOICES = (('M', 'Male'), ('F', 'Female'),)
-    grade_choice = choice
     ID = models.AutoField(primary_key=True)
-    first_name = models.CharField(max_length=50, verbose_name='First Name')
-    last_name = models.CharField(max_length=50, verbose_name='Last Name')
+    user = models.OneToOneField(User, on_delete=models.CASCADE,)
+    grade_choice = choice
     classID = models.ForeignKey(ClassInfo, on_delete=models.SET_NULL, verbose_name='Student Class', blank=True,
                                 null=True)
     studentYear = models.CharField(max_length=20, choices=grade_choice, default=FIRST, verbose_name='Year Grade')
-    gender = models.CharField(max_length=200, choices=CATEGORY_CHOICES, verbose_name='Gender', default='Male')
-    skill = models.IntegerField(validators=[MaxValueValidator(10), MinValueValidator(0)], verbose_name="Skill", default=5)
 
     def __str__(self):
-        return self.first_name + " " + self.last_name
+        return self.user.first_name + " " + self.user.last_name
 
 
 class Course(models.Model):
@@ -102,6 +95,21 @@ class Assignment(models.Model):
     def __str__(self):
         return self.assignmentTitle
 
+    def save(self, *args, **kwargs):
+        if self.assignmentFile.size > 10 ^ 7:
+            super(Assignment, self).save(*args, **kwargs)
+        else:
+            raise Exception("end_date should be greater than start_date")
+
+
+class Adminofficerconstraint(models.Model):
+    size = models.IntegerField(verbose_name="size of the file (bits) ")
+    ID = models.AutoField(primary_key=True)
+    extension = models.CharField(max_length=10, verbose_name="extension of the file")
+
+    def __str__(self):
+        return self.extension
+
 
 class Teacher(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -109,7 +117,7 @@ class Teacher(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField(blank=True, null=True)
-    fiscalCode = models.CharField(max_length=16)
+    fiscalCode = models.CharField(max_length=16,unique=True)
     coordinatedClass = models.ForeignKey(ClassInfo, on_delete=models.SET_NULL, blank=True, null=True)
     appointmentSchedule = models.FileField(null=True, blank=True, default='TeacherSchedule.csv')
 
