@@ -5,7 +5,7 @@ from django.forms import ModelForm
 import datetime
 
 from .models import Student, ClassInfo, Content, PerformanceGrade, StudentCourse, Attendance, \
-    Assignment, Announcement, Teacher, AssignFinalGrade, Behavior
+    Assignment, Announcement, Teacher, AssignFinalGrade, Behavior, Adminofficerconstraint
 
 
 class AnnouncementForm(ModelForm):
@@ -139,6 +139,13 @@ class AssignmentForm(ModelForm):
         model = Assignment
         exclude = ('course_id', 'additionDate', 'fileName',)
         fields = ['assignmentTitle', 'assignmentFile', 'deadlineDate']
+
+
+class AdminofficerconstraintForm(ModelForm):
+    class Meta:
+        model = Adminofficerconstraint
+        exclude = ('ID',)
+
 
 
 class TimetableForm(ModelForm):

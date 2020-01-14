@@ -14,11 +14,12 @@ import csv
 from functools import partial, wraps
 from django.forms import formset_factory
 from .models import StudentCourse, PerformanceGrade, Parent, Content, Course, Student, ClassInfo, TeacherCourse, \
-    ParentStudent, Attendance, Assignment, Announcement, Teacher, Note, Behavior
+    ParentStudent, Attendance, Assignment, Announcement, Teacher, Note, Behavior, Adminofficerconstraint
 from django.views import generic
 from application.forms import StudentForm, ParentSignUpForm, ClassComposeForm, ContentForm, PerformanceGradeForm, \
     AbsenceForm, AssignmentForm, TimetableForm, AnnouncementForm, TeacherCreateForm, AppointmentsForm, \
-    PutFinalGradeForm, BehaviorForm
+    PutFinalGradeForm, BehaviorForm, AdminofficerconstraintForm
+from django.core.exceptions import ValidationError
 
 
 # -----------------------------------------------------------------------------------------------
@@ -623,17 +624,36 @@ def grade_form(request, course_id):
 
 
 @login_required(login_url='application:login')
+def constraints_form(request):
+    if request.method == 'POST':
+        form = AdminofficerconstraintForm(request.POST)
+        if form.is_valid():
+            Adminofficerconstraint.objects.filter().delete()
+            form.save()
+            return redirect('application:ao')
+    else:
+        form = AdminofficerconstraintForm()
+    return render(request, 'administrativeOfficer/aoConstraint.html', {'form': form, })
+
+
+@login_required(login_url='application:login')
 def assignment_form(request, course_id):
     if request.method == 'POST':
         form = AssignmentForm(request.POST, request.FILES)
         if form.is_valid():
             unsaved_form = form.save(commit=False)
             unsaved_form.course_id = Course.objects.get(ID=course_id)
-            unsaved_form.save()
-            return redirect('application:teacher')
+
+            if Adminofficerconstraint.objects.filter()[0].__str__() in str(form.cleaned_data['assignmentFile']):
+                unsaved_form.save()
+            else:
+                jpg_response = "This file is not a jpg."
+                response = render(request, 'teacher/addAssignment.html', {'form': form, 'course_id': course_id,
+                                                                          'jpg_response': jpg_response})
+                return response
     else:
         form = AssignmentForm()
-    return render(request, 'teacher/addAssignment.html', {'form': form, 'course_id': course_id, })
+    return render(request, 'teacher/addAssignment.html', {'form': form, 'course_id': course_id})
 
 
 class TeacherClassCoordinated(generic.ListView):

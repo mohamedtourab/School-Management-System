@@ -95,6 +95,21 @@ class Assignment(models.Model):
     def __str__(self):
         return self.assignmentTitle
 
+    def save(self, *args, **kwargs):
+        if self.assignmentFile.size > 10 ^ 7:
+            super(Assignment, self).save(*args, **kwargs)
+        else:
+            raise Exception("end_date should be greater than start_date")
+
+
+class Adminofficerconstraint(models.Model):
+    size = models.IntegerField(verbose_name="size of the file (bits) ")
+    ID = models.AutoField(primary_key=True)
+    extension = models.CharField(max_length=10, verbose_name="extension of the file")
+
+    def __str__(self):
+        return self.extension
+
 
 class Teacher(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
