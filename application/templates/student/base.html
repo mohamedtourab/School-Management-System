@@ -5,34 +5,52 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-
     <link href="https://fonts.googleapis.com/css?family=Work+Sans:100,200,300,400,500,600,700,800,900" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Fredericka+the+Great" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="../../../../../../static/application/css/open-iconic-bootstrap.min.css">
-    <link rel="stylesheet" href="../../../../../../static/application/css/animate.css">
-    <link rel="stylesheet" href="../../../../../../static/application/css/owl.carousel.min.css">
-    <link rel="stylesheet" href="../../../../../../static/application/css/owl.theme.default.min.css">
-    <link rel="stylesheet" href="../../../../../../static/application/css/magnific-popup.css">
-    <link rel="stylesheet" href="../../../../../../static/application/css/aos.css">
-    <link rel="stylesheet" href="../../../../../../static/application/css/ionicons.min.css">
-    <link rel="stylesheet" href="../../../../../../static/application/css/flaticon.css">
-    <link rel="stylesheet" href="../../../../../../static/application/css/icomoon.css">
-    <link rel="stylesheet" href="../../../../../../static/application/css/style.css">
-    <link rel="stylesheet" href="../../../../../../static/application/css/style2.css">
+    <link rel="stylesheet" href="../../../../static/application/css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="../../../../static/application/css/animate.css">
+    <link rel="stylesheet" href="../../../../static/application/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="../../../../static/application/css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="../../../../static/application/css/magnific-popup.css">
+
+    <link rel="stylesheet" href="../../../../static/application/css/aos.css">
+
+    <link rel="stylesheet" href="../../../../static/application/css/ionicons.min.css">
+
+    <link rel="stylesheet" href="../../../../static/application/css/flaticon.css">
+    <link rel="stylesheet" href="../../../../static/application/css/icomoon.css">
+    <link rel="stylesheet" href="../../../../static/application/css/style.css">
+    <link rel="stylesheet" href="../../../../static/application/css/style2.css">
 </head>
 <body>
 <div class="py-2 bg-primary">
     <div class="container">
-        <div class="row no-gutters d-flex align-items-start align-items-center px-3 px-md-0 pull-right">
+        <div class="row no-gutters d-flex align-items-start align-items-center px-3 px-md-0">
             <div class="col-lg-12 d-block">
                 <div class="row d-flex">
+                    <div class="col-md-5 pr-4 d-flex topper align-items-center">
+                        <div class="icon bg-fifth mr-2 d-flex justify-content-center align-items-center"><span
+                                class="icon-map"></span></div>
+                        <span class="text">198 West 21th Street, Suite 721 New York NY 10016</span>
+                    </div>
+                    <div class="col-md pr-4 d-flex topper align-items-center">
+                        <div class="icon bg-secondary mr-2 d-flex justify-content-center align-items-center"><span
+                                class="icon-paper-plane"></span></div>
+                        <span class="text">youremail@email.com</span>
+                    </div>
+                    <div class="col-md pr-4 d-flex topper align-items-center">
+                        <div class="icon bg-tertiary mr-2 d-flex justify-content-center align-items-center"><span
+                                class="icon-phone2"></span></div>
+                        <span class="text">+ 1235 2355 98</span>
+                    </div>
                     <div class="col-md pr-4 d-flex topper align-items-right">
                         <div class="icon bg-tertiary mr-2 d-flex justify-content-center align-items-center"><span
                                 class="glyphicon glyphicon-user"></span></div>
+                        <a class="btn btn-lg" href="{% url 'application:change_password' %}" role="button"><span
+                                class="text"><u>Change password</u></span></a>
                         <a class="btn btn-outline-primary" href="{% url 'application:logout' %}" role="button"><span
                                 class="text">Logout</span></a>  <!--ADD LOGOUT HERE-->
                     </div>
@@ -44,7 +62,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light ftco_navbar ftco-navbar-light" id="ftco-navbar">
     <div class="container d-flex align-items-center">
-        <a class="navbar-brand" href="{% url 'application:parentWithID' student_id %}" style="font-size: 30px">Kiddos</a>
+        <a class="navbar-brand" href="{% url 'application:student_login_view' student_id %}" style="font-size: 30px">Kiddos</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
                 aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="oi oi-menu"></span> Menu
@@ -52,23 +70,12 @@
         <div class="collapse navbar-collapse" id="ftco-nav" style="font-size: 14px">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item {% block home_active %}{% endblock %}"><a
-                        href="{% url 'application:parentWithID' student_id %}"
-                        class="nav-link pl-0">Home</a></li>
-                <li class="nav-item {% block attendance_active %}{% endblock %}"><a
-                        href="{% url 'application:parentAttendance' student_id course_id %}"
-                        class="nav-link pl-0">Attendance</a></li>
-                <li class="nav-item {% block materials_active %}{% endblock %}"><a
-                        href="{% url 'application:materials' student_id course_id %}"
-                        class="nav-link pl-0">Materials</a></li>
-                <li class="nav-item {% block assignments_active %}{% endblock %}"><a
-                        href="{% url 'application:assignments' student_id course_id %}"
+                        href="{% url 'application:student_login_view' student_id %}" class="nav-link pl-0">Home</a></li>
+                <li class="nav-item {% block Assignments %}{% endblock %}"><a
+                        href="{% url 'application:student_assignment' student_id %}"
                         class="nav-link pl-0">Assignments</a></li>
-                <li class="nav-item {% block notes_active %}{% endblock %}"><a
-                        href="{% url 'application:CourseNote' student_id course_id %}"
-                        class="nav-link pl-0">Notes</a></li>
-                <li class="nav-item {% block behavior_active %}{% endblock %}"><a
-                        href="{% url 'application:parentBehavior' student_id course_id %}"
-                        class="nav-link pl-0">Behavior</a></li>
+                <li class="nav-item {% block grades_active %}{% endblock %}"><a
+                        href="#" class="nav-link pl-0">Performance Grades</a></li>
             </ul>
         </div>
     </div>
@@ -147,21 +154,21 @@
 </div>
 
 
-<script src="../../../../../../static/application/js/jquery.min.js"></script>
-<script src="../../../../../../static/application/js/jquery-migrate-3.0.1.min.js"></script>
-<script src="../../../../../../static/application/js/popper.min.js"></script>
-<script src="../../../../../../static/application/js/bootstrap.min.js"></script>
-<script src="../../../../../../static/application/js/jquery.easing.1.3.js"></script>
-<script src="../../../../../../static/application/js/jquery.waypoints.min.js"></script>
-<script src="../../../../../../static/application/js/jquery.stellar.min.js"></script>
-<script src="../../../../../../static/application/js/owl.carousel.min.js"></script>
-<script src="../../../../../../static/application/js/jquery.magnific-popup.min.js"></script>
-<script src="../../../../../../static/application/js/aos.js"></script>
-<script src="../../../../../../static/application/js/jquery.animateNumber.min.js"></script>
-<script src="../../../../../../static/application/js/scrollax.min.js"></script>
+<script src="../../../../static/application/js/jquery.min.js"></script>
+<script src="../../../../static/application/js/jquery-migrate-3.0.1.min.js"></script>
+<script src="../../../../static/application/js/popper.min.js"></script>
+<script src="../../../../static/application/js/bootstrap.min.js"></script>
+<script src="../../../../static/application/js/jquery.easing.1.3.js"></script>
+<script src="../../../../static/application/js/jquery.waypoints.min.js"></script>
+<script src="../../../../static/application/js/jquery.stellar.min.js"></script>
+<script src="../../../../static/application/js/owl.carousel.min.js"></script>
+<script src="../../../../static/application/js/jquery.magnific-popup.min.js"></script>
+<script src="../../../../static/application/js/aos.js"></script>
+<script src="../../../../static/application/js/jquery.animateNumber.min.js"></script>
+<script src="../../../../static/application/js/scrollax.min.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
-<script src="../../../../../../static/application/js/google-map.js"></script>
-<script src="../../../../../../static/application/js/main.js"></script>
+<script src="../../../../static/application/js/google-map.js"></script>
+<script src="../../../../static/application/js/main.js"></script>
 
 </body>
 </html>

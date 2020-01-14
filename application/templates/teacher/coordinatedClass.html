@@ -19,14 +19,14 @@
                 <tbody>
                 {% for stdCourse in studentCourse %}
                     <tr>
-                        <td style="text-align: center">{{ stdCourse.studentID.first_name }}</td>
-                        <td style="text-align: center">{{ stdCourse.studentID.last_name }}</td>
+                        <td style="text-align: center">{{ stdCourse.student_id.first_name }}</td>
+                        <td style="text-align: center">{{ stdCourse.student_id.last_name }}</td>
                         <td style="text-align: center">{{ stdCourse.course_id }}</td>
                         {% if stdCourse.finalGrade %}
                             <td style="text-align: center">{{ stdCourse.finalGrade }}</td>
                         {% else %}
                             <td style="text-align: center">
-                                <a href="coordinatedClass/studentCourses/{{ stdCourse.studentID.ID }}"
+                                <a href="coordinatedClass/studentCourses/{{ stdCourse.student_id.ID }}"
                                    class="btn btn-primary btn-sm" style="font-size: 20px;"> ASSIGN </a>
                             </td>
                         {% endif %}

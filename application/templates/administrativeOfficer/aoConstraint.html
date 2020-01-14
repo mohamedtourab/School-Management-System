@@ -1,0 +1,15 @@
+{% extends 'administrativeOfficer/base.html' %}
+
+{% load crispy_forms_tags %}
+{% block aoconstraint_active %}active{% endblock %}
+{% block home_active %} passive {% endblock %}
+
+{% block body %}
+    <div style="padding-left: 2%; padding-top: 1%;padding-bottom: 5%;width: 90%;">
+        <form method="post" action="{% url 'application:constraintAOForm' %}">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button type="submit" class="btn btn-primary btn-lg" style="font-size: 20px">Add</button>
+        </form>
+    </div>
+{% endblock %}

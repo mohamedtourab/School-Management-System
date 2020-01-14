@@ -5,7 +5,28 @@ from django.forms import ModelForm
 import datetime
 
 from .models import Student, ClassInfo, Content, PerformanceGrade, StudentCourse, Attendance, \
-    Assignment, Announcement, Teacher, AssignFinalGrade, Behavior
+    Assignment, Announcement, Teacher, AssignFinalGrade, Behavior, Adminofficerconstraint
+
+FIRST = 'FIRST'
+SECOND = 'SECOND'
+THIRD = 'THIRD'
+FOURTH = 'FOURTH'
+FIFTH = 'FIFTH'
+SIXTH = 'SIXTH'
+SEVENTH = 'SEVENTH'
+EIGHTH = 'EIGHTH'
+NINTH = 'NINTH'
+TENTH = 'TENTH'
+choice = ((FIRST, 'FIRST'),
+          (SECOND, 'SECOND'),
+          (THIRD, 'THIRD'),
+          (FOURTH, 'FOURTH'),
+          (FIFTH, 'FIFTH'),
+          (SIXTH, 'SIXTH'),
+          (SEVENTH, 'SEVENTH'),
+          (EIGHTH, 'EIGHTH'),
+          (NINTH, 'NINTH'),
+          (TENTH, 'TENTH'),)
 
 
 class AnnouncementForm(ModelForm):
@@ -16,18 +37,20 @@ class AnnouncementForm(ModelForm):
         fields = ['announcementTitle', 'announcementText', 'date']
 
 
-class StudentForm(ModelForm):
-    class Meta:
-        model = Student
-        fields = ['first_name', 'last_name', 'classID', 'studentYear']
-
-
-class ParentSignUpForm(UserCreationForm):
-    studentID = forms.ModelMultipleChoiceField(queryset=Student.objects.all())
+class StudentForm(UserCreationForm):
+    student_year = forms.ChoiceField(choices=choice)
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', 'studentID',)
+        fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2', 'student_year']
+
+
+class ParentSignUpForm(UserCreationForm):
+    student_id = forms.ModelMultipleChoiceField(queryset=Student.objects.all())
+
+    class Meta:
+        model = User
+        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', 'student_id',)
 
 
 class TeacherCreateForm(UserCreationForm):
@@ -113,9 +136,10 @@ class AbsenceForm(ModelForm):
         self.date = datetime.date.today
         student_course_id = StudentCourse.objects.filter(course_id=self.course_id)
         self.fields['studentCourseID'] = forms.ModelChoiceField(queryset=student_course_id)
+
     class Meta:
         model = Attendance
-        fields = ['date', 'presence', 'cameLate', 'leftEarly']
+        fields = ['date', 'studentCourseID', 'presence', 'cameLate', 'leftEarly']
 
 
 class BehaviorForm(ModelForm):
@@ -141,6 +165,13 @@ class AssignmentForm(ModelForm):
         fields = ['assignmentTitle', 'assignmentFile', 'deadlineDate']
 
 
+class AdminofficerconstraintForm(ModelForm):
+    class Meta:
+        model = Adminofficerconstraint
+        exclude = ('ID',)
+
+
+
 class TimetableForm(ModelForm):
     class Meta:
         model = ClassInfo
@@ -160,9 +191,9 @@ class AppointmentsForm(ModelForm):
 
 class PutFinalGradeForm(ModelForm):
     def __init__(self, *args, **kwargs):
-        self.studentID = kwargs.pop('studentID', None)
+        self.student_id = kwargs.pop('student_id', None)
         super(PutFinalGradeForm, self).__init__(*args, **kwargs)
-        self.student_course = forms.ModelChoiceField(queryset=StudentCourse.objects.filter(studentID=self.studentID))
+        self.student_course = forms.ModelChoiceField(queryset=StudentCourse.objects.filter(student_id=self.student_id))
         self.fields['student_course'] = self.student_course
 
     class Meta:
