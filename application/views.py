@@ -530,9 +530,9 @@ class AppointmentView(generic.ListView):
         return self.request.user.teacher.ID
 
 
-def appointment_form(request, teacherID):
+def appointment_form(request, teacher_id):
     my_dict = {
-        'teacher': Teacher.objects.get(ID=teacherID)}  # GET STUDENT ID HERE
+        'teacher': Teacher.objects.get(ID=teacher_id)}  # GET STUDENT ID HERE
     appointment_schedule = my_dict['teacher'].appointmentSchedule
     try:
         read_csv_file(file=appointment_schedule, dictionary=my_dict, used_delimiter=';')
@@ -541,7 +541,7 @@ def appointment_form(request, teacherID):
         pass
 
     if request.method == 'POST':
-        instance = Teacher.objects.get(ID=teacherID)
+        instance = Teacher.objects.get(ID=teacher_id)
         form = AppointmentsForm(request.POST, request.FILES, instance=instance)
         if form.is_valid():
             form.save()
@@ -549,7 +549,39 @@ def appointment_form(request, teacherID):
     else:
         form = AppointmentsForm()
 
-    return render(request, 'teacher/appointment.html', {'form': form, 'teacherID': teacherID, 'my_dict': my_dict})
+    return render(request, 'teacher/appointment.html', {'form': form, 'teacherID': teacher_id, 'my_dict': my_dict})
+
+
+class TimetablesView(generic.ListView):
+    template_name = 'teacher/timetables.html'
+    context_object_name = 'teacherID'
+
+    def get_queryset(self):
+        return self.request.user.teacher.ID
+
+class TimetablesWithIDView(generic.ListView):
+    template_name = 'teacher/timetables.html'
+    context_object_name = 'teacher_id'
+
+    def get_queryset(self):
+        return self.request.user.teacher.ID
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(TimetablesWithIDView, self).get_context_data(**kwargs)
+        context['classes'] = ClassCourse.objects.filter(teacher_id=self.kwargs['teacher_id'])
+        return context
+
+
+def timetables_specific_class_view(request, class_id, course_id):
+    my_dict = {'course' : course_id}
+    my_dict.update({'class_id': class_id})
+    timetable = my_dict['course'].timetable
+    try:
+        read_csv_file(file=timetable, dictionary=my_dict, used_delimiter=',')
+        my_dict.update({'timeTable': 'timetable'})
+    except:
+        pass
+    return render(request, 'parent/afterloginparent.html', my_dict)
 
 
 class TeacherCourseDetailView(generic.ListView):

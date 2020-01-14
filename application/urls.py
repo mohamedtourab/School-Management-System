@@ -26,7 +26,10 @@ urlpatterns = [
     path('teacher/', login_required(views.TeacherView.as_view(), login_url='application:login'), name='teacher'),
     path('teacher/course/<int:course_id>/addtopic', views.content_form, name='contentForm'),
     path('teacher/appointments/', views.AppointmentView.as_view(), name='appointment'),  # NOT USED! Don't Touch!
-    path('teacher/appointments/<int:teacherID>', views.appointment_form, name='appointmentWithID'),
+    path('teacher/appointments/<int:teacher_id>/', views.appointment_form, name='appointmentWithID'),
+    path('teacher/timetables/', views.TimetablesView.as_view(), name='timetables'),  # NOT USED! Don't Touch!
+    path('teacher/timetables/<int:teacher_id>/', views.TimetablesWithIDView.as_view(), name='timetablesWithID'),
+    path('teacher/timetables/<int:teacher_id>/<int:class_id>/', views.timetables_specific_class_view, name='timetablesWithIDSpecificClass'),
     url(r'^teacher/course/(?P<course_id>[0-9]+)/addPerformanceGrade/$', views.grade_form, name='gradeForm'),
     path('teacher/course/<int:course_id>/addAssignment', views.assignment_form, name='assignmentForm'),
     url(r'^teacher/course/(?P<course_id>[0-9]+)/absence/$', views.absence_form, name='absenceForm'),
