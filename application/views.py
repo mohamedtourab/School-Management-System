@@ -347,7 +347,7 @@ class ParentAttendanceView(generic.ListView):
 
 
 class ParentBehaviorView(generic.ListView):
-    template_name = 'parent/behaviorp.html'
+    template_name = 'parent/behavior.html'
     context_object_name = 'student_id'
 
     def get_queryset(self):
@@ -772,4 +772,24 @@ def login_user(request):
 ####### STUDENT AREA##########
 # -----------------------------------------------------------------------------------------------
 def student_login_view(request, student_id):
-    return HttpResponse("<h1>you are a student</h1>")
+    my_dict = {'allStudentCourses': Course.objects.filter(studentcourse__student_id=student_id)}  # GET STUDENT ID HERE
+    my_dict.update({'parentStudent': ParentStudent.objects.filter(student_id=student_id)})
+    my_dict.update({'student_id': student_id})
+    if ClassInfo.objects.filter(student__ID=student_id).exists():
+        my_dict.update({'studentClass': ClassInfo.objects.get(student__ID=student_id)})
+        timetable = my_dict['studentClass'].timetable
+        try:
+            read_csv_file(file=timetable, dictionary=my_dict, used_delimiter=',')
+            my_dict.update({'timeTable': 'timetable'})
+        except:
+            pass
+    return render(request, 'student/after_login.html', my_dict)
+
+
+def student_assignment_view(request, student_id):
+    list_of_courses = StudentCourse.objects.filter(student_id=student_id)
+    assignment_dict = dict()
+    for course in list_of_courses:
+        list_of_assignments = Assignment.objects.filter(course_id=course.course_id)
+        assignment_dict.update({course.course_id.name: list_of_assignments})
+    return render(request, 'student/assignments.html', {'assignment_dict': assignment_dict, 'student_id': student_id, })

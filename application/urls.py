@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.urls import path, re_path
+from django.urls import path
 from django.conf.urls import url
 from . import views
 from django.conf.urls.static import static
@@ -87,8 +87,8 @@ urlpatterns = [
     # -------------------------------------------------------------------------------------------
     #               STUDENT URLS
     # -------------------------------------------------------------------------------------------
-    path('student/<int:student_id>',views.student_login_view,name='student_login_view'),
-
+    path('student/<int:student_id>', views.student_login_view, name='student_login_view'),
+    path('student/<int:student_id>/assignments', views.student_assignment_view, name='student_assignment')
 ]
 
 if settings.DEBUG:
