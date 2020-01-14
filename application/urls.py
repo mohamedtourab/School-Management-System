@@ -76,7 +76,7 @@ urlpatterns = [
     path('ao/', login_required(views.AdministrativeOfficer.as_view(), login_url='application:login'), name='ao'),
     url(r'^ao/class/(?P<name>[0-9][A-Z]+)/$', views.timetable_form, name='timetableForm'),
     path('communicationAO/', views.communication_ao, name='communicationAO'),
-    path('aoConstraint/', views.constraints_form, name='constraintAOForm'),
+    #path('aoConstraint/', views.constraints_form, name='constraintAOForm'),
     path('teacherMasterData/', views.GetTeacherMasterData.as_view(), name='teacherMasterData'),
     path('parentsignup/', views.parent_signup, name='parentSignup'),
     path('composeClass/', views.class_compose, name='classCompose'),

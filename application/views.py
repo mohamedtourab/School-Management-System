@@ -667,17 +667,11 @@ def assignment_form(request, course_id):
         if form.is_valid():
             unsaved_form = form.save(commit=False)
             unsaved_form.course_id = Course.objects.get(ID=course_id)
-
-            if Adminofficerconstraint.objects.filter()[0].__str__() in str(form.cleaned_data['assignmentFile']):
-                unsaved_form.save()
-            else:
-                jpg_response = "This file is not a jpg."
-                response = render(request, 'teacher/addAssignment.html', {'form': form, 'course_id': course_id,
-                                                                          'jpg_response': jpg_response})
-                return response
+            unsaved_form.save()
+            return redirect('application:teacher')
     else:
         form = AssignmentForm()
-    return render(request, 'teacher/addAssignment.html', {'form': form, 'course_id': course_id})
+    return render(request, 'teacher/addAssignment.html', {'form': form, 'course_id': course_id, })
 
 
 class TeacherClassCoordinated(generic.ListView):
