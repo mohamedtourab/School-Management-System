@@ -58,6 +58,7 @@ def number_of_students():
     number = Student.objects.filter(classID=None).count()
     return number
 
+
 # -----------------------------------------------------------------------------------------------
 ####### ADMINISTRATIVE OFFICER AREA##########
 # -----------------------------------------------------------------------------------------------
@@ -157,21 +158,37 @@ def class_compose(request):
             class_info = form.save()
             class_info.refresh_from_db()
             if class_info.name[0] == '1':
-                course1 = Course.objects.get_or_create(name='Math 1', numberOfHoursPerWeek='10', year='FIRST')
-                course2 = Course.objects.get_or_create(name='Physics 1', numberOfHoursPerWeek='10', year='FIRST')
+                course1 = Course.objects.get_or_create(name='Math', numberOfHoursPerWeek='10', year='FIRST')
+                course2 = Course.objects.get_or_create(name='Physics', numberOfHoursPerWeek='10', year='FIRST')
                 course3 = Course.objects.get_or_create(name='English', numberOfHoursPerWeek='10', year='FIRST')
+                course4 = Course.objects.get_or_create(name='Italian', numberOfHoursPerWeek='10', year='FIRST')
+                course5 = Course.objects.get_or_create(name='Latin', numberOfHoursPerWeek='10', year='FIRST')
+                course6 = Course.objects.get_or_create(name='Art', numberOfHoursPerWeek='10', year='FIRST')
+                course7 = Course.objects.get_or_create(name='Gym', numberOfHoursPerWeek='10', year='FIRST')
+                course8 = Course.objects.get_or_create(name='Spanish', numberOfHoursPerWeek='10', year='FIRST')
+
                 ClassCourse.objects.get_or_create(class_id=class_info, course_id=course1[0],
                                                   teacher_id=Teacher.objects.get(first_name='Marco'))
                 ClassCourse.objects.get_or_create(class_id=class_info, course_id=course2[0],
                                                   teacher_id=Teacher.objects.get(first_name='Marco'))
                 ClassCourse.objects.get_or_create(class_id=class_info, course_id=course3[0],
                                                   teacher_id=Teacher.objects.get(first_name='Marco'))
+                ClassCourse.objects.get_or_create(class_id=class_info, course_id=course4[0],
+                                                  teacher_id=Teacher.objects.get(first_name='Marco'))
+                ClassCourse.objects.get_or_create(class_id=class_info, course_id=course5[0],
+                                                  teacher_id=Teacher.objects.get(first_name='Antonio'))
+                ClassCourse.objects.get_or_create(class_id=class_info, course_id=course6[0],
+                                                  teacher_id=Teacher.objects.get(first_name='Antonio'))
 
+                ClassCourse.objects.get_or_create(class_id=class_info, course_id=course7[0],
+                                                  teacher_id=Teacher.objects.get(first_name='Antonio'))
+                ClassCourse.objects.get_or_create(class_id=class_info, course_id=course8[0],
+                                                  teacher_id=Teacher.objects.get(first_name='Antonio'))
             elif class_info.name[0] == '2':
                 course1, create1 = Course.objects.get_or_create(name='Math 2', numberOfHoursPerWeek='10', year='SECOND')
                 course2, create2 = Course.objects.get_or_create(name='Physics 2', numberOfHoursPerWeek='10',
                                                                 year='SECOND')
-                course3, create3 = Course.objects.get_or_create(name='Italian', numberOfHoursPerWeek='10',
+                course3, create3 = Course.objects.get_or_create(name='Italian 2', numberOfHoursPerWeek='10',
                                                                 year='SECOND')
                 ClassCourse.objects.get_or_create(class_id=class_info, course_id=course1,
                                                   teacher_id=Teacher.objects.get(first_name='Antonio'))
@@ -700,16 +717,23 @@ def assignment_form(request, course_id):
             unsaved_form = form.save(commit=False)
             unsaved_form.course_id = Course.objects.get(ID=course_id)
 
-            if Adminofficerconstraint.objects.filter()[0].__str__() in str(form.cleaned_data['assignmentFile']):
-                unsaved_form.save()
+            if Adminofficerconstraint.objects.filter().count() != 0:
+                if Adminofficerconstraint.objects.filter()[0].__str__() in str(form.cleaned_data['assignmentFile']):
+                    unsaved_form.save()
+                else:
+                    jpg_response = "This file is not a " + Adminofficerconstraint.objects.filter()[0].__str__()
+                    response = render(request, 'teacher/addAssignment.html', {'form': form, 'course_id': course_id,
+                                                                              'jpg_response': jpg_response})
+                    return response
             else:
-                jpg_response = "This file is not a jpg."
+                jpg_response = "No constraints on input file, ask help to Administrative Officer"
                 response = render(request, 'teacher/addAssignment.html', {'form': form, 'course_id': course_id,
                                                                           'jpg_response': jpg_response})
                 return response
+            return redirect('application:teacher')
     else:
         form = AssignmentForm()
-    return render(request, 'teacher/addAssignment.html', {'form': form, 'course_id': course_id})
+    return render(request, 'teacher/addAssignment.html', {'form': form, 'course_id': course_id, })
 
 
 class TeacherClassCoordinated(generic.ListView):
