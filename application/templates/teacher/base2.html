@@ -56,8 +56,8 @@
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item {% block home_active %}{% endblock %}"><a href="{% url 'application:teacher' %}" class="nav-link pl-0">Home</a>
                 </li>
-
-
+                <li class="nav-item" {% block timetables_active %}{% endblock %}><a href="
+                    {% url 'application:timetables' %}{{ teacherID }}" class="nav-link">Timetables</a></li>
                 <li class="nav-item" {% block appointment_active %}{% endblock %}><a href="
                     {% url 'application:appointment' %}{{ teacherID }}" class="nav-link">Appointment</a></li>
                 <li class="nav-item {% block coordinatedClass_active %}{% endblock %}"><a

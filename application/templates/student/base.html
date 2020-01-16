@@ -12,7 +12,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="../../../../static/application/css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" href="../../../../static/application/css/animate.css">
-
     <link rel="stylesheet" href="../../../../static/application/css/owl.carousel.min.css">
     <link rel="stylesheet" href="../../../../static/application/css/owl.theme.default.min.css">
     <link rel="stylesheet" href="../../../../static/application/css/magnific-popup.css">
@@ -25,47 +24,62 @@
     <link rel="stylesheet" href="../../../../static/application/css/icomoon.css">
     <link rel="stylesheet" href="../../../../static/application/css/style.css">
     <link rel="stylesheet" href="../../../../static/application/css/style2.css">
-
 </head>
 <body>
 <div class="py-2 bg-primary">
     <div class="container">
-        <div class="row no-gutters d-flex align-items-start align-items-center px-3 px-md-0 pull-right">
+        <div class="row no-gutters d-flex align-items-start align-items-center px-3 px-md-0">
             <div class="col-lg-12 d-block">
                 <div class="row d-flex">
+                    <div class="col-md-5 pr-4 d-flex topper align-items-center">
+                        <div class="icon bg-fifth mr-2 d-flex justify-content-center align-items-center"><span
+                                class="icon-map"></span></div>
+                        <span class="text">198 West 21th Street, Suite 721 New York NY 10016</span>
+                    </div>
+                    <div class="col-md pr-4 d-flex topper align-items-center">
+                        <div class="icon bg-secondary mr-2 d-flex justify-content-center align-items-center"><span
+                                class="icon-paper-plane"></span></div>
+                        <span class="text">youremail@email.com</span>
+                    </div>
+                    <div class="col-md pr-4 d-flex topper align-items-center">
+                        <div class="icon bg-tertiary mr-2 d-flex justify-content-center align-items-center"><span
+                                class="icon-phone2"></span></div>
+                        <span class="text">+ 1235 2355 98</span>
+                    </div>
                     <div class="col-md pr-4 d-flex topper align-items-right">
                         <div class="icon bg-tertiary mr-2 d-flex justify-content-center align-items-center"><span
                                 class="glyphicon glyphicon-user"></span></div>
+                        <a class="btn btn-lg" href="{% url 'application:change_password' %}" role="button"><span
+                                class="text"><u>Change password</u></span></a>
                         <a class="btn btn-outline-primary" href="{% url 'application:logout' %}" role="button"><span
-                                class="text">LogOut</span></a>
+                                class="text">Logout</span></a>  <!--ADD LOGOUT HERE-->
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light ftco_navbar ftco-navbar-light" id="ftco-navbar">
     <div class="container d-flex align-items-center">
-        <a class="navbar-brand" href="{% url 'application:teacher' %}" style="font-size: 24px">Kiddos</a>
+        <a class="navbar-brand" href="{% url 'application:student_login_view' student_id %}" style="font-size: 30px">Kiddos</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
                 aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="oi oi-menu"></span> Menu
         </button>
-        <div class="collapse navbar-collapse" id="ftco-nav">
+        <div class="collapse navbar-collapse" id="ftco-nav" style="font-size: 14px">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item active"><a href="{% url 'application:teacher' %}" class="nav-link pl-0">Home</a>
-                </li>
-                <li class="nav-item" {% block timetables_active %}{% endblock %}><a href="
-                    {% url 'application:timetables' %}{{ teacherID }}" class="nav-link">Timetables</a></li>
-                <li class="nav-item"><a href="{% url 'application:appointment' %}{{ teacherID }}" class="nav-link">Appointment</a></li>
-                <li class="nav-item {% block coordinatedClass_active %}{% endblock %}"><a
-                        href="{% url 'application:TeacherCoordinator' %}" class="nav-link">Coordinated Class</a></li>
+                <li class="nav-item {% block home_active %}{% endblock %}"><a
+                        href="{% url 'application:student_login_view' student_id %}" class="nav-link pl-0">Home</a></li>
+                <li class="nav-item {% block Assignments %}{% endblock %}"><a
+                        href="{% url 'application:student_assignment' student_id %}"
+                        class="nav-link pl-0">Assignments</a></li>
+                <li class="nav-item {% block grades_active %}{% endblock %}"><a
+                        href="#" class="nav-link pl-0">Performance Grades</a></li>
             </ul>
         </div>
     </div>
 </nav>
-
-
 <!-- END nav -->
 
 {% block body %}
@@ -98,7 +112,7 @@
                     <h2 class="ftco-heading-2">Links</h2>
                     <ul class="list-unstyled">
                         <li><a href="#"><span class="ion-ios-arrow-round-forward mr-2"></span>Home</a></li>
-                        <li><a href="#"><span class="ion-ios-arrow-round-forward mr-2"></span>Appointment</a></li>
+                        <li><a href="#"><span class="ion-ios-arrow-round-forward mr-2"></span>About</a></li>
                         <li><a href="#"><span class="ion-ios-arrow-round-forward mr-2"></span>Teachers</a></li>
                         <li><a href="#"><span class="ion-ios-arrow-round-forward mr-2"></span>Courses</a></li>
                         <li><a href="#"><span class="ion-ios-arrow-round-forward mr-2"></span>Contact</a></li>
@@ -106,7 +120,14 @@
                 </div>
             </div>
             <div class="col-md-6 col-lg-3">
-
+                <div class="ftco-footer-widget mb-5">
+                    <h2 class="ftco-heading-2 mb-0">Connect With Us</h2>
+                    <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-3">
+                        <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
+                        <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
+                        <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
+                    </ul>
+                </div>
             </div>
         </div>
         <div class="row">

@@ -63,7 +63,7 @@ class ClassInfo(models.Model):
 
 class Student(models.Model):
     ID = models.AutoField(primary_key=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE,)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, )
     grade_choice = choice
     classID = models.ForeignKey(ClassInfo, on_delete=models.SET_NULL, verbose_name='Student Class', blank=True,
                                 null=True)
@@ -95,17 +95,11 @@ class Assignment(models.Model):
     def __str__(self):
         return self.assignmentTitle
 
-    def save(self, *args, **kwargs):
-        if self.assignmentFile.size > 10 ^ 7:
-            super(Assignment, self).save(*args, **kwargs)
-        else:
-            raise Exception("end_date should be greater than start_date")
-
 
 class Adminofficerconstraint(models.Model):
-    size = models.IntegerField(verbose_name="size of the file (bits) ")
+    size = models.IntegerField(verbose_name="Maximum file size(bits)", blank=True, null=True)
     ID = models.AutoField(primary_key=True)
-    extension = models.CharField(max_length=10, verbose_name="extension of the file")
+    extension = models.CharField(max_length=10, verbose_name="File Extension", blank=True, null=True)
 
     def __str__(self):
         return self.extension
@@ -117,7 +111,7 @@ class Teacher(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField(blank=True, null=True)
-    fiscalCode = models.CharField(max_length=16,unique=True)
+    fiscalCode = models.CharField(max_length=16, unique=True)
     coordinatedClass = models.ForeignKey(ClassInfo, on_delete=models.SET_NULL, blank=True, null=True)
     appointmentSchedule = models.FileField(null=True, blank=True, default='TeacherSchedule.csv')
 
@@ -162,7 +156,7 @@ class ParentStudent(models.Model):
     student_id = models.ForeignKey(Student, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.student_id.first_name + ' ' + self.student_id.last_name + ':' + self.parentID.user.first_name + ' ' + self.parentID.user.last_name
+        return self.student_id.user.first_name + ' ' + self.student_id.user.last_name + ':' + self.parentID.user.first_name + ' ' + self.parentID.user.last_name
 
 
 class StudentCourse(models.Model):
@@ -173,7 +167,7 @@ class StudentCourse(models.Model):
     publishFinalGrade = models.BooleanField(blank=True, default=False)
 
     def __str__(self):
-        return self.student_id.first_name + '_' + self.student_id.last_name + ':' + self.course_id.name
+        return self.student_id.user.first_name + '_' + self.student_id.user.last_name + ':' + self.course_id.name
 
 
 class PerformanceGrade(models.Model):
@@ -183,7 +177,7 @@ class PerformanceGrade(models.Model):
     grade = models.PositiveIntegerField(verbose_name='Grade')
 
     def __str__(self):
-        return self.studentCourseID.student_id.first_name + '_' + self.studentCourseID.student_id.last_name + ':' + self.studentCourseID.course_id.name
+        return self.studentCourseID.student_id.user.first_name + '_' + self.studentCourseID.student_id.user.last_name + ':' + self.studentCourseID.course_id.name
 
 
 class AssignFinalGrade(models.Model):
@@ -192,7 +186,7 @@ class AssignFinalGrade(models.Model):
     final_grade = models.PositiveIntegerField()
 
     def __str__(self):
-        return self.student_course.student_id.first_name + '_' + self.student_course.student_id.last_name + \
+        return self.student_course.student_id.user.first_name + '_' + self.student_course.student_id.user.last_name + \
                ':' + self.student_course.course_id.name
 
 
@@ -234,7 +228,7 @@ class Attendance(models.Model):
     leftEarly = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.studentCourseID.student_id.first_name + ' ' + self.studentCourseID.student_id.last_name + ':' + self.studentCourseID.course_id.name
+        return self.studentCourseID.student_id.user.first_name + ' ' + self.studentCourseID.student_id.user.last_name + ':' + self.studentCourseID.course_id.name
 
 
 class Behavior(models.Model):
@@ -244,7 +238,7 @@ class Behavior(models.Model):
     behavior = models.CharField(max_length=200)
 
     def __str__(self):
-        return self.studentCourseID.student_id.first_name + ' ' + self.studentCourseID.student_id.last_name + ':' + self.studentCourseID.course_id.name
+        return self.studentCourseID.student_id.user.first_name + ' ' + self.studentCourseID.student_id.user.last_name + ':' + self.studentCourseID.course_id.name
 
 
 class FreeSlots(models.Model):
