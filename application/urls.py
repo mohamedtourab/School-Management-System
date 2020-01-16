@@ -6,7 +6,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 app_name = 'application'
-
+log_url = 'application:login'
 urlpatterns = [
     # -------------------------------------------------------------------------------------------
     #               GENERAL URLS
@@ -21,9 +21,9 @@ urlpatterns = [
     #               TEACHER URLS
     # -------------------------------------------------------------------------------------------
     url(r'^teacher/course/(?P<course_id>[0-9]+)/$',
-        login_required(views.TeacherCourseDetailView.as_view(), login_url='application:login'),
+        login_required(views.TeacherCourseDetailView.as_view(), login_url=log_url),
         name='teacherCourseViewWithcourse_id'),
-    path('teacher/', login_required(views.TeacherView.as_view(), login_url='application:login'), name='teacher'),
+    path('teacher/', login_required(views.TeacherView.as_view(), login_url=log_url), name='teacher'),
     path('teacher/course/<int:course_id>/addtopic', views.content_form, name='contentForm'),
     path('teacher/appointments/', views.AppointmentView.as_view(), name='appointment'),  # NOT USED! Don't Touch!
     path('teacher/appointments/<int:teacherID>', views.appointment_form, name='appointmentWithID'),
@@ -33,7 +33,7 @@ urlpatterns = [
     url(r'^teacher/course/(?P<course_id>[0-9]+)/behavior/$', views.behavior_form, name='behaviorForm'),
     path('teacher/coordinatedClass', views.TeacherClassCoordinated.as_view(), name='TeacherCoordinator'),
     url(r'^teacher/coordinatedClass/studentCourses/(?P<student_id>[0-9]+)/$',
-        login_required(views.final_grade_form, login_url='application:login'),
+        login_required(views.final_grade_form, login_url=log_url),
         name='putFinalGrade'),
     # -------------------------------------------------------------------------------------------
     #               PARENT URLS
@@ -41,30 +41,30 @@ urlpatterns = [
     path('parent/', views.parent_view, name='parent'),
     url(r'^parent/(?P<student_id>[0-9]+)/$', views.parent_view, name='parentWithID'),
     url(r'^parent/grades/(?P<student_id>[0-9]+)/$',
-        login_required(views.ParentGradeView.as_view(), login_url='application:login'), name='parentGradeWithID'),
-    path('parent/grades/', login_required(views.ParentGradeView.as_view(), login_url='application:login'),
+        login_required(views.ParentGradeView.as_view(), login_url=log_url), name='parentGradeWithID'),
+    path('parent/grades/', login_required(views.ParentGradeView.as_view(), login_url=log_url),
          name='parentGrade'),
-    path('chooseChild/', login_required(views.ChooseChild.as_view(), login_url='application:login'),
+    path('chooseChild/', login_required(views.ChooseChild.as_view(), login_url=log_url),
          name='chooseChild'),
-    path('parent/attendance', login_required(views.ParentAttendanceView.as_view(), login_url='application:login'),
+    path('parent/attendance', login_required(views.ParentAttendanceView.as_view(), login_url=log_url),
          name='parentAttendance'),
-    path('parent/behavior', login_required(views.ParentBehaviorView.as_view(), login_url='application:login'),
+    path('parent/behavior', login_required(views.ParentBehaviorView.as_view(), login_url=log_url),
          name='parentBehavior'),
     url(r'^parent/(?P<student_id>[0-9]+)/course/$',
-        login_required(views.CourseView.as_view(), login_url='application:login'), name='courseView'),
+        login_required(views.CourseView.as_view(), login_url=log_url), name='courseView'),
     # NOT HANDLED URL PLEASE DONT USE
     url(r'^parent/(?P<student_id>[0-9]+)/course/(?P<course_id>[0-9]+)/$',
-        login_required(views.CourseDetailView.as_view(), login_url='application:login'),
+        login_required(views.CourseDetailView.as_view(), login_url=log_url),
         name='courseViewWithcourse_id'),
     path('change-password/', views.change_password, name='change_password'),
     url(r'^parent/(?P<student_id>[0-9]+)/course/(?P<course_id>[0-9]+)/assignments/$',
-        login_required(views.AssignmentView.as_view(), login_url='application:login'), name='assignments'),
+        login_required(views.AssignmentView.as_view(), login_url=log_url), name='assignments'),
     url(r'^parent/(?P<student_id>[0-9]+)/course/(?P<course_id>[0-9]+)/materials/$',
-        login_required(views.MaterialView.as_view(), login_url='application:login'), name='materials'),
+        login_required(views.MaterialView.as_view(), login_url=log_url), name='materials'),
     url(r'^parent/(?P<student_id>[0-9]+)/course/(?P<course_id>[0-9]+)/attendance/$',
-        login_required(views.ParentAttendanceView.as_view(), login_url='application:login'), name='parentAttendance'),
+        login_required(views.ParentAttendanceView.as_view(), login_url=log_url), name='parentAttendance'),
     url(r'^parent/(?P<student_id>[0-9]+)/course/(?P<course_id>[0-9]+)/behavior/$',
-        login_required(views.ParentBehaviorView.as_view(), login_url='application:login'), name='parentBehavior'),
+        login_required(views.ParentBehaviorView.as_view(), login_url=log_url), name='parentBehavior'),
     path('parent/<int:student_id>/announcement/', views.AnnouncementView.as_view(), name='announcement'),
     path('parent/<int:student_id>/course/<int:course_id>/notes/', views.NotesView.as_view(), name='CourseNote'),
     path('parent/<int:student_id>/finalResult/', views.FinalGradeView.as_view(), name='finalResult'),

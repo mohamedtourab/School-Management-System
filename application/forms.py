@@ -82,10 +82,7 @@ class ContentForm(ModelForm):
         self.user = kwargs.pop('user', None)
         self.request = kwargs.pop('request', None)
         super(ContentForm, self).__init__(*args, **kwargs)
-        # listOfCoursesID = (TeacherCourse.objects.filter(teacherID=self.user.teacher.ID)).values('course_id')
-        # listOfCourses = Course.objects.filter(ID__in=listOfCoursesID)
-        # self.course_id = forms.ModelChoiceField(queryset=listOfCourses)
-        # self.fields['course_id'] = self.course_id
+
 
     def clean(self):
         cleaned_data = super().clean()

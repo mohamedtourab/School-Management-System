@@ -25,6 +25,10 @@ from django.core.exceptions import ValidationError
 # -----------------------------------------------------------------------------------------------
 ####### HELPER FUNCTIONS AREA##########
 # -----------------------------------------------------------------------------------------------
+ao_app = 'application:ao'
+adm_off = 'administrativeOfficer/enrollStudent.html'
+add_assign =''
+
 def read_csv_file(file, dictionary, used_delimiter):
     csv_file = open(file.path, 'r')
     read_csv = csv.reader(csv_file, delimiter=used_delimiter)
@@ -76,7 +80,7 @@ def timetable_form(request, name):
         form = TimetableForm(request.POST, request.FILES, instance=instance)
         if form.is_valid():
             form.save()
-            return redirect('application:ao')
+            return redirect(ao_app)
     else:
         form = TimetableForm()
 
@@ -102,7 +106,7 @@ def enroll_student(request):
         form = StudentForm(request.POST)
         try:
             user = User.objects.get(username=request.POST['username'], )
-            return render(request, 'administrativeOfficer/enrollStudent.html',
+            return render(request, adm_off,
                           {'error_message': 'Username already Exist.\nTry another Username.', 'form': StudentForm()})
         except User.DoesNotExist:
             if form.is_valid():
@@ -110,11 +114,11 @@ def enroll_student(request):
                 user.refresh_from_db()  # load the profile instance created by the signal
                 student = Student.objects.create(user=user, studentYear=form['student_year'].value())
             messages.success(request, 'Student has been successfully added')
-            return render(request, 'administrativeOfficer/enrollStudent.html', {'form': StudentForm()})
+            return render(request, adm_off, {'form': StudentForm()})
             # if a GET (or any other method) we'll create a blank form
     else:
         form = StudentForm()
-    return render(request, 'administrativeOfficer/enrollStudent.html', {'form': form})
+    return render(request, adm_off, {'form': form})
 
 
 @login_required(login_url='application:login')
@@ -654,7 +658,7 @@ def constraints_form(request):
         if form.is_valid():
             Adminofficerconstraint.objects.filter().delete()
             form.save()
-            return redirect('application:ao')
+            return redirect(ao_app)
     else:
         form = AdminofficerconstraintForm()
     return render(request, 'administrativeOfficer/aoConstraint.html', {'form': form, })
@@ -770,7 +774,7 @@ def login_user(request):
                     except:
                         try:
                             administrative_officer = user.administrativeofficer
-                            return redirect('application:ao')
+                            return redirect(ao_app)
                         except:
                             try:
                                 principle = user.principle
