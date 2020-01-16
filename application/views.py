@@ -27,7 +27,7 @@ from django.core.exceptions import ValidationError
 # -----------------------------------------------------------------------------------------------
 ao_app = 'application:ao'
 adm_off = 'administrativeOfficer/enrollStudent.html'
-add_assign =''
+
 
 def read_csv_file(file, dictionary, used_delimiter):
     csv_file = open(file.path, 'r')
