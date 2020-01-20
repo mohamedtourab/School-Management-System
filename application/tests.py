@@ -14,12 +14,16 @@ class TeacherTestCase(TestCase):
         self.assertEqual(teach.first_name, "Corentin")
 
 
-class StudentTestCase(TestCase):
+'''
+class ClassInfoTestCase(TestCase):
     def setUp(self):
+        class1 = ClassInfo.objects.create(ID=6, name="1A", totalStudentsNumber=22, gender_ratio=0.2, skill_average=5)
+        class2 = ClassInfo.objects.create(ID=66, name="1A", totalStudentsNumber=22, gender_ratio=0.4, skill_average=5)
+
         Student.objects.create(grade_choice="FIRST", ID=2, first_name="Victor", last_name="Seguin",
-                               classID=1, studentYear=1)
+                               classID=class1, studentYear=1)
         Student.objects.create(grade_choice="FIRST", ID=229, first_name="Victr", last_name="Sguin",
-                               classID=1, studentYear=2)
+                               classID=class2, studentYear=2)
 
     def test_on(self):
         student = Student.objects.get(ID=229)
@@ -42,12 +46,6 @@ class ParentTestCase(TestCase):
         parent2 = User.objects.create_user('Papa')
         Parent.objects.create(user=parent, ID=5, lastLogin=False)
         Parent.objects.create(user=parent2, ID=59, lastLogin=True)
-
-
-class ClassInfoTestCase(TestCase):
-    def setUp(self):
-        ClassInfo.objects.create(ID=6, name="1A", totalStudentsNumber=22, gender_ratio=0.2, skill_average=5)
-        ClassInfo.objects.create(ID=66, name="1A", totalStudentsNumber=22, gender_ratio=0.4, skill_average=5)
 
 
 class ClassCourseTestCase(TestCase):
@@ -139,4 +137,4 @@ class BehaviorTestCase(TestCase):
 class FreeSlotsTestCase(TestCase):
     def setUp(self):
         FreeSlots.objects.create(teacherID=1, date="02-02-2020", schedule="a")
-        FreeSlots.objects.create(teacherID=1, date="03-03-2020", schedule="pmk")
+        FreeSlots.objects.create(teacherID=1, date="03-03-2020", schedule="pmk")'''
