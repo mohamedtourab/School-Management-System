@@ -25,6 +25,10 @@ from django.core.exceptions import ValidationError
 # -----------------------------------------------------------------------------------------------
 ####### HELPER FUNCTIONS AREA##########
 # -----------------------------------------------------------------------------------------------
+ao_app = 'application:ao'
+adm_off = 'administrativeOfficer/enrollStudent.html'
+
+
 def read_csv_file(file, dictionary, used_delimiter):
     csv_file = open(file.path, 'r')
     read_csv = csv.reader(csv_file, delimiter=used_delimiter)
@@ -77,7 +81,7 @@ def timetable_form(request, name):
         form = TimetableForm(request.POST, request.FILES, instance=instance)
         if form.is_valid():
             form.save()
-            return redirect('application:ao')
+            return redirect(ao_app)
     else:
         form = TimetableForm()
 
@@ -103,7 +107,7 @@ def enroll_student(request):
         form = StudentForm(request.POST)
         try:
             user = User.objects.get(username=request.POST['username'], )
-            return render(request, 'administrativeOfficer/enrollStudent.html',
+            return render(request, adm_off,
                           {'error_message': 'Username already Exist.\nTry another Username.', 'form': StudentForm()})
         except User.DoesNotExist:
             if form.is_valid():
@@ -111,11 +115,11 @@ def enroll_student(request):
                 user.refresh_from_db()  # load the profile instance created by the signal
                 student = Student.objects.create(user=user, studentYear=form['student_year'].value())
             messages.success(request, 'Student has been successfully added')
-            return render(request, 'administrativeOfficer/enrollStudent.html', {'form': StudentForm()})
+            return render(request, adm_off, {'form': StudentForm()})
             # if a GET (or any other method) we'll create a blank form
     else:
         form = StudentForm()
-    return render(request, 'administrativeOfficer/enrollStudent.html', {'form': form})
+    return render(request, adm_off, {'form': form})
 
 
 @login_required(login_url='application:login')
@@ -547,9 +551,9 @@ class AppointmentView(generic.ListView):
         return self.request.user.teacher.ID
 
 
-def appointment_form(request, teacherID):
+def appointment_form(request, teacher_id):
     my_dict = {
-        'teacher': Teacher.objects.get(ID=teacherID)}  # GET STUDENT ID HERE
+        'teacher': Teacher.objects.get(ID=teacher_id)}  # GET STUDENT ID HERE
     appointment_schedule = my_dict['teacher'].appointmentSchedule
     try:
         read_csv_file(file=appointment_schedule, dictionary=my_dict, used_delimiter=';')
@@ -558,7 +562,7 @@ def appointment_form(request, teacherID):
         pass
 
     if request.method == 'POST':
-        instance = Teacher.objects.get(ID=teacherID)
+        instance = Teacher.objects.get(ID=teacher_id)
         form = AppointmentsForm(request.POST, request.FILES, instance=instance)
         if form.is_valid():
             form.save()
@@ -566,7 +570,39 @@ def appointment_form(request, teacherID):
     else:
         form = AppointmentsForm()
 
-    return render(request, 'teacher/appointment.html', {'form': form, 'teacherID': teacherID, 'my_dict': my_dict})
+    return render(request, 'teacher/appointment.html', {'form': form, 'teacherID': teacher_id, 'my_dict': my_dict})
+
+
+class TimetablesView(generic.ListView):
+    template_name = 'teacher/timetables.html'
+    context_object_name = 'teacherID'
+
+    def get_queryset(self):
+        return self.request.user.teacher.ID
+
+class TimetablesWithIDView(generic.ListView):
+    template_name = 'teacher/timetables.html'
+    context_object_name = 'teacher_id'
+
+    def get_queryset(self):
+        return self.request.user.teacher.ID
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(TimetablesWithIDView, self).get_context_data(**kwargs)
+        context['classes'] = ClassCourse.objects.filter(teacher_id=self.kwargs['teacher_id'])
+        return context
+
+
+def timetables_specific_class_view(request, class_id, course_id):
+    my_dict = {'course' : course_id}
+    my_dict.update({'class_id': class_id})
+    timetable = my_dict['course'].timetable
+    try:
+        read_csv_file(file=timetable, dictionary=my_dict, used_delimiter=',')
+        my_dict.update({'timeTable': 'timetable'})
+    except:
+        pass
+    return render(request, 'parent/afterloginparent.html', my_dict)
 
 
 class TeacherCourseDetailView(generic.ListView):
@@ -671,7 +707,7 @@ def constraints_form(request):
         if form.is_valid():
             Adminofficerconstraint.objects.filter().delete()
             form.save()
-            return redirect('application:ao')
+            return redirect(ao_app)
     else:
         form = AdminofficerconstraintForm()
     return render(request, 'administrativeOfficer/aoConstraint.html', {'form': form, })
@@ -794,7 +830,7 @@ def login_user(request):
                     except:
                         try:
                             administrative_officer = user.administrativeofficer
-                            return redirect('application:ao')
+                            return redirect(ao_app)
                         except:
                             try:
                                 principle = user.principle
