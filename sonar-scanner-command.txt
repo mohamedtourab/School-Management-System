@@ -1,0 +1,1 @@
+sonar-scanner.bat -D"sonar.projectKey=school-managment-system" -D"sonar.sources=." -D"sonar.host.url=http://localhost:9000" -D"sonar.login=013d4203ede79ef515f5a4957195df2f15abe83d"
