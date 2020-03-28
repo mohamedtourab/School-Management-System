@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
+from django.contrib.auth.views import redirect_to_login
 from django.db.models import Sum
 from django.core.mail import send_mail
 from django.http import HttpResponse
@@ -61,6 +62,13 @@ def number_of_seats():
 def number_of_students():
     number = Student.objects.filter(classID=None).count()
     return number
+
+
+class RequireLoginMixin:
+    def dispatch(self,request,*args,**kwargs):
+        if not request.user.is_authenticated():
+            return  redirect_to_login(request.get_full_path())
+        return super(RequireLoginMixin,self).dispatch(request,*args,**kwargs)
 
 
 # -----------------------------------------------------------------------------------------------
