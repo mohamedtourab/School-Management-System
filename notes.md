@@ -73,3 +73,31 @@ REST_FRAMEWORK = {
 )
 }
 ```
+
+8- You can run the django project by setting your own settings which is different from  another host setting
+we can do so by copying the ```setting.py``` file into new folder for example settings directory then copy the ```setting.py``` file to that directory with a new name
+for example ```base.py``` create a new ```__init__.py``` file by using touch command then create a new python file ```do7a_setting.py```, open the newly created file and import base.py
+by writing 
+```python
+from .base.py import *
+``` 
+a- Cut ```DEBUG=true, ALLOWED_HOST,DATABASE``` to ```do7a_setting.py```
+
+b- Add inside ```ALLOWED_HOST=['localhost',]```
+
+c- Add ```INSTALLED_APPS+=[]```
+
+d- Save your changes, to run your new setting file you have to use this command
+
+e- ```python manage.py runserver --settings=mysite.settings.do7a_setting```
+
+9- you can automate point no.8 if you are using virtual enviroment, To do so firstly you should create ```.env``` file and insert
+```python
+DJANGO_SETTINGS_MODULE=mysite.settings.do7a_settings
+```
+then exit your virtual enviroment and reload it. to check if everything is working properly 
+excute the following command ```echo $DJANGO_SETTINGS_MODULE``` it should print ```mysite.settings.do7a_setting```
+then re-run your server without writing --setting part, it should work properly.
+
+10- Don't put the .env file in source control.
+
