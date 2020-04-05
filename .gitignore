@@ -13,3 +13,4 @@ application/migrations/
 db.sqlite3
 .scannerwork
 .DS_Store
+private
