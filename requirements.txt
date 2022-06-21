@@ -1,7 +1,7 @@
 certifi==2019.9.11
 Django>=2.2.5
 django-crispy-forms>=1.8.0
-numpy==1.17.2
+numpy==1.22.0
 pytz==2019.3
 six==1.12.0
 sqlparse==0.3.0
